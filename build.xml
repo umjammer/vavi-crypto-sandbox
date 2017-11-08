@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Shift_JIS"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <!-- ////////////////////////////////////////////////////////////////////// -->
 <!-- Copyright (c) 2002 by Naohide Sano, All rights reserved.               -->
@@ -7,63 +7,50 @@
 <!--                                                                        -->
 <!-- ssl                                                                    -->
 <!--                                                                        -->
-<!-- @author	Naohide Sano                                                -->
-<!-- @version	0.00	031109	nsano	initial version                     -->
+<!-- @author Naohide Sano                                                   -->
+<!-- @version 0.00 031109 nsano initial version                             -->
 <!--                                                                        -->
 <!-- ////////////////////////////////////////////////////////////////////// -->
 
-<project default="run" basedir=".">
+<project name="vavi-crypt-sandbox" default="run" basedir="."
+  xmlns:artifact="urn:maven-artifact-ant">
 
-  <property file="../../local.properties" />
-  <property file="local.properties" />
-
-  <property name="dir.native" value="src" />
-  <property name="dir.build" value="build" />
-
-  <path id="project.class.path">
-    <pathelement location="../.." />
-    <fileset dir="${maven.repo}">
-      <include name="junit/jars/junit-3.8.1.jar" />
-    </fileset>
-    <fileset dir="lib">
+  <path id="maven-ant-tasks.classpath">
+    <fileset dir="${user.home}/lib/java/maven-ant-tasks">
       <include name="*.jar" />
-      <exclude name="mscrypto.jar" />
     </fileset>
   </path>
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="urn:maven-artifact-ant"
+           classpathref="maven-ant-tasks.classpath" />
 
-  <!-- clean -->
-  <target name="clean" description="ビルド環境のクリア">
-    <delete dir="${dir.build}" />
-    <delete file="${signjar.jar}" />
-    <delete file="gi.jar" />
-    <fileset dir="src">
-      <include name="**/*.class" />
-    </fileset>
-  </target>
+  <property environment="env" />
+  <property file="local.properties" />
+
+  <xmlproperty file="pom.xml" />
+
+  <!-- Path Definitions -->
+  <path id="project.class.path">
+    <pathelement location="${javac.dest.test}" />
+    <pathelement location="${javac.dest}" />
+    <fileset refid="maven-ant-tasks.dependency.fileset" />
+  </path>
 
   <!-- prepare -->
-  <target name="prepare" description="ビルド環境の">
-    <mkdir dir="${dir.build}" />
-    <delete file="${signjar.jar}" />
-    <delete file="gi.jar" />
-  </target>
-
-  <!-- javac -->
-  <target name="compile" depends="prepare" description="コンパイル">
-    <javac debug="on" description="true" destdir="${dir.build}">
-      <classpath refid="project.class.path" />
-      <include name="**/*.java" />
-      <src path="src" />
-    </javac>
-    <copy todir="${dir.build}" preservelastmodified="true">
-      <fileset dir="src">
-        <include name="**/*.properties" />
-      </fileset>
-    </copy>
+  <target name="prepare" description="Preparing">
+    <artifact:pom file="pom.xml" id="maven.project" />
+    <artifact:dependencies fileSetId="maven-ant-tasks.dependency.fileset">
+      <pom refid="maven.project" />
+    </artifact:dependencies>
+    <artifact:mvn pom="pom.xml">
+      <arg value="clean" />
+      <arg value="package" />
+      <arg value="-Dmaven.test.skip=true"/>
+    </artifact:mvn>
   </target>
 
   <!-- javah -->
-  <target name="javah" depends="compile" description="Makeing Header">
+  <target name="javah" depends="prepare" description="Makeing Header">
     <javah destdir="src">
       <classpath>
         <pathelement location="src" />
@@ -73,8 +60,8 @@
     </javah>
   </target>
 
-  <!-- gcc -->
-  <target name="compile.native" depends="javah" description="コンパイル C">
+  <!-- gcc cygwin -->
+  <target name="compile.native.cygwin" depends="javah" description="Compiling C">
     <apply executable="gcc" dest="${dir.native}" parallel="false">
       <arg value="-c" />
       <arg line="-g -Wall -O2" />
@@ -92,8 +79,8 @@
     </apply>
   </target>
 
-  <!-- link -->
-  <target name="link" depends="compile.native" description="Makeing DLL">
+  <!-- link cygwin -->
+  <target name="link.cygwin" depends="compile.native.cygwin" description="Makeing DLL">
     <apply executable="dllwrap" dest="lib">
       <arg value="--add-stdcall-alias" />
       <arg line="--driver-name gcc" />
@@ -110,7 +97,7 @@
   </target>
 
   <!-- packaging.gi -->
-  <target name="packaging.gi" depends="" description="Packaging">
+  <target name="packaging.gi" depends="prepare" description="Packaging instrumentation">
     <jar jarfile="gi.jar" manifest="etc/manifest.mf">
       <fileset dir="${dir.build}">
         <include name="GenericInstrumentation*.class" />
@@ -121,20 +108,33 @@
   </target>
 
   <!-- packaging.mscrypto -->
-  <target name="packaging.mscrypto" depends="" description="Packaging">
-    <jar jarfile="${signjar.jar}">
-      <fileset dir="${dir.build}">
+  <target name="packaging.mscrypto" depends="" description="Packaging mscrypt">
+    <jar jarfile="${mscrypt.signjar.jar}">
+      <fileset dir="${javac.dest}">
         <include name="com/boyter/mscrypto/**/*.class" />
       </fileset>
     </jar>
-    <signjar jar="${signjar.jar}"
+    <signjar jar="${mscrypt.signjar.jar}"
+             alias="${signjar.keystore.alias}"
+             storepass="${signjar.keystore.password}"
+             keystore="${signjar.keystore.file}" />
+  </target>
+
+  <!-- packaging.camellia -->
+  <target name="packaging.camellia" depends="" description="Packaging camellia">
+    <jar jarfile="${cammelia.signjar.jar}">
+      <fileset dir="${javac.dest}">
+        <include name="vavi/crypt/camellia/**/*.class" />
+      </fileset>
+    </jar>
+    <signjar jar="${cammelia.signjar.jar}"
              alias="${signjar.keystore.alias}"
              storepass="${signjar.keystore.password}"
              keystore="${signjar.keystore.file}" />
   </target>
 
   <!-- jar -->
-  <target name="packaging" depends="compile" description="パッケージング">
+  <target name="packaging" depends="prepare" description="Packaging All">
     <antcall target="packaging.gi" />
     <antcall target="packaging.mscrypto" />
   </target>
@@ -151,7 +151,6 @@
       <classpath>
         <pathelement location="mscrypto.jar" />
         <path refid="project.class.path" />
-        <pathelement location="${dir.build}" />
       </classpath>
       <arg value="pkcs12" />
     </java>
@@ -161,7 +160,7 @@
   <target name="t2" depends="packaging" description="ssl test using mscrypto">
     <java classname="t113_2" fork="yes">
       <env key="PATH" path="lib" />
-<!--
+      <!--
       <jvmarg value="-Ddeployment.security.browser.keystore.use=true" />
       <jvmarg value="-Dsecurity.provider.1=com.boyter.mscrypto.MSKeyManagerProvider" />
       <jvmarg value="-Dsecurity.provider.2=com.boyter.mscrypto.MSTrustManagerProvider" />
@@ -174,7 +173,6 @@
       <classpath>
         <pathelement location="mscrypto.jar" />
         <path refid="project.class.path" />
-        <pathelement location="${dir.build}" />
       </classpath>
       <arg value="${t2.url}" />
     </java>
@@ -184,7 +182,7 @@
   <target name="t2d" depends="packaging" description="ssl test using mscrypto original">
     <java classname="t113_2" fork="yes">
       <env key="PATH" path="lib" />
-<!--
+      <!--
       <jvmarg value="-Ddeployment.security.browser.keystore.use=true" />
       <jvmarg value="-Dsecurity.provider.1=com.boyter.mscrypto.MSKeyManagerProvider" />
       <jvmarg value="-Dsecurity.provider.2=com.boyter.mscrypto.MSTrustManagerProvider" />
@@ -194,10 +192,9 @@
       <jvmarg value="-javaagent:gi.jar" />
       <jvmarg value="-Djava.security.manager" />
       <jvmarg value="-Djava.security.policy=mscrypto.policy" />
-        <classpath>
+      <classpath>
         <pathelement location="lib/mscrypto.jar" />
         <path refid="project.class.path" />
-        <pathelement location="${dir.build}" />
         <fileset dir="${dir.build}">
           <exclude name="com/**/*" />
           <exclude name="org/**/*" />
@@ -208,18 +205,32 @@
   </target>
 
   <!-- t3 -->
-  <target name="t3" depends="compile,packaging.gi" description="ssl test using opensign">
+  <target name="t3" depends="prepare,packaging.gi" description="ssl test using opensign">
     <java classname="t113_3" fork="yes">
       <env key="PATH" path="lib" />
       <jvmarg value="-javaagent:gi.jar" />
       <classpath>
-        <fileset dir="lib">
-          <include name="*.zip" />
-        </fileset>
         <path refid="project.class.path" />
-        <pathelement location="${dir.build}" />
       </classpath>
       <arg value="${t2.url}" />
+    </java>
+  </target>
+
+  <!-- t13 -->
+  <target name="t13" depends="prepare" description="SSL">
+    <java classname="t13" fork="yes">
+      <jvmarg value="-Dfile.encoding=UTF-8" />
+      <jvmarg value="-Djavax.net.ssl.keyStore=${t13.jks.file}" />
+      <jvmarg value="-Djavax.net.ssl.keyStorePassword=${t13.jks.password}" />
+      <classpath refid="project.class.path" />
+      <arg value="${t13.url}" />
+    </java>
+  </target>
+
+  <!-- t19 -->
+  <target name="t19" depends="prepare" description="crypt">
+    <java classname="t19" fork="yes">
+      <classpath refid="project.class.path" />
     </java>
   </target>
 
