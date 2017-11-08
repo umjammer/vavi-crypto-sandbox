@@ -16,7 +16,7 @@ import javassist.CtMethod;
 
 
 /**
- * PropertiesClassFileTransformer. 
+ * PropertiesClassFileTransformer.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 051215 nsano initial version <br>
@@ -35,10 +35,10 @@ System.err.println("PropertiesClassFileTransformer::transform: " + className);
             try {
                 ByteArrayInputStream stream = new ByteArrayInputStream(classfileBuffer);
                 CtClass ctClass = GenericInstrumentation.getClassPool().makeClass(stream);
-                
+
                 CtMethod ctMethod = ctClass.getDeclaredMethod(method);
                 ctMethod.insertBefore(instruction);
-                
+
                 return ctClass.toBytecode();
             } catch (Exception e) {
 e.printStackTrace(System.err);
@@ -72,7 +72,7 @@ System.err.println(" class: " + clazz);
 System.err.println(" method: " + method);
 System.err.println(" instruction: " + instruction);
         } catch (IOException e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 }

@@ -13,7 +13,7 @@ import java.security.Provider;
 
 /**
  * MSRSASignProvider.
- * 
+ *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050604 nsano modified <br>

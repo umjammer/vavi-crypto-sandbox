@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: SSLTool.java,v 1.1.1.1 2003/10/05 18:39:26 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -23,7 +23,7 @@ import org.jstk.JSTKResult;
 public class SSLTool {
     public static final Logger logger = Logger.getLogger("org.jstk.ssl");
 
-    static Map<String, JSTKCommand> cmds = new HashMap<String, JSTKCommand>(); // Keep it accessible by BenchCommand.
+    static Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
     static {
         cmds.put("server", new ServerCommand());
         cmds.put("client", new ClientCommand());

@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: JSTKLoginModule.java,v 1.1.1.1 2003/10/05 18:39:27 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -62,19 +62,19 @@ public class JSTKLoginModule implements LoginModule {
 
     /**
      * Initialize this <code>LoginModule</code>.
-     * 
+     *
      * <p>
-     * 
+     *
      * @param subject the <code>Subject</code> to be authenticated.
      *            <p>
-     * 
+     *
      * @param callbackHandler a <code>CallbackHandler</code> for communicating with the end user (prompting for user names and
      *            passwords, for example).
      *            <p>
-     * 
+     *
      * @param sharedState shared <code>LoginModule</code> state.
      *            <p>
-     * 
+     *
      * @param options options specified in the login <code>Configuration</code> for this particular <code>LoginModule</code>.
      */
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
@@ -103,14 +103,14 @@ public class JSTKLoginModule implements LoginModule {
 
     /**
      * Authenticate the user by prompting for a user name and password.
-     * 
+     *
      * <p>
-     * 
+     *
      * @return true in all cases since this <code>LoginModule</code> should not be ignored.
-     * 
+     *
      * @exception FailedLoginException if the authentication fails.
      *                <p>
-     * 
+     *
      * @exception LoginException if this <code>LoginModule</code> is unable to perform the authentication.
      */
     public boolean login() throws LoginException {
@@ -188,17 +188,17 @@ public class JSTKLoginModule implements LoginModule {
      * <p>
      * This method is called if the LoginContext's overall authentication succeeded (the relevant REQUIRED, REQUISITE, SUFFICIENT
      * and OPTIONAL LoginModules succeeded).
-     * 
+     *
      * <p>
      * If this LoginModule's own authentication attempt succeeded (checked by retrieving the private state saved by the
      * <code>login</code> method), then this method associates a <code>SamplePrincipal</code> with the <code>Subject</code>
      * located in the <code>LoginModule</code>. If this LoginModule's own authentication attempted failed, then this method
      * removes any state that was originally saved.
-     * 
+     *
      * <p>
-     * 
+     *
      * @exception LoginException if the commit fails.
-     * 
+     *
      * @return true if this LoginModule's own login and commit attempts succeeded, or false otherwise.
      */
     public boolean commit() throws LoginException {
@@ -218,7 +218,7 @@ public class JSTKLoginModule implements LoginModule {
             }
             try {
                 Iterator<Principal> itr = uam.userRoles(username);
-                rolePrincipals = new Vector<Principal>();
+                rolePrincipals = new Vector<>();
                 while (itr.hasNext()) {
                     Principal rolePrincipal = itr.next();
                     if (!subject.getPrincipals().contains(rolePrincipal)) {
@@ -248,15 +248,15 @@ public class JSTKLoginModule implements LoginModule {
      * <p>
      * This method is called if the LoginContext's overall authentication failed. (the relevant REQUIRED, REQUISITE, SUFFICIENT
      * and OPTIONAL LoginModules did not succeed).
-     * 
+     *
      * <p>
      * If this LoginModule's own authentication attempt succeeded (checked by retrieving the private state saved by the
      * <code>login</code> and <code>commit</code> methods), then this method cleans up any state that was originally saved.
-     * 
+     *
      * <p>
-     * 
+     *
      * @exception LoginException if the abort fails.
-     * 
+     *
      * @return false if this LoginModule's own login and/or commit attempts failed, and true otherwise.
      */
     public boolean abort() throws LoginException {
@@ -283,14 +283,14 @@ public class JSTKLoginModule implements LoginModule {
 
     /**
      * Logout the user.
-     * 
+     *
      * <p>
      * This method removes the <code>SamplePrincipal</code> that was added by the <code>commit</code> method.
-     * 
+     *
      * <p>
-     * 
+     *
      * @exception LoginException if the logout fails.
-     * 
+     *
      * @return true in all cases since this <code>LoginModule</code> should not be ignored.
      */
     public boolean logout() throws LoginException {

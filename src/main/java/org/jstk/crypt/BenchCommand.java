@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: BenchCommand.java,v 1.1.1.1 2003/10/05 18:39:16 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -28,7 +28,7 @@ import org.jstk.JSTKResult;
 
 
 public class BenchCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<String, String>();
+    private static Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cmdfile", "bin/ctbench.cmds");
         defaults.put("runcount", "1");
@@ -73,14 +73,14 @@ public class BenchCommand extends JSTKCommandAdapter {
         st.slashStarComments(true);
         st.eolIsSignificant(true);
 
-        Vector<String[]> cmdLines = new Vector<String[]>();
+        Vector<String[]> cmdLines = new Vector<>();
         Vector<String> cmdWords = null;
         int tok;
         do {
             tok = st.nextToken();
             if (tok == StreamTokenizer.TT_WORD) {
                 if (cmdWords == null)
-                    cmdWords = new Vector<String>();
+                    cmdWords = new Vector<>();
                 cmdWords.add(st.sval);
             } else if ((tok == StreamTokenizer.TT_EOL) || (tok == StreamTokenizer.TT_EOF)) {
                 if (cmdWords == null)

@@ -27,7 +27,7 @@ import vavi.util.Debug;
 
 /**
  * MSTrustManagerImpl.
- * 
+ *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
@@ -38,7 +38,7 @@ final class MSTrustManagerImpl implements X509TrustManager {
     private static final MSCryptoManager msCryptoManager = MSCryptoManager.getInstance();
 
     /**
-     * @param ks this method use windows key store, this means nothing, so set null 
+     * @param ks this method use windows key store, this means nothing, so set null
      */
     MSTrustManagerImpl(KeyStore ks) throws KeyStoreException {
     }
@@ -67,7 +67,7 @@ Debug.println("getAcceptedIssuers: " + certcollection.size() + " certs found");
             caArray = certcollection.toArray(caArray);
 
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 //for (int i = 0; i < caArray.length; i++) {
@@ -93,7 +93,7 @@ Debug.println(">>>>>>>> checkClientTrusted: Entered: " + authType);
 Debug.printStackTrace(e);
             throw e;
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -113,7 +113,7 @@ Debug.println(">>>>>>>> checkServerTrusted: Entered: " + authType);
 Debug.printStackTrace(e);
             throw e;
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 }

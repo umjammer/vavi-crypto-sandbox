@@ -22,7 +22,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 /**
  * EchoServer.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano initial version <br>
  */
@@ -75,13 +75,13 @@ class ThreadedEchoHandler extends Thread {
     public void run() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            // PrintWriter out = new PrintWriter(socket.getOutputStream(), true
-            // /* autoFlush */);
+//             PrintWriter out = new PrintWriter(socket.getOutputStream(), true
+//             /* autoFlush */);
 
             String string = null;
             while ((string = in.readLine()) != null) {
-                if (string == null)
-                    break;
+//                if (string == null)
+//                    break;
                 System.out.println(counter + ": " + string);
                 System.out.flush();
             }

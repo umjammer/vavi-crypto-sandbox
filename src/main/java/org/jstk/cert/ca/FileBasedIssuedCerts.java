@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: FileBasedIssuedCerts.java,v 1.1.1.1 2003/10/05 18:39:15 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -77,8 +77,7 @@ public class FileBasedIssuedCerts implements IssuedCerts {
     }
 
     public boolean exists(Certificate cert) throws CADatabaseException {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(indexFileName));
+        try (BufferedReader br = new BufferedReader(new FileReader(indexFileName))) {
             X509Certificate x509Cert = (X509Certificate) cert;
             String serialNo = x509Cert.getSerialNumber().toString();
             String line = null;

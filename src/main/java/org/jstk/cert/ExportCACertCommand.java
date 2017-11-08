@@ -25,7 +25,7 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class ExportCACertCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<String, String>();
+    private static Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cadir", "cadir");
         defaults.put("cerfile", "ca.cer");

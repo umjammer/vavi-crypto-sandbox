@@ -25,11 +25,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package vavi.crypt.camellia;
+package vavi.crypto.camellia;
 
 
 /**
- * Camellia. 
+ * Camellia.
  *
  * @author NTT
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
@@ -40,7 +40,7 @@ public final class Camellia {
     /*
      * S-box data
      */
-    private static final int sBox1_1110[] = {
+    private static final int[] sBox1_1110 = {
         0x70707000, 0x82828200, 0x2c2c2c00, 0xececec00, 0xb3b3b300, 0x27272700,
         0xc0c0c000, 0xe5e5e500, 0xe4e4e400, 0x85858500, 0x57575700, 0x35353500,
         0xeaeaea00, 0x0c0c0c00, 0xaeaeae00, 0x41414100, 0x23232300, 0xefefef00,
@@ -86,7 +86,7 @@ public final class Camellia {
         0x77777700, 0xc7c7c700, 0x80808000, 0x9e9e9e00
     };
 
-    private static final int sBox4_4404[] = {
+    private static final int[] sBox4_4404 = {
         0x70700070, 0x2c2c002c, 0xb3b300b3, 0xc0c000c0, 0xe4e400e4, 0x57570057,
         0xeaea00ea, 0xaeae00ae, 0x23230023, 0x6b6b006b, 0x45450045, 0xa5a500a5,
         0xeded00ed, 0x4f4f004f, 0x1d1d001d, 0x92920092, 0x86860086, 0xafaf00af,
@@ -132,7 +132,7 @@ public final class Camellia {
         0xe3e300e3, 0xf4f400f4, 0xc7c700c7, 0x9e9e009e
     };
 
-    private static final int sBox2_0222[] = {
+    private static final int[] sBox2_0222 = {
         0x00e0e0e0, 0x00050505, 0x00585858, 0x00d9d9d9, 0x00676767, 0x004e4e4e,
         0x00818181, 0x00cbcbcb, 0x00c9c9c9, 0x000b0b0b, 0x00aeaeae, 0x006a6a6a,
         0x00d5d5d5, 0x00181818, 0x005d5d5d, 0x00828282, 0x00464646, 0x00dfdfdf,
@@ -178,7 +178,7 @@ public final class Camellia {
         0x00eeeeee, 0x008f8f8f, 0x00010101, 0x003d3d3d
     };
 
-    private static final int sBox3_3033[] = {
+    private static final int[] sBox3_3033 = {
         0x38003838, 0x41004141, 0x16001616, 0x76007676, 0xd900d9d9, 0x93009393,
         0x60006060, 0xf200f2f2, 0x72007272, 0xc200c2c2, 0xab00abab, 0x9a009a9a,
         0x75007575, 0x06000606, 0x57005757, 0xa000a0a0, 0x91009191, 0xf700f7f7,
@@ -229,16 +229,16 @@ public final class Camellia {
     private int pt0, pt1, pt2, pt3;
 
     private final int rotateRight(int x, int s) {
-        return (((x) >>> (s)) + ((x) << (32 - s)));
-    };
+        return ((x >>> s) + (x << (32 - s)));
+    }
 
     private final long rotateLeft(int x, int s) {
-        return ((x) << (s)) + ((x) >>> (32 - s));
-    };
+        return (x << s) + (x >>> (32 - s));
+    }
 
     /**
      * Computes the exclusive-or of x and y and and assigns it to z, ie,
-     * 
+     *
      * z = x ^ y
      */
     private void xorBlock(int[] x, int xp, int[] y, int yp, int[] z, int zp) {
@@ -251,7 +251,7 @@ public final class Camellia {
     /**
      * This function is only used in key generation.
      */
-    private static void rotBlock(int x[], int xp, int n, int y[], int yp) {
+    private static void rotBlock(int[] x, int xp, int n, int[] y, int yp) {
         int r = (n & 31); /* Must not be 0 */
         int idx = (n >>> 5);
         int idx1 = (idx + 1) & 3;
@@ -264,11 +264,11 @@ public final class Camellia {
 
     /* Key generation constants */
 
-    private final int sigma1[] = {
+    private final int[] sigma1 = {
         0xa09e667f, 0x3bcc908b, 0xb67ae858, 0x4caa73b2
     };
 
-    private final int sigma2[] = {
+    private final int[] sigma2 = {
         0xc6ef372f, 0xe94f82be, 0x54ff53a5, 0xf1d36f1c
     };
 
@@ -276,16 +276,16 @@ public final class Camellia {
      * As for this variable, it is used in 192/256 bit version camellia.
      */
     @SuppressWarnings("unused")
-    private static final int sigma3[] = {
+    private static final int[] sigma3 = {
         0x10e527fa, 0xde682d1d, 0xb05688c2, 0xb3e6c1fd
     };
 
-    private static int ksft1[] = {
+    private static int[] ksft1 = {
         0, 64, 0, 64, 15, 79, 15, 79, 30, 94, 45, 109, 45, 124, 60, 124, 77, 13,
         94, 30, 94, 30, 111, 47, 111, 47
     };
 
-    private static int kidx1[] = {
+    private static int[] kidx1 = {
         0, 0, 8, 8, 0, 0, 8, 8, 8, 8, 0, 0, 8, 0, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 8, 8
     };
 
@@ -293,7 +293,7 @@ public final class Camellia {
      * As for this variable, it is used in 192/256 bit version camellia.
      */
     @SuppressWarnings("unused")
-    private static int ksft2[] = {
+    private static int[] ksft2 = {
         0, 64, 0, 64, 15, 79, 15, 79, 30, 94, 30, 94, 45, 109, 45, 109,
         60, 124, 60, 124, 60, 124, 77, 13, 77, 13, 94, 30, 94, 30, 111, 47, 111, 47
     };
@@ -302,7 +302,7 @@ public final class Camellia {
      * As for this variable, it is used in 192/256 bit version camellia.
      */
     @SuppressWarnings("unused")
-    private static int kIdx2[] = {
+    private static int[] kIdx2 = {
         0, 0, 12, 12, 4, 4, 8, 8, 4, 4, 12, 12, 0, 0, 8, 8, 0, 0, 4, 4, 12, 12,
         0, 0, 8, 8, 4, 4, 8, 8, 0, 0, 12, 12
     };
@@ -408,7 +408,7 @@ public final class Camellia {
     }
 
     /**
-     * @param rawKey 128 bit key 
+     * @param rawKey 128 bit key
      * @param keyTable 52 bytes table, 52 means ???
      */
     public void genEkey(int[] rawKey, int[] keyTable) {
@@ -437,7 +437,7 @@ public final class Camellia {
      * @param keyTable generated by {@link #genEkey(int[], int[])}
      * @param cipherText 4 byte encrypted
      */
-    public void encryptBlock(int plainText[], int keyTable[], int cipherText[]) {
+    public void encryptBlock(int[] plainText, int[] keyTable, int[] cipherText) {
 
         int k = 4;
 
@@ -470,8 +470,8 @@ public final class Camellia {
      * @param keyTable generated by {@link #genEkey(int[], int[])}
      * @param plainText 4 byte decrypted
      */
-    public void decryptBlock(int cipherText[], int keyTable[], int plainText[]) {
-        
+    public void decryptBlock(int[] cipherText, int[] keyTable, int[] plainText) {
+
         int k = 48;
 
         pt0 = keyTable[k + 0] ^ (cipherText[0]);

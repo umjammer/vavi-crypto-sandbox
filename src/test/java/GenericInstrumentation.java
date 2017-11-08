@@ -15,7 +15,7 @@ import javassist.ClassPool;
 
 /**
  * GenericInstrumentation.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 051215 nsano initial version <br>
  */
@@ -23,11 +23,11 @@ public class GenericInstrumentation {
 
     /** */
     static ClassPool classPool;
-    
+
     /** */
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         classPool = ClassPool.getDefault();
-        
+
         Enumeration<?> e = props.propertyNames();
         while (e.hasMoreElements()) {
             String name = (String) e.nextElement();
@@ -53,7 +53,7 @@ System.err.println(name + ", " + classFileTransformer.getClass());
         try {
             props.load(GenericInstrumentation.class.getResourceAsStream("GenericInstrumentation.properties"));
         } catch (IOException e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 

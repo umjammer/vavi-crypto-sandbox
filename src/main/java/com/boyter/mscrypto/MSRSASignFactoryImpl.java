@@ -20,7 +20,7 @@ import vavi.util.Debug;
 
 
 /**
- * MSRSASignFactoryImpl. 
+ * MSRSASignFactoryImpl.
  *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
@@ -141,7 +141,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
                 jsse.update(b);
             }
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -159,7 +159,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
                 jsse.update(data, off, len);
             }
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -176,7 +176,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineInitVerify: entered");
             jsse = Signature.getInstance(SignatureAlg, "SunJSSE");
             jsse.initVerify(publicKey);
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
         signOpInProgress = false;
@@ -198,7 +198,7 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
         try {
             verifyresult = jsse.verify(sigBytes);
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
         return verifyresult;
@@ -220,7 +220,7 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
         try {
             verifyresult = jsse.verify(sig, off, len);
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
         return verifyresult;

@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: ASN1Set.java,v 1.1.1.1 2003/10/05 18:39:12 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -18,7 +18,7 @@ import java.util.List;
 /** */
 public class ASN1Set extends ASN1Type {
     /** */
-    protected List<ASN1Type> elems = new ArrayList<ASN1Type>();
+    protected List<ASN1Type> elems = new ArrayList<>();
 
     /** */
     private boolean ignoreMembers = false;
@@ -78,7 +78,7 @@ public class ASN1Set extends ASN1Type {
         if (elems == null) {
             return null;
         }
-        List<byte[]> elemEncodings = new ArrayList<byte[]>();
+        List<byte[]> elemEncodings = new ArrayList<>();
         int len = 0;
         for (int i = 0; i < elems.size(); i++) {
             ASN1Type elem = elems.get(i);

@@ -39,7 +39,7 @@ import vavi.util.Debug;
 
 /**
  * MSKeyManagerImpl.
- * 
+ *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
@@ -66,7 +66,7 @@ final class MSKeyManagerImpl implements X509KeyManager {
 Debug.println(">>>> chooseClientAlias: entered: issures: " + issuers.length + ", types: " + keyType.length);
 
         try {
-            List<String> aliases = new ArrayList<String>();
+            List<String> aliases = new ArrayList<>();
             for (int i = 0; i < keyType.length; i++) {
 Debug.println(i + ": " + keyType[i]);
                 String[] tmp = getClientAliases(keyType[i], issuers);
@@ -79,7 +79,7 @@ Debug.println("chooseClientAlias: something wrong - no aliases");
 Debug.println("aliases: " + aliases.size());
             alias = aliases.get(0);
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 Debug.println("<<<< chooseClientAlias: " + alias);
@@ -104,7 +104,7 @@ Debug.println("chooseServerAlias: something wrong - no aliases");
             }
             alias = aliases[0];
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 Debug.println("<<<< chooseServerAlias: " + alias);
@@ -133,7 +133,7 @@ Debug.println(">>>> getCertificateChain: entered, alias:" + alias);
             certChain = msCryptoManager.getCertChain(cert);
 
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 Debug.println("<<<< getCertificateChain: certChain:" + (certChain != null ? certChain.length : -1));
@@ -161,7 +161,7 @@ Debug.println("Number of accepted issuers: " + (issuers != null ? issuers.length
             validAliases = checkAlias(aliases, issuers);
 
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 Debug.println("<<<< aliases found: " + validAliases.length);
@@ -193,7 +193,7 @@ Debug.println(">>>> No server aliases found");
             validAliases = checkAlias(aliases, issuers);
 
         } catch (Exception e) {
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
 
 Debug.println(">>>> aliases found: " + validAliases.length);
@@ -286,7 +286,7 @@ Debug.println("keysize: " + keySize);
             }
         } catch (Exception e) {
             Debug.println(Level.SEVERE, ">>>> " + e);
-//            throw (RuntimeException) new IllegalStateException().initCause(e);
+//            throw new IllegalStateException(e);
         }
 
 // Debug.println("mod: " + rsaprivcrtkey.getModulus());
@@ -314,8 +314,8 @@ Debug.println(">>>> getPrivateKey: normal exit");
 
 Debug.println(">>>> CheckAlias: entered");
         X509Certificate cert = null;
-        List<String> aliasList = new ArrayList<String>();
-        List<String> issuerList = new ArrayList<String>();
+        List<String> aliasList = new ArrayList<>();
+        List<String> issuerList = new ArrayList<>();
 
 Debug.println("aliases: " + aliases.length);
 Debug.println("issuers: " + (issuers != null ? issuers.length : -1));

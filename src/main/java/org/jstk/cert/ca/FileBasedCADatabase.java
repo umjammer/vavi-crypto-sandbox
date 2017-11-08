@@ -28,52 +28,30 @@ import java.util.Vector;
 
 
 public class FileBasedCADatabase implements CADatabaseSpi {
+
     public static final String KEYSTORE = "ca.ks";
-
     public static final String STORETYPE = "JCEKS";
-
     public static final String ALIAS = "cakey";
-
     public static final String STOREPASS = "changeit";
-
     public static final String KEYPASS = "changeit";
-
     public static final String ISSUED_DIR = "issued";
-
     public static final String REVOKED_DIR = "revoked";
-
     public static final String ISSUED_CERTS = "issued.certs";
-
     public static final String REVOKED_CERTS = "revoked.certs";
-
     public static final String SERIALNO_FILE = "serialno.cur";
-
     public static final String STORETYPE_FILE = "caks.type";
-
     public static final String START_SERIALNO = "999";
 
-    public static final BigInteger ONE = new BigInteger("1");
-
     private String ksFileName;
-
     private String serialNoFileName;
-
     private String storeTypeFileName;
-
     private String caDirName;
-
     private PrivateKey caPrivateKey;
-
     private Certificate caCert;
-
     private CertPath caCertPath;
-
     private File caDir;
-
 //    private boolean initialized = false;
-
     private String password;
-
     private String storeType;
 
     public FileBasedCADatabase(FileBasedCADatabaseParams params) throws CADatabaseException {
@@ -130,7 +108,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
                 throw new CADatabaseException("Certificate not found in keystore: " + ksFileName);
             }
             CertificateFactory certFac = CertificateFactory.getInstance("X.509");
-            Vector<Certificate> certVec = new Vector<Certificate>();
+            Vector<Certificate> certVec = new Vector<>();
             for (int i = 0; i < caCerts.length; i++) {
                 certVec.add(caCerts[i]);
             }
@@ -229,7 +207,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
             String serialNoString = br.readLine();
             BigInteger serialNo = new BigInteger(serialNoString);
             br.close();
-            serialNo = serialNo.add(ONE);
+            serialNo = serialNo.add(BigInteger.ONE);
             PrintWriter pw = new PrintWriter(new FileWriter(serialNoFileName));
             pw.println(serialNo.toString());
             pw.close();

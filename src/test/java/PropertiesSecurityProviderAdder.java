@@ -13,7 +13,7 @@ import java.util.Properties;
 
 /**
  * SystemPropertiesSecurityProviderAdder.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 051215 nsano initial version <br>
  */
@@ -43,7 +43,7 @@ System.err.println("PropertiesSecurityProviderAdder::exec: " + name + ", " + pro
             props.load(GenericInstrumentation.class.getResourceAsStream("PropertiesSecurityProviderAdder.properties"));
         } catch (IOException e) {
 e.printStackTrace(System.err);
-            throw (RuntimeException) new IllegalStateException().initCause(e);
+            throw new IllegalStateException(e);
         }
     }
 }

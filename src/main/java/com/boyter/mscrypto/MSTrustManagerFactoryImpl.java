@@ -18,7 +18,7 @@ import java.security.KeyStore;
 
 /**
  * MSTrustManagerFactoryImpl.
- * 
+ *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
@@ -28,7 +28,7 @@ public final class MSTrustManagerFactoryImpl extends TrustManagerFactorySpi {
     private X509TrustManager trustManager;
 
     /**
-     * @param ks this method use windows key store, so set null 
+     * @param ks this method use windows key store, so set null
      */
     protected void engineInit(KeyStore ks) throws KeyStoreException {
         trustManager = new MSTrustManagerImpl(null);

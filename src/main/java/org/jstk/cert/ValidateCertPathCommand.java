@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: ValidateCertPathCommand.java,v 1.1.1.1 2003/10/05 18:39:14 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -37,7 +37,7 @@ import org.jstk.cert.rep.FileBasedRepository;
 
 
 public class ValidateCertPathCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<String, String>();
+    private static Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cerfile", "my.cer");
         defaults.put("truststore", "my.ts");
@@ -112,7 +112,7 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
             if (crlfile != null && (new java.io.File(crlfile)).exists()) {
                 BufferedInputStream bis1 = new BufferedInputStream(new FileInputStream(crlfile));
                 CRL crl = cf.generateCRL(bis1);
-                Vector<CRL> params = new Vector<CRL>();
+                Vector<CRL> params = new Vector<>();
                 params.add(crl);
                 CollectionCertStoreParameters csParams = new CollectionCertStoreParameters(params);
                 CertStore cs = CertStore.getInstance("Collection", csParams);

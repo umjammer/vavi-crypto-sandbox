@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: SecurityInfo.java,v 1.1.1.1 2003/10/05 18:39:18 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -28,7 +28,7 @@ public class SecurityInfo {
         Properties props;
 
         public AlgInfo(String alg1, String alg2, String pn, String pv) {
-            aliases = new HashSet<String>();
+            aliases = new HashSet<>();
             aliases.add(alg1);
             if (alg2 != null)
                 aliases.add(alg2);
@@ -89,7 +89,7 @@ public class SecurityInfo {
             info = provider.getInfo();
 
             props = new Properties();
-            svcmap = new HashMap<String, Vector<SecurityInfo.AlgInfo>>();
+            svcmap = new HashMap<>();
             Iterator<Map.Entry<Object, Object>> itr = provider.entrySet().iterator();
             while (itr.hasNext()) {
                 Map.Entry<Object, Object> ent = itr.next();
@@ -120,7 +120,7 @@ public class SecurityInfo {
                 }
                 Vector<AlgInfo> algs = svcmap.get(svc);
                 if (algs == null) { // Found a new service.
-                    algs = new Vector<AlgInfo>();
+                    algs = new Vector<>();
 
                     algs.add(new AlgInfo(alg1, alg2, pname, pvalue));
                     svcmap.put(svc, algs);

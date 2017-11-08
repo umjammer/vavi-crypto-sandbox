@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: FileBasedRepository.java,v 1.1.1.1 2003/10/05 18:39:15 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -107,6 +107,7 @@ public class FileBasedRepository {
             off = 0;
         }
 
+        @SuppressWarnings("unused")
         public int getOffset() {
             return off;
         }
@@ -152,7 +153,7 @@ public class FileBasedRepository {
 
     private String filename = null;
 
-    private List<Object> list = new ArrayList<Object>();
+    private List<Object> list = new ArrayList<>();
 
     public FileBasedRepository(String filename) throws Exception {
         this.filename = filename;
@@ -174,7 +175,7 @@ public class FileBasedRepository {
         if (magicNo != FBREP_MAGIC)
             throw new IOException("Not a File Based Repository");
 
-        list = new ArrayList<Object>();
+        list = new ArrayList<>();
         boolean scanComplete = false;
         while (!scanComplete) {
             byte entryId = fbrInput.readByte();

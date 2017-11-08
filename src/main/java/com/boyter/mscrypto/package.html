@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Shift_JIS"?>
+<?xml version="1.0" encoding="utf-8"?>
 <html lang="ja">
 
 <head>
@@ -13,8 +13,8 @@
  *
  * Written by Naohide Sano
  *
- * @description	com.boyter.mscrypto �p�b�P�[�W
- * @status	����m�F
+ * @description	com.boyter.mscrypto パッケージ
+ * @status	動作確認
  *
  * @author	<a href=mailto:"vavivavi@yahoo.co.jp">Naohide Sano</a>(nsano)
  *
@@ -24,42 +24,42 @@
 
 <body>
 
-<p>M$ �̏ؖ����������N���X��񋟂��܂��D</p>
+<p>M$ の証明書を扱うクラスを提供します．</p>
 
-<h2>�킩��������</h2>
+<h2>わかったこと</h2>
 
 <ul>
- <li>�L�[�X�g�A�ɂ͊Ǘ��p�p�X���[�h������A<code>$JAVA_HOME/jre/lib/security/cacerts</code>�̃f�t�H���g�p�X���[�h��
+ <li>キーストアには管理用パスワードがあり、<code>$JAVA_HOME/jre/lib/security/cacerts</code>のデフォルトパスワードは
  <pre>
 changeit
-</pre> �ł���. keytools��,<code>-keystore</code>�I�v�V�����ŃL�[�X�g�A�t�@�C�����w�肵�Ȃ��ꍇ�A<code>$HOME/.keystore</code>
- �t�@�C�����L�[�X�g�A�t�@�C���Ƃ��Ďg�p����(�Ȃ���΍쐬����)�B����AJava�A�v���P�[�V�����̓f�t�H���g�� <code>$JAVA_HOME/jre/lib/security/cacerts</code>
- ���L�[�X�g�A�t�@�C���Ƃ��Ďg�p����(��)�B Java �A�v���P�[�V�����ɔC�ӂ̃L�[�X�g�A�t�@�C�����w�肷��ɂ̓V�X�e���v���p�e�B���w�肷��B<br/><br/>
+</pre> である. keytoolsは,<code>-keystore</code>オプションでキーストアファイルを指定しない場合、<code>$HOME/.keystore</code>
+ ファイルをキーストアファイルとして使用する(なければ作成する)。一方、Javaアプリケーションはデフォルトで <code>$JAVA_HOME/jre/lib/security/cacerts</code>
+ をキーストアファイルとして使用する(※)。 Java アプリケーションに任意のキーストアファイルを指定するにはシステムプロパティを指定する。<br/><br/>
  <ul>
   <li><code>javax.net.ssl.trustStore</code>
-  <p>�g���X�g�X�g�A�t�@�C��</p>
+  <p>トラストストアファイル</p>
   </li>
   <li><code>javax.net.ssl.trustStorePassword</code>
-  <p>�g���X�g�X�g�A�t�@�C���̃p�X���[�h</p>
+  <p>トラストストアファイルのパスワード</p>
   </li>
   <li><code>javax.net.ssl.keyStore</code>
-  <p>�L�[�X�g�A�t�@�C��</p>
+  <p>キーストアファイル</p>
   </li>
   <li><code>javax.net.ssl.keyStorePassword</code>
-  <p>�L�[�X�g�A�t�@�C���̃p�X���[�h</p>
-  <p>�ǂ����C����������,�g���X�g�X�g�A�͐M���ł���T�[�o�ؖ������i�[�����L�[�X�g�A�ł���ASSL�ʐM�̂��߂ɂ�<code>trustStore</code>�A<code>trustStorePassword</code>���w�肷��B
-  <code>trustStorePassword</code>�͎w��
-  ���Ȃ��Ă�����\�ŁA�w�肵���ꍇ�̓g���X�g�X�g�A�t�@�C���̐����������؂ł���炵���B</p>
+  <p>キーストアファイルのパスワード</p>
+  <p>どうも気持が悪いが,トラストストアは信頼できるサーバ証明書を格納したキーストアであり、SSL通信のためには<code>trustStore</code>、<code>trustStorePassword</code>を指定する。
+  <code>trustStorePassword</code>は指定
+  しなくても動作可能で、指定した場合はトラストストアファイルの整合性を検証できるらしい。</p>
   </li>
  </ul>
  </li>
 
- <li>.cer �t�@�C���� keytool �ŃC���|�[�g�ł���B <pre>
+ <li>.cer ファイルは keytool でインポートできる。 <pre>
 $ keytool -import -trustcacerts -file ca.cer -alias ca
 </pre></li>
 </ul>
 
-<h2>�Q�l</h2>
+<h2>参考</h2>
 
 <ul>
  <li>../100/t13.java - JSSE</li>
@@ -68,16 +68,16 @@ $ keytool -import -trustcacerts -file ca.cer -alias ca
  Java Cryptography with Windows</a></li>
 </ul>
 
-<h2>���ꂩ��������邱��</h2>
+<h2>これから実装すること</h2>
 
 <ul>
- <li>�v���C�x�[�g�L�[�G�N�X�|�[�g�ł���悤�ɂ��Ƃ��Ȏg���ւ���</li>
- <li>���z���}�ɂ������H��������I</li>
+ <li>プライベートキーエクスポートできるようにしとかな使われへんやん</li>
+ <li>↑ホンマにそうか？実験しる！</li>
  <li><code>-Ddeployment.security.browser.keystore.use=true</code>
- �͂������˂�</li>
+ はいつ効くねん</li>
 </ul>
 
-<h2>�ꎟ���C�Z���X</h2>
+<h2>一次ライセンス</h2>
 
 <a
  href="http://www.ftponline.com/javapro/2002_07/magazine/features/bboyter/default_pf.aspx">mscrypto</a>

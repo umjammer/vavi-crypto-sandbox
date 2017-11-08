@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: ASN1PullParser.java,v 1.1.1.1 2003/10/05 18:39:12 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -17,7 +17,7 @@ import java.io.PrintStream;
 
 /**
  * ASN1PullParser.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050317 nsano initial version <br>
  */

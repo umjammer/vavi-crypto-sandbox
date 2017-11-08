@@ -27,7 +27,7 @@ import vavi.util.Debug;
 
 /**
  * opensign SSL.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 031217 nsano initial version <br>
  */
@@ -52,23 +52,23 @@ public class t113_3 {
         kmf.init(null, null);
         KeyManager[] km = kmf.getKeyManagers();
 
-        // Ø–¾‘‚ÌM—Š«‚ğŒˆ’è‚·‚é‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+        // è¨¼æ˜æ›¸ã®ä¿¡é ¼æ€§ã‚’æ±ºå®šã™ã‚‹ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("MSTMF");
         tmf.init((KeyStore) null);
         TrustManager[] tm = tmf.getTrustManagers();
 
-        // ƒ\ƒPƒbƒgƒvƒƒgƒRƒ‹‚ğÀ‘•‚·‚éSSLContext‚ğì¬
+        // ã‚½ã‚±ãƒƒãƒˆãƒ—ãƒ­ãƒˆã‚³ãƒ«ã‚’å®Ÿè£…ã™ã‚‹SSLContextã‚’ä½œæˆ
         SSLContext sslContext = SSLContext.getInstance("SSL");
-        // SSLContext‚ğ‰Šú‰»
+        // SSLContextã‚’åˆæœŸåŒ–
         sslContext.init(km, tm, new SecureRandom());
-        // SSLContext‚ÌSocketFactory‚ğæ“¾
+        // SSLContextã®SocketFactoryã‚’å–å¾—
         SSLSocketFactory sslSF = sslContext.getSocketFactory();
-        // URLConnection‚ÉSocketFactory‚ğƒZƒbƒg
+        // URLConnectionã«SocketFactoryã‚’ã‚»ãƒƒãƒˆ
         ((HttpsURLConnection) huc).setSSLSocketFactory(sslSF);
 
         //----
 
-        // ƒzƒXƒg–¼‚ğ–³‹‚³‚¹‚é
+        // ãƒ›ã‚¹ãƒˆåã‚’ç„¡è¦–ã•ã›ã‚‹
         HostnameVerifier hv = new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session) {
 Debug.println(hostname + ", "+ session);
@@ -77,10 +77,10 @@ Debug.println(hostname + ", "+ session);
         };
         ((HttpsURLConnection) huc).setHostnameVerifier(hv);
 
-        // HTMLƒtƒ@ƒCƒ‹‚ğStream‚Åæ“¾
+        // HTMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’Streamã§å–å¾—
         InputStream in = new BufferedInputStream(huc.getInputStream());
         OutputStream os = System.out;
-        // OutputStream‚Éo—Í
+        // OutputStreamã«å‡ºåŠ›
         byte bb[] = new byte[1024];
         int length = 0;
         while ((length = in.read(bb, 0, bb.length)) != -1) {

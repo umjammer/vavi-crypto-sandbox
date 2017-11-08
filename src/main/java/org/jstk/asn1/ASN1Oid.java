@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: ASN1Oid.java,v 1.1.1.1 2003/10/05 18:39:11 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -16,12 +16,12 @@ import java.io.ByteArrayOutputStream;
 /**
  * From: A Layman's Guide to a Subset of ASN.1, BER, and DER Encoding of object identifier. BER encoding. Primitive. Contents
  * octets are as follows, where value1, ..., valuen denote the integer values of the components in the complete object identifier:
- * 
+ *
  * 1. The first octet has value 40 * value1 + value2. (This is unambiguous, since value1 is limited to values 0, 1, and 2; value2
  * is limited to the range 0 to 39 when value1 is 0 or 1; and, according to X.208, n is always at least 2.) 2. The following
  * octets, if any, encode value3, ..., valuen. Each value is encoded base 128, most significant digit first, with as few digits as
  * possible, and the most significant bit of each octet except the last in the value's encoding set to "1."
- * 
+ *
  * Example: The first octet of the BER encoding of RSA Data Security, Inc.'s object identifier is 40 * 1 + 2 = 42 = 2a16. The
  * encoding of 840 = 6 * 128 + 4816 is 86 48 and the encoding of 113549 = 6 * 1282 + 7716 * 128 + d16 is 86 f7 0d. This leads to
  * the following BER encoding: 06 06 2a 86 48 86 f7 0d

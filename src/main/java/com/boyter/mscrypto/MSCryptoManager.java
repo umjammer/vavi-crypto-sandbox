@@ -44,7 +44,7 @@ import vavi.util.Debug;
 
 /**
  * MSCryptoManager.
- * 
+ *
  * @author Brian Boyter
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
@@ -56,7 +56,7 @@ public class MSCryptoManager {
     }
 
     /** */
-    private static MSCryptoManager cryptoManager = new MSCryptoManager();  
+    private static MSCryptoManager cryptoManager = new MSCryptoManager();
 
     /** */
     public static MSCryptoManager getInstance() {
@@ -78,16 +78,16 @@ public class MSCryptoManager {
 
     /**
      * Returns true if the cert is valid.
-     * 
+     *
      * Certificate is valid if: a. Has a chain of trust back to a trusted root
      * CA. b. The certs in the cert chain are not expired. c. The certs in the
      * cert chain have not been revoked. d. The cert is valid for the purpose it
      * is being used.
-     * 
+     *
      * The DontKnowFlag tells this routine what to do if the revocation status
      * of the cert cannot be established: 0 = reject the cert 1 = accept the
      * cert anyway 2 = prompt the user what he wants to do
-     * 
+     *
      * @throws IOException
      * @throws GeneralSecurityException
      */
@@ -105,8 +105,8 @@ Debug.println("isCertValid: Entered");
     }
 
     /**
-     * @throws GeneralSecurityException 
-     * @throws IOException 
+     * @throws GeneralSecurityException
+     * @throws IOException
      */
     public boolean isCertChainValid(X509Certificate[] certChain, Flag dontKnowFlag)
         throws GeneralSecurityException, IOException {
@@ -154,10 +154,10 @@ Debug.println("isCertChainValid: YES - cert chain is trusted");
 
     /**
      * check if the cert is revoked
-     * 
-     * @throws CertificateEncodingException 
-     * @throws IOException 
-     * @return true when cert has revoked  
+     *
+     * @throws CertificateEncodingException
+     * @throws IOException
+     * @return true when cert has revoked
      */
     private final boolean isCertRevoked(X509Certificate cert, Flag dontKnowFlag)
         throws CertificateEncodingException, IOException {
@@ -272,10 +272,10 @@ Debug.println("isCertWithinValidityPeriod: NO - cert is notYetValid");
     /**
      * helper function
      * @return <code>true</code> signature is valid
-     * @throws NoSuchProviderException 
-     * @throws NoSuchAlgorithmException 
-     * @throws CertificateException 
-     * @throws InvalidKeyException 
+     * @throws NoSuchProviderException
+     * @throws NoSuchAlgorithmException
+     * @throws CertificateException
+     * @throws InvalidKeyException
      */
     private final boolean verifySignature(X509Certificate issuerCert, X509Certificate cert)
         throws InvalidKeyException, CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
@@ -295,7 +295,7 @@ Debug.println("verifySignature: OK - cert signature verified");
     /**
      * Reads Microsoft certificate store Returns array of trusted root CA
      * certificates
-     * 
+     *
      * @throws GeneralSecurityException
      * @throws IOException
      */
@@ -309,7 +309,7 @@ Debug.println("getCACerts: entered\n");
 
         String[] encodedCerts = getCACerts();
 Debug.println("getCACerts: " + encodedCerts.length + " CA certs found");
-        List<X509Certificate> caList = new ArrayList<X509Certificate>(encodedCerts.length);
+        List<X509Certificate> caList = new ArrayList<>(encodedCerts.length);
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
@@ -339,7 +339,7 @@ Debug.println("getCACerts: normal exit");
 
     /**
      * Returns the certificate chain to validate the given alias.
-     * 
+     *
      * @throws IOException
      * @throws CertStoreException
      */
@@ -347,7 +347,7 @@ Debug.println("getCACerts: normal exit");
 
 Debug.println("getCertChain: entered");
 
-        List<X509Certificate> certChainList = new ArrayList<X509Certificate>();
+        List<X509Certificate> certChainList = new ArrayList<>();
         // X509Certificate issuercert;
         boolean match;
         X509Certificate[] issuerArray = null;

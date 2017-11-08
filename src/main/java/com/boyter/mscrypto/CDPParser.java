@@ -55,7 +55,7 @@ class CDPParser {
 //Debug.println(cdpBlob.length + " bytes:\n" + StringUtil.getDump(cdpBlob));
         byte[] seq1 = null;
         byte[] seq2 = null;
-        List<String> urlList = new ArrayList<String>();
+        List<String> urlList = new ArrayList<>();
 
         // check to make sure this is a byte array
         if (cdpBlob[0] != 0x04) {

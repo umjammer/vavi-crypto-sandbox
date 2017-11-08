@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: ASN1ParseTest.java,v 1.1.1.1 2003/10/05 18:39:12 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -46,7 +46,7 @@ public class ASN1ParseTest extends TestCase {
         "data/test.csr", "data/test1.cer", "data/test2.pem"
     };
 
-    protected List<InputFile> inputStreamVec = new ArrayList<InputFile>();
+    protected List<InputFile> inputStreamVec = new ArrayList<>();
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
@@ -69,6 +69,7 @@ public class ASN1ParseTest extends TestCase {
                     int n;
                     while ((n = is.read(buf)) > 0)
                         baos.write(buf, 0, n);
+                    is.close();
                 } catch (IOException ioe) { // Input file has a problem
                     logger.info("I/O problem with : " + file + ", Exception: " + ioe + ". Skipping ...");
                     continue;

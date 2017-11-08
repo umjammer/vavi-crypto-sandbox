@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: IssueCertCommand.java,v 1.1.1.1 2003/10/05 18:39:14 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -38,7 +38,7 @@ import org.jstk.pki.SignedData;
 
 
 public class IssueCertCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<String, String>();
+    private static Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("csrfile", "my.csr");
         defaults.put("cerfile", "my.cer");
@@ -136,7 +136,7 @@ public class IssueCertCommand extends JSTKCommandAdapter {
                 // Examine ExtendedKeyUsage setting
                 String ekuFlag = props.getProperty("ExtendedKeyUsage");
                 if (ekuFlag != null && ekuFlag.equalsIgnoreCase("true")) {
-                    eku = new LinkedList<String>();
+                    eku = new LinkedList<>();
                     String ekuOId = null;
                     int index = 0;
                     while ((ekuOId = props.getProperty("ExtendedKeyUsage.ObjectId." + index)) != null) {

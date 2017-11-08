@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: JSTKUser.java,v 1.1.1.1 2003/10/05 18:39:27 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -28,7 +28,7 @@ public class JSTKUser implements java.io.Serializable {
         this.loginName = loginName;
         this.userName = userName;
         this.passWord = passWord;
-        roles = new HashSet<String>();
+        roles = new HashSet<>();
     }
 
     public void addRole(String roleName) {

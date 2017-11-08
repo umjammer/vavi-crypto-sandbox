@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: UserAccountManager.java,v 1.1.1.1 2003/10/05 18:39:27 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -39,8 +39,8 @@ public class UserAccountManager implements java.io.Serializable {
     private static UserAccountManager instance = null;
 
     public UserAccountManager() {
-        users = new HashMap<String, JSTKUser>();
-        roles = new HashMap<String, JSTKRole>();
+        users = new HashMap<>();
+        roles = new HashMap<>();
     }
 
     public static UserAccountManager getInstance(UAMPersistenceManagerIntf pmi) throws Exception {
@@ -100,7 +100,7 @@ public class UserAccountManager implements java.io.Serializable {
     // Iterator of user Principals
     public Iterator<Principal> users() {
         Iterator<JSTKUser> itr = users.values().iterator();
-        Vector<Principal> v = new Vector<Principal>();
+        Vector<Principal> v = new Vector<>();
         while (itr.hasNext()) {
             JSTKUser user = itr.next();
             v.add(new JSTKUserPrincipal(user.getLoginName(), user.getUserName()));
@@ -141,7 +141,7 @@ public class UserAccountManager implements java.io.Serializable {
     // Iterator over role Principals
     public Iterator<Principal> roles() {
         Iterator<JSTKRole> itr = roles.values().iterator();
-        Vector<Principal> v = new Vector<Principal>();
+        Vector<Principal> v = new Vector<>();
         while (itr.hasNext()) {
             JSTKRole role = itr.next();
             v.add(new JSTKRolePrincipal(role.getRoleName(), role.getRoleDesc()));
@@ -156,7 +156,7 @@ public class UserAccountManager implements java.io.Serializable {
             throw new NoSuchRoleException();
 
         Iterator<String> itr = role.users();
-        Vector<Principal> v = new Vector<Principal>();
+        Vector<Principal> v = new Vector<>();
         while (itr.hasNext()) {
             String loginName = itr.next();
             JSTKUser user = users.get(loginName);
@@ -172,7 +172,7 @@ public class UserAccountManager implements java.io.Serializable {
             throw new NoSuchUserException();
 
         Iterator<String> itr = user.roles();
-        Vector<Principal> v = new Vector<Principal>();
+        Vector<Principal> v = new Vector<>();
         while (itr.hasNext()) {
             String roleName = itr.next();
             JSTKRole role = roles.get(roleName);

@@ -1,0 +1,4 @@
+grant codeBase "file:target/classes" {
+  permission java.security.SecurityPermission
+      "insertProvider.CamelliaCipher";
+};

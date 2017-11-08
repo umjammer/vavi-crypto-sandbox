@@ -1,10 +1,10 @@
 /*
  * @(#) $Id: JSTKRole.java,v 1.1.1.1 2003/10/05 18:39:27 pankaj_kumar Exp $
  *
- * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net). 
+ * Copyright (c) 2002-03 by Pankaj Kumar (http://www.pankaj-k.net).
  * All rights reserved.
  *
- * The license governing the use of this file can be found in the 
+ * The license governing the use of this file can be found in the
  * root directory of the containing software.
  */
 
@@ -25,7 +25,7 @@ public class JSTKRole implements java.io.Serializable {
     public JSTKRole(String roleName, String roleDesc) {
         this.roleName = roleName;
         this.roleDesc = roleDesc;
-        users = new HashSet<String>();
+        users = new HashSet<>();
     }
 
     public void addUser(String loginName) {

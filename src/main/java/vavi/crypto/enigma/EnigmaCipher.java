@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2009 by Naohide Sano, All rights reserved.
+ * Copyright (c) 2012 by Naohide Sano, All rights reserved.
  *
  * Programmed by Naohide Sano
  */
 
-package vavi.crypt.camellia;
+package vavi.crypto.enigma;
 
 import java.io.UnsupportedEncodingException;
 import java.security.AlgorithmParameters;
@@ -24,12 +24,12 @@ import javax.crypto.ShortBufferException;
 
 
 /**
- * CamelliaCipher. 
+ * EnigmaCipher.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00 2009/02/22 nsano initial version <br>
+ * @version 0.00 2012/09/19 nsano initial version <br>
  */
-public final class CamelliaCipher extends CipherSpi {
+public final class EnigmaCipher extends CipherSpi {
 
     /* @see javax.crypto.CipherSpi#engineDoFinal(byte[], int, int) */
     @Override
@@ -78,26 +78,18 @@ public final class CamelliaCipher extends CipherSpi {
         return null;
     }
 
-    private Camellia camellia = new Camellia();
+    private EnigmaMachine enigma;
 
     private boolean finalized = false;
 
     private int opmode;
-
-    private int[] keyTable = new int[52];
 
     /* @see javax.crypto.CipherSpi#engineInit(int, java.security.Key, java.security.SecureRandom) */
     @Override
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
         this.opmode = opmode;
 
-        int[] keyInts = new int[16];
-        byte[] keyBytes = key.getEncoded();
-        for (int i = 0; i < keyBytes.length; i++) {
-            keyInts[i] = keyBytes[i] & 0xff;
-        }
-
-        camellia.genEkey(keyInts, keyTable);
+        enigma = new EnigmaMachine(new EnigmaRotor[] { new EnigmaRotor(1, 1) }, new EnigmaReflector(1));
 
         finalized = false;
     }
@@ -147,8 +139,8 @@ public final class CamelliaCipher extends CipherSpi {
 
         int blockSize = engineGetBlockSize();
 
-        int[] in = new int[4];
-        int[] out = new int[4];
+        byte[] in = new byte[4];
+        byte[] out = new byte[4];
 
         if (opmode == Cipher.ENCRYPT_MODE) {
             byte[] dataBytes = new byte[engineGetOutputSize(inputLen) / 4];
@@ -157,9 +149,9 @@ public final class CamelliaCipher extends CipherSpi {
 
             for (int i = 0; i < dataBytes.length; i += blockSize) {
                 for (int j = 0; j < blockSize; j++) {
-                    in[j] = dataBytes[i + j] & 0xff;
+                    in[j] = dataBytes[i + j];
                 }
-                camellia.encryptBlock(in, keyTable, out);
+                enigma.processMessage(in, 0, out, 0, blockSize);
                 for (int j = 0; j < blockSize; j++) {
                     // TODO consider endian
                     for (int k = 0; k < 4; k++) {
@@ -180,9 +172,9 @@ public final class CamelliaCipher extends CipherSpi {
                         in[j] |= (input[inputOffset + i * 4 + j * 4 + k] & 0xff) << ((3 - k) * 8);
                     }
                 }
-                camellia.decryptBlock(in, keyTable, out);
+                enigma.processMessage(in, 0, out, 0, blockSize);
                 for (int j = 0; j < blockSize; j++) {
-                    output[outputOffset + i + j] = (byte) out[j];
+                    output[outputOffset + i + j] = out[j];
 //System.err.printf("D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i + j, in[j], outputOffset + i + j, output[outputOffset + i + j]);
                 }
             }

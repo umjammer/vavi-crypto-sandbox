@@ -4,27 +4,41 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.crypt.camellia;
+package vavi.crypto.camellia;
 
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.SecureRandom;
+import java.security.Security;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 
 import org.junit.Test;
 
+import vavi.crypto.camellia.Camellia;
+import vavi.crypto.camellia.CamelliaCipher;
+import vavi.crypto.camellia.CamelliaCipherProvider;
+
 import static org.junit.Assert.assertEquals;
 
 
 /**
- * CamelliaTest. 
+ * CamelliaTest.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 2009/02/21 nsano initial version <br>
  */
 public class CamelliaTest {
 
-    /** */
+    static {
+        int r = Security.addProvider(new CamelliaCipherProvider());
+        System.err.println("pos: " + r);
+        Arrays.asList(Security.getProviders()).forEach(System.err::println);
+    }
+
+    /** raw method */
     @Test
     public void test00() throws Exception {
         String key = "sanonaohide01234";
@@ -42,7 +56,7 @@ public class CamelliaTest {
 //        Camellia camellia2 = new Camellia();
 //        camellia2.genEkey(keyInts, keyTable);
 
-        String data = "�{���͐��V�Ȃ�B";
+        String data = "本日は晴天なり。";
 //        String data = "abcdefghijklmn";
 //        String data = "abcd";
         byte[] dataBytes0 = data.getBytes("UTF-8");
@@ -93,14 +107,14 @@ System.err.println(new String(decryptedBytes, "UTF-8"));
         assertEquals(data, new String(decryptedBytes, "UTF-8"));
     }
 
-    /** */
+    /** raw jce method */
     @Test
     public void test01() throws Exception {
         CamelliaCipher cipher = new CamelliaCipher();
         SecureRandom random = new SecureRandom();
         Key key = new CamelliaCipher.CamelliaKey("sanonaohide01234");
         cipher.engineInit(Cipher.ENCRYPT_MODE, key, random);
-        String plain = "�{���͐��V�Ȃ�B";
+        String plain = "本日は晴天なり。";
         byte[] input = plain.getBytes("UTF-8");
         byte[] encrypted = cipher.engineDoFinal(input, 0, input.length);
 //System.err.println("encrypted: " + encrypted.length);
@@ -108,6 +122,47 @@ System.err.println(new String(decryptedBytes, "UTF-8"));
         byte[] decrypted = cipher.engineDoFinal(encrypted, 0, encrypted.length);
 System.err.println(new String(decrypted, "UTF-8"));
         assertEquals(plain, new String(decrypted, "UTF-8"));
+    }
+
+    /** jce */
+    @Test
+    public void test02() throws Exception {
+        Cipher cipher = Cipher.getInstance("Camellia", "Camellia");
+        SecureRandom random = new SecureRandom();
+        KeySpec keySpec = new CamelliaCipher.CamelliaKeySpec("sanonaohide01234");
+        Key key = KeyFactory.getInstance("Camellia").generatePrivate(keySpec);
+        cipher.init(Cipher.ENCRYPT_MODE, key, random);
+        String plain = "本日は晴天なり。";
+        byte[] input = plain.getBytes("UTF-8");
+        byte[] encrypted = cipher.doFinal(input, 0, input.length);
+//System.err.println("encrypted: " + encrypted.length);
+        cipher.init(Cipher.DECRYPT_MODE, key, random);
+        byte[] decrypted = cipher.doFinal(encrypted, 0, encrypted.length);
+System.err.println(new String(decrypted, "UTF-8"));
+        assertEquals(plain, new String(decrypted, "UTF-8"));
+    }
+
+    //----
+
+    /**
+     * <pre>
+     * -Djava.security.policy=<i>url</i>
+     * -Djava.security.policy=target/classes/camellia.policy
+     * </pre>
+     * <code>java.security.policy</code> MacOSX 1.8 Oracle: はじめからOK
+     */
+    public static void main(String[] args) throws Exception {
+        Security.addProvider(new CamelliaCipherProvider());
+        Cipher cipher = Cipher.getInstance("Camellia", "Camellia");
+        SecureRandom random = new SecureRandom();
+        Key key = new CamelliaCipher.CamelliaKey("sanonaohide01234");
+        cipher.init(Cipher.ENCRYPT_MODE, key, random);
+        String plain = "本日は晴天なり。";
+        byte[] input = plain.getBytes("UTF-8");
+        byte[] encrypted = cipher.doFinal(input, 0, input.length);
+        cipher.init(Cipher.DECRYPT_MODE, key, random);
+        byte[] decrypted = cipher.doFinal(encrypted, 0, encrypted.length);
+        System.err.println(new String(decrypted, "UTF-8"));
     }
 }
 

@@ -25,7 +25,7 @@ import vavi.util.Debug;
 
 /**
  * msrsatest.
- * 
+ *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano initial version <br>
  */
