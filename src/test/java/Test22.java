@@ -4,8 +4,6 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.misc;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -14,7 +12,11 @@ import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 
+import org.junit.jupiter.api.Test;
+
 import vavi.util.StringUtil;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 
 /**
@@ -23,8 +25,10 @@ import vavi.util.StringUtil;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 070414 vavi initial version <br>
  */
-public class t22 {
-    public static void main(String[] args) throws Exception {
+public class Test22 {
+
+    @Test
+    void test() throws Exception {
 
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         SecureRandom random = new SecureRandom();
@@ -42,6 +46,7 @@ System.err.println("encrypted\n" + StringUtil.getDump(encryptedData));
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] decryptedData = cipher.doFinal(encryptedData);
 System.err.println("decrypted\n" + StringUtil.getDump(decryptedData));
+        assertArrayEquals(data, decryptedData);
     }
 }
 

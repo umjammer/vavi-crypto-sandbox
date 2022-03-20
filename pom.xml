@@ -24,37 +24,178 @@
           <encoding>utf-8</encoding>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>instrumentation</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <jar jarfile="${project.build.directory}/gi.jar"
+                     manifest="src/test/instrumentation/manifest.mf">
+                  <fileset dir="${project.build.testOutputDirectory}">
+                    <include name="instr/*.class" />
+                    <include name="Generic*.properties" />
+                    <include name="Properties*.properties" />
+                  </fileset>
+                  <zipfileset src="${maven.dependency.org.javassist.javassist.jar.path}"
+                              excludes="META-INF/**"/>
+                </jar>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>keychain</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <jar jarfile="${project.build.directory}/keychain-provider.jar">
+                  <fileset dir="${project.build.outputDirectory}">
+                    <include name="vavix/rococoa/foundation/*.class" />
+                    <include name="vavix/rococoa/keychain/*.class" />
+                  </fileset>
+                  <fileset dir="${project.build.testOutputDirectory}">
+                    <include name="vavix/rococoa/keychain/Key*.class" />
+                  </fileset>
+                </jar>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>camellia</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <jar jarfile="${project.build.directory}/camellia-provider.jar">
+                  <fileset dir="${project.build.outputDirectory}">
+                    <include name="vavi/cripto/camellia/*.class" />
+                  </fileset>
+                  <fileset dir="${project.build.testOutputDirectory}">
+                    <include name="camellia.policy" />
+                  </fileset>
+                </jar>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.rococoa</groupId>
+                  <artifactId>rococoa-core</artifactId>
+                  <type>dylib</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                  <destFileName>librococoa.dylib</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+<!--
+    how do those work???
+            -cp ${project.build.directory}/camellia-provider.jar
+            -Djava.security.policy=${project.build.testOutputDirectory}/camellia.policy
+-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <argLine>
+            -javaagent:${project.build.directory}/gi.jar
+            -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+          </argLine>
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
   <repositories>
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
+    <repository>
+      <id>github</id>
+      <name>GitHub umjammer Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/umjammer/*</url>
+    </repository>
   </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.8.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javassist</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.8.0.GA</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.0.6</version>
+      <version>1.1.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.23.0-GA</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
-  <scm>
-    <url>https://github.com/umjammer/vavi-crypto-sandbox</url>
-  </scm>
-  <issueManagement>
-    <url>https://github.com/umjammer/vavi-crypto-sandbox/issues</url>
-  </issueManagement>
 </project>

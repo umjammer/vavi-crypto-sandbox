@@ -4,6 +4,8 @@
  * Programmed by Naohide Sano
  */
 
+package instr;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -31,12 +33,13 @@ class PropertiesClassFileTransformer implements ClassFileTransformer {
         throws IllegalClassFormatException {
 
         if (className.matches(clazz)) {
-System.err.println("PropertiesClassFileTransformer::transform: " + className);
+System.err.println("PropertiesClassFileTransformer::transform: class: " + className);
             try {
                 ByteArrayInputStream stream = new ByteArrayInputStream(classfileBuffer);
                 CtClass ctClass = GenericInstrumentation.getClassPool().makeClass(stream);
 
                 CtMethod ctMethod = ctClass.getDeclaredMethod(method);
+System.err.println("PropertiesClassFileTransformer::transform: method: " + method);
                 ctMethod.insertBefore(instruction);
 
                 return ctClass.toBytecode();
@@ -62,7 +65,7 @@ e.printStackTrace(System.err);
     static {
         try {
             Properties props = new Properties();
-            props.load(GenericInstrumentation.class.getResourceAsStream("PropertiesClassFileTransformer.properties"));
+            props.load(GenericInstrumentation.class.getResourceAsStream("/PropertiesClassFileTransformer.properties"));
 
             instruction = props.getProperty("instruction");
             clazz = props.getProperty("class");
