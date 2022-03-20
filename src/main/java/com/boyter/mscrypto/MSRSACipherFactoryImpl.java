@@ -31,7 +31,6 @@ import vavi.util.Debug;
  * MSRSACipherFactoryImpl.
  *
  * @author Brian Boyter
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
  */
 public final class MSRSACipherFactoryImpl extends CipherSpi {
