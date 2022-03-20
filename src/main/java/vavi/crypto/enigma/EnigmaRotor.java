@@ -20,14 +20,12 @@ public class EnigmaRotor {
 
     private int[] f = new int[256];
 
-    protected EnigmaRotor(long seed, int notchIndex) {
+    protected EnigmaRotor(SecureRandom r, int notchIndex) {
         this.notchIndex = notchIndex;
         int fx = 0;
         int bx;
         for (int i = 0; i < 256; ++i)
             f[i] = b[i] = -1;
-        SecureRandom r = new SecureRandom();
-        r.setSeed(seed);
         byte[] rb = new byte[1];
         for (int i = 0; i < 256; ++i) {
             r.nextBytes(rb);

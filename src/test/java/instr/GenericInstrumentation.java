@@ -4,6 +4,8 @@
  * Programmed by Naohide Sano
  */
 
+package instr;
+
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
@@ -51,7 +53,7 @@ System.err.println(name + ", " + classFileTransformer.getClass());
     /** */
     static {
         try {
-            props.load(GenericInstrumentation.class.getResourceAsStream("GenericInstrumentation.properties"));
+            props.load(GenericInstrumentation.class.getResourceAsStream("/GenericInstrumentation.properties"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

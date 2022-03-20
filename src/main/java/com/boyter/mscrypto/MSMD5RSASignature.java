@@ -10,14 +10,11 @@ package com.boyter.mscrypto;
 
 import java.security.NoSuchAlgorithmException;
 
-import com.boyter.mscrypto.MSRSASignFactoryImpl;
-
 
 /**
  * MSMD5RSASignature.
  *
  * @author Brian Boyter
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
  */
 public final class MSMD5RSASignature extends MSRSASignFactoryImpl {

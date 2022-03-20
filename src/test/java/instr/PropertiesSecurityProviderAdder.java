@@ -1,3 +1,4 @@
+package instr;
 /*
  * Copyright (c) 2005 by Naohide Sano, All rights rserved.
  *
@@ -40,7 +41,7 @@ System.err.println("PropertiesSecurityProviderAdder::exec: " + name + ", " + pro
     /** */
     static {
         try {
-            props.load(GenericInstrumentation.class.getResourceAsStream("PropertiesSecurityProviderAdder.properties"));
+            props.load(GenericInstrumentation.class.getResourceAsStream("/PropertiesSecurityProviderAdder.properties"));
         } catch (IOException e) {
 e.printStackTrace(System.err);
             throw new IllegalStateException(e);

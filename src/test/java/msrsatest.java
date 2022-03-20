@@ -20,6 +20,9 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+
 import vavi.util.Debug;
 
 
@@ -29,15 +32,18 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano initial version <br>
  */
+@EnabledOnOs(OS.WINDOWS)
 public class msrsatest {
+
+    static {
+        Security.addProvider(new com.boyter.mscrypto.MSKeyManagerProvider());
+        Security.addProvider(new com.boyter.mscrypto.MSTrustManagerProvider());
+        Security.addProvider(new com.boyter.mscrypto.MSRSACipherProvider());
+        Security.addProvider(new com.boyter.mscrypto.MSRSASignProvider());
+    }
 
     /** */
     public static void main(String[] args) throws Exception {
-
-Security.addProvider(new com.boyter.mscrypto.MSKeyManagerProvider());
-Security.addProvider(new com.boyter.mscrypto.MSTrustManagerProvider());
-Security.addProvider(new com.boyter.mscrypto.MSRSACipherProvider());
-Security.addProvider(new com.boyter.mscrypto.MSRSASignProvider());
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance("MSKMF");
         kmf.init(null, null);

@@ -1,5 +1,5 @@
-grant codeBase "file:target/camellia-provider.jar" {
+grant codeBase "file:target/keychain-provider.jar" {
   permission java.lang.RuntimePermission "getProtectionDomain";
   permission java.security.SecurityPermission
-      "insertProvider.Camellia";
+      "insertProvider.KeyChain";
 };

@@ -11,13 +11,11 @@ public class EnigmaReflector {
 
     private int[] contacts = new int[256];
 
-    protected EnigmaReflector(long seed) {
+    protected EnigmaReflector(SecureRandom r) {
         byte[] rb = new byte[1];
         int[] mi = new int[256];
         for (int i = 0; i < 256; ++i)
             mi[i] = -1;
-        SecureRandom r = new SecureRandom();
-        r.setSeed(seed);
         int[] f = new int[2];
         for (int i = 0; i < 128; ++i) {
             for (int j = 0; j < 2; ++j) {

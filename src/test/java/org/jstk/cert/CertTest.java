@@ -19,7 +19,7 @@ import org.jstk.asn1.ASN1PullParser;
 import org.jstk.asn1.ASN1PullParserException;
 import org.jstk.asn1.ASN1Seq;
 import org.jstk.asn1.DefASN1PullParser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class CertTest {

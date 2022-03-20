@@ -4,8 +4,6 @@
  * Programmed by Naohide Sano
  */
 
-package vavi.test.misc;
-
 import java.security.Provider;
 import java.security.Security;
 import java.util.Random;
@@ -15,6 +13,10 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Crypt Example.
@@ -22,7 +24,7 @@ import javax.crypto.spec.DESKeySpec;
  * @author <a href="mailto:hattori-f@klab.org">Fumitada Hattori</a>
  * @version 0.00 2005/02/07 hattori initial version <br>
  */
-public class t19 {
+public class Test19 {
 
     /** */
     private static final byte[] key = "k3lmX0M9dmwAMvwOLm31NevEnreo7m32NeqiudR".getBytes();
@@ -109,8 +111,8 @@ public class t19 {
         return bytes;
     }
 
-    /** */
-    public static void main(String[] args) throws Exception {
+    @Test
+    void test() throws Exception {
 
         Provider[] providers = Security.getProviders();
         for (Provider provider : providers) {
@@ -124,12 +126,15 @@ public class t19 {
 
 System.out.println("account : " + account + ", password : " + password);
 
-        String encodedStr = t19.encode(account, password);
+        String encodedStr = Test19.encode(account, password);
 
 System.out.println("Encrypted String : " + encodedStr + "length : " + encodedStr.length());
 
-        String[] decodedStrs = t19.decode(encodedStr);
+        String[] decodedStrs = Test19.decode(encodedStr);
 
         System.out.println("account : " + decodedStrs[0] + ", password : " + decodedStrs[1]);
+
+        assertEquals("hattori-f", decodedStrs[0]);
+        assertEquals("hattori-f_pass", decodedStrs[1]);
     }
 }

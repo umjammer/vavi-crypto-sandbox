@@ -6,7 +6,7 @@
 
 package vavi.crypto.camellia;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -14,14 +14,15 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.KeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherSpi;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -32,7 +33,6 @@ import javax.crypto.ShortBufferException;
  */
 public final class CamelliaCipher extends CipherSpi {
 
-    /* @see javax.crypto.CipherSpi#engineDoFinal(byte[], int, int) */
     @Override
     protected byte[] engineDoFinal(byte[] input, int inputOffset, int inputLen) throws IllegalBlockSizeException, BadPaddingException {
         byte[] output = engineUpdate(input, inputOffset, inputLen);
@@ -40,7 +40,6 @@ public final class CamelliaCipher extends CipherSpi {
         return output;
     }
 
-    /* @see javax.crypto.CipherSpi#engineDoFinal(byte[], int, int, byte[], int) */
     @Override
     protected int engineDoFinal(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset) throws ShortBufferException, IllegalBlockSizeException, BadPaddingException {
         int outputLen = engineUpdate(input, inputOffset, inputLen, output, outputOffset);
@@ -48,19 +47,16 @@ public final class CamelliaCipher extends CipherSpi {
         return outputLen;
     }
 
-    /* @see javax.crypto.CipherSpi#engineGetBlockSize() */
     @Override
     protected int engineGetBlockSize() {
         return 4;
     }
 
-    /* @see javax.crypto.CipherSpi#engineGetIV() */
     @Override
     protected byte[] engineGetIV() {
         throw new UnsupportedOperationException();
     }
 
-    /* @see javax.crypto.CipherSpi#engineGetOutputSize(int) */
     @Override
     protected int engineGetOutputSize(int inputLen) {
         if (opmode == Cipher.ENCRYPT_MODE) {
@@ -71,7 +67,6 @@ public final class CamelliaCipher extends CipherSpi {
         }
     }
 
-    /* @see javax.crypto.CipherSpi#engineGetParameters() */
     @Override
     protected AlgorithmParameters engineGetParameters() {
         throw new UnsupportedOperationException();
@@ -89,7 +84,6 @@ public final class CamelliaCipher extends CipherSpi {
     /** */
     private int[] keyTable = new int[52];
 
-    /* @see javax.crypto.CipherSpi#engineInit(int, java.security.Key, java.security.SecureRandom) */
     @Override
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
         this.opmode = opmode;
@@ -105,31 +99,26 @@ public final class CamelliaCipher extends CipherSpi {
         finalized = false;
     }
 
-    /* @see javax.crypto.CipherSpi#engineInit(int, java.security.Key, java.security.spec.AlgorithmParameterSpec, java.security.SecureRandom) */
     @Override
     protected void engineInit(int opmode, Key key, AlgorithmParameterSpec params, SecureRandom random) throws InvalidKeyException, InvalidAlgorithmParameterException {
         engineInit(opmode, key, random);
     }
 
-    /* @see javax.crypto.CipherSpi#engineInit(int, java.security.Key, java.security.AlgorithmParameters, java.security.SecureRandom) */
     @Override
     protected void engineInit(int opmode, Key key, AlgorithmParameters params, SecureRandom random) throws InvalidKeyException, InvalidAlgorithmParameterException {
         engineInit(opmode, key, random);
     }
 
-    /* @see javax.crypto.CipherSpi#engineSetMode(java.lang.String) */
     @Override
     protected void engineSetMode(String mode) throws NoSuchAlgorithmException {
         throw new UnsupportedOperationException();
     }
 
-    /* @see javax.crypto.CipherSpi#engineSetPadding(java.lang.String) */
     @Override
     protected void engineSetPadding(String padding) throws NoSuchPaddingException {
         throw new UnsupportedOperationException();
     }
 
-    /* @see javax.crypto.CipherSpi#engineUpdate(byte[], int, int) */
     @Override
     protected byte[] engineUpdate(byte[] input, int inputOffset, int inputLen) {
         byte[] output = new byte[engineGetOutputSize(input.length)];
@@ -141,7 +130,6 @@ public final class CamelliaCipher extends CipherSpi {
         return output;
     }
 
-    /* @see javax.crypto.CipherSpi#engineUpdate(byte[], int, int, byte[], int) */
     @Override
     protected int engineUpdate(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset) throws ShortBufferException {
         if (finalized) {
@@ -155,7 +143,7 @@ public final class CamelliaCipher extends CipherSpi {
 
         if (opmode == Cipher.ENCRYPT_MODE) {
             byte[] dataBytes = new byte[engineGetOutputSize(inputLen) / 4];
-//System.err.println("dataBytes: " + dataBytes.length);
+//Debug.println(Level.FINE, "dataBytes: " + dataBytes.length);
             System.arraycopy(input, inputOffset, dataBytes, 0, inputLen);
 
             for (int i = 0; i < dataBytes.length; i += blockSize) {
@@ -167,26 +155,26 @@ public final class CamelliaCipher extends CipherSpi {
                     // TODO consider endian
                     for (int k = 0; k < 4; k++) {
                         output[outputOffset + i * 4 + j * 4 + k] = (byte) (out[j] >> ((3 - k) * 8));
-//System.err.printf("Y[%02d] %02x\n", outputOffset + i * 4 + j * 4 + k, output[outputOffset + i + j * 4 + k]);
+//Debug.printf(Level.FINE, "Y[%02d] %02x\n", outputOffset + i * 4 + j * 4 + k, output[outputOffset + i + j * 4 + k]);
                     }
-//System.err.printf("E: in[%02d]=%02x, out[%02d]=%08x\n", inputOffset + i + j, dataBytes[i + j], outputOffset + i + j, out[j]);
+//Debug.printf(Level.FINE, "E: in[%02d]=%02x, out[%02d]=%08x\n", inputOffset + i + j, dataBytes[i + j], outputOffset + i + j, out[j]);
                 }
             }
         } else if (opmode == Cipher.DECRYPT_MODE) {
-//System.err.println("inputLen: " + inputLen / 4);
+//Debug.println(Level.FINE, "inputLen: " + inputLen / 4);
             for (int i = 0; i < inputLen / 4; i += blockSize) {
                 for (int j = 0; j < blockSize; j++) {
                     // TODO consider endian
                     in[j] = 0;
                     for (int k = 0; k < 4; k++) {
-//System.err.printf("X[%02d] %02x\n", inputOffset + i * 4 + j * 4 + k, input[inputOffset + i * 4 + j * 4 + k] & 0xff);
+//Debug.printf(Level.FINE, "X[%02d] %02x\n", inputOffset + i * 4 + j * 4 + k, input[inputOffset + i * 4 + j * 4 + k] & 0xff);
                         in[j] |= (input[inputOffset + i * 4 + j * 4 + k] & 0xff) << ((3 - k) * 8);
                     }
                 }
                 camellia.decryptBlock(in, keyTable, out);
                 for (int j = 0; j < blockSize; j++) {
                     output[outputOffset + i + j] = (byte) out[j];
-//System.err.printf("D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i + j, in[j], outputOffset + i + j, output[outputOffset + i + j]);
+//Debug.printf(Level.FINE, "D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i + j, in[j], outputOffset + i + j, output[outputOffset + i + j]);
                 }
             }
         } else {
@@ -197,19 +185,15 @@ public final class CamelliaCipher extends CipherSpi {
     }
 
     /** */
-    public static class CamelliaKey implements Key {
+    public static class CamelliaKey implements SecretKey {
         /** 16 bytes (128 bit) key */
-        byte[] key;
+        String key;
         /** @param key 16 bytes using UTF-8 encoding */
         public CamelliaKey(String key) {
-            try {
-                this.key = key.getBytes("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                assert false;
-            }
+            this.key = key;
         }
         public byte[] getEncoded() {
-            return key;
+            return key.getBytes(StandardCharsets.UTF_8);
         }
         public String getAlgorithm() {
             return "Camellia";
@@ -217,19 +201,16 @@ public final class CamelliaCipher extends CipherSpi {
         public String getFormat() {
             return "B]";
         }
-    };
+    }
 
     /** */
-    public static class CamelliaKeySpec implements KeySpec {
+    public static class CamelliaKeySpec extends SecretKeySpec {
         /** 16 bytes (128 bit) key */
-        byte[] key;
+        String key;
         /** @param key 16 bytes using UTF-8 encoding */
         public CamelliaKeySpec(String key) {
-            try {
-                this.key = key.getBytes("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                assert false;
-            }
+            super(key.getBytes(StandardCharsets.UTF_8), "Camellia");
+            this.key = key;
         }
     }
 }

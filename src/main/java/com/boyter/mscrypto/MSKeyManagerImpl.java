@@ -41,7 +41,6 @@ import vavi.util.Debug;
  * MSKeyManagerImpl.
  *
  * @author Brian Boyter
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 050314 nsano modified <br>
  */
 final class MSKeyManagerImpl implements X509KeyManager {

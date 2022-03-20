@@ -414,7 +414,7 @@ public final class Camellia {
     public void genEkey(int[] rawKey, int[] keyTable) {
         int t[] = new int[16];
 
-        memcpy(t, 0, rawKey, 0, 4);
+        System.arraycopy(rawKey, 0, t, 0, 4);
         for (int i = 4; i < 8; i++) {
             t[i] = 0;
         }
@@ -423,8 +423,8 @@ public final class Camellia {
         feistel(t, 8, sigma1, 0, 2);
         xorBlock(t, 8, t, 0, t, 8);
         feistel(t, 8, sigma2, 0, 2);
-        memcpy(keyTable, 0, t, 0, 16);
-        memcpy(keyTable, 4, t, 8, 8);
+        System.arraycopy(t, 0, keyTable, 0, 16);
+        System.arraycopy(t, 4, keyTable, 8, 8);
 
         for (int i = 4; i < 26; i += 2) {
             rotBlock(t, kidx1[i + 0], ksft1[i + 0], keyTable, i * 2);
@@ -500,13 +500,6 @@ public final class Camellia {
         plainText[1] = keyTable[k + 1] ^ (pt3);
         plainText[2] = keyTable[k + 2] ^ (pt0);
         plainText[3] = keyTable[k + 3] ^ (pt1);
-    }
-
-    /** */
-    private static final void memcpy(int[] dst, int dstP, int[] src, int srcP, int leng) {
-        for (int i = 0; i < leng; i++) {
-            dst[i + dstP] = src[i + srcP];
-        }
     }
 }
 

@@ -18,7 +18,7 @@ import javax.net.ssl.X509TrustManager;
 
 
 /**
- * t113_1
+ * skip ssl host verification.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 051215 nsano initial version <br>

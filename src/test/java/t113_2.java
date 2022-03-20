@@ -22,6 +22,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+
 import vavi.util.Debug;
 
 
@@ -31,6 +34,7 @@ import vavi.util.Debug;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 031205 nsano initial version <br>
  */
+@EnabledOnOs(OS.WINDOWS)
 public class t113_2 {
 
     /**
