@@ -1,0 +1,7 @@
+#com.boyter.mscrypto.MSKeyManagerProvider
+#com.boyter.mscrypto.MSRSACipherProvider
+#com.boyter.mscrypto.MSRSASignProvider
+#com.boyter.mscrypto.MSTrustManagerProvider
+vavi.crypto.camellia.CamelliaCipherProvider
+#vavi.crypto.enigma.EnigmaCipherProvider
+vavi.security.keychain.spi.KeyChainKeyStoreProvider
