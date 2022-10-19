@@ -1,5 +1,6 @@
-[![CodeQL](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml)
 [![GitHub Packages](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml)
+[![CodeQL](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml)
+![Java](https://img.shields.io/badge/Java-8-b07219)
 
 # vavi-crypto-sandbox
 
@@ -31,8 +32,10 @@ For inquires regarding of Camellia, please access here.
   http://info.isl.ntt.co.jp/crypt/camellia/index.html
 ```
 
-### rococoa
+## TODO
 
- * notification
- * keychain (cyberduck/core/dylib)
-   * https://github.com/conormcd/osx-keychain-java
+ * rococoa
+   * notification
+   * keychain (cyberduck/core/dylib)
+     * https://github.com/conormcd/osx-keychain-java
+ * jna platform contains CFxxx
