@@ -1,4 +1,5 @@
 [![GitHub Packages](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml)
+[![Actions Status](https://github.com/umjammer/vavi-crypto-sandbox/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions)
 [![CodeQL](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml)
 ![Java](https://img.shields.io/badge/Java-8-b07219)
 
