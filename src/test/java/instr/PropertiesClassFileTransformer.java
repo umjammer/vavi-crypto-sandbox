@@ -61,7 +61,7 @@ e.printStackTrace(System.err);
     /** */
     static String method;
 
-    /** */
+    /* */
     static {
         try {
             Properties props = new Properties();

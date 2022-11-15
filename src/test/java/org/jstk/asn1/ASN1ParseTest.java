@@ -56,8 +56,7 @@ public class ASN1ParseTest {
 
     @BeforeAll
     static void setUp() {
-        for (int i = 0; i < inputFiles.length; i++) {
-            String file = inputFiles[i];
+        for (String file : inputFiles) {
             byte[] bytes = null;
             try { // Try PEM format
                 BufferedReader reader = new BufferedReader(new InputStreamReader(ASN1ParseTest.class.getResourceAsStream("/" + file)));
