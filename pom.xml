@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-crypto-sandbox</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
 
   <name>Vavi Crypto API</name>
   <organization>
@@ -24,7 +24,7 @@
   </issueManagement>
 
   <properties>
-    <rococoa.version>0.8.5-SNAPSHOT</rococoa.version>
+    <rococoa.version>0.8.5</rococoa.version>
   </properties>
 
   <distributionManagement>
