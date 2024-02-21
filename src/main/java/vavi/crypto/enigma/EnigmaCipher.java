@@ -25,6 +25,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.beechwood.crypto.chipher.enigma.EnigmaMachine;
+import com.beechwood.crypto.chipher.enigma.EnigmaReflector;
+import com.beechwood.crypto.chipher.enigma.EnigmaRotor;
 import vavi.util.Debug;
 
 
@@ -87,29 +90,29 @@ public final class EnigmaCipher extends CipherSpi {
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
         this.opmode = opmode;
 
-        enigma = new EnigmaMachine(new EnigmaRotor[] { new EnigmaRotor(random, 1) }, new EnigmaReflector(random));
-
         finalized = false;
     }
 
     @Override
     protected void engineInit(int opmode, Key key, AlgorithmParameterSpec params, SecureRandom random) throws InvalidKeyException, InvalidAlgorithmParameterException {
         engineInit(opmode, key, random);
+        enigma = new EnigmaMachine(new EnigmaRotor[] { new EnigmaRotor(random, 1, 0) }, new EnigmaReflector(random));
+
     }
 
     @Override
     protected void engineInit(int opmode, Key key, AlgorithmParameters params, SecureRandom random) throws InvalidKeyException, InvalidAlgorithmParameterException {
-        engineInit(opmode, key, random);
+        throw new UnsupportedOperationException("TODO AlgorithmParameters");
     }
 
     @Override
     protected void engineSetMode(String mode) throws NoSuchAlgorithmException {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("enigma doesn't have mode");
     }
 
     @Override
     protected void engineSetPadding(String padding) throws NoSuchPaddingException {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("enigma doesn't use padding");
     }
 
     @Override

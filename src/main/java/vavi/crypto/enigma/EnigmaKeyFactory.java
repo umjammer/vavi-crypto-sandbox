@@ -28,7 +28,7 @@ public class EnigmaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected SecretKey engineGenerateSecret(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof EnigmaKeySpec) {
-            return new EnigmaKey(EnigmaKeySpec.class.cast(keySpec).key);
+            return new EnigmaKey(((EnigmaKeySpec) keySpec).key);
         }
         throw new InvalidKeySpecException("unable to process key spec: " + keySpec);
     }
@@ -36,7 +36,7 @@ public class EnigmaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected KeySpec engineGetKeySpec(SecretKey key, Class<?> keySpec) throws InvalidKeySpecException {
         if (key instanceof EnigmaKey) {
-            return new EnigmaKeySpec(EnigmaKey.class.cast(key).key);
+            return new EnigmaKeySpec(((EnigmaKey) key).key);
         }
         throw new InvalidKeySpecException("key is unsupported: " + key);
     }

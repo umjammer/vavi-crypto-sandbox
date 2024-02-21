@@ -19,7 +19,7 @@ public final class EnigmaCipherProvider extends Provider {
 
     /** */
     public EnigmaCipherProvider() {
-        super("EnigmaCipher", 1.0, "EnigmaCipherProvider implements Dr. Dobb's Enigma Chipher");
+        super("EnigmaCipher", 1.03, "EnigmaCipherProvider implements Dr. Dobb's Enigma Cipher");
         put("Cipher.Enigma", "vavi.crypto.enigma.EnigmaCipher");
         put("SecretKeyFactory.Enigma", "vavi.crypto.enigma.EnigmaKeyFactory");
     }

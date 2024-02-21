@@ -9,16 +9,18 @@ package vavi.crypto.enigma;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SecureRandom;
-
 import javax.crypto.Cipher;
 
+import com.beechwood.crypto.chipher.enigma.EnigmaMachine;
+import com.beechwood.crypto.chipher.enigma.EnigmaReflector;
+import com.beechwood.crypto.chipher.enigma.EnigmaRotor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import vavi.util.Debug;
 import vavi.util.StringUtil;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -31,10 +33,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EnigmaTest {
 
     @Test
-    @Disabled("doen't work, how to use? lost source site")
+    @Disabled("doesn't work, how to use? i found a source but no usage")
     public void test01() throws Exception {
+        long seed = 314159265358979L;
         SecureRandom random = new SecureRandom();
-        EnigmaMachine enigma = new EnigmaMachine(new EnigmaRotor[] { new EnigmaRotor(random, 4), new EnigmaRotor(random, 11), new EnigmaRotor(random, 6) }, new EnigmaReflector(random));
+        random.setSeed(seed);
+        EnigmaMachine enigma = new EnigmaMachine(new EnigmaRotor[] { new EnigmaRotor(random, 4, 0), new EnigmaRotor(random, 11, 0), new EnigmaRotor(random, 6, 0) }, new EnigmaReflector(random));
         byte[] in = "naohidesano1234".getBytes();
         byte[] out = new byte[in.length];
         enigma.processMessage(in, 0, out, 0, in.length);
@@ -42,7 +46,7 @@ Debug.println("\n" + StringUtil.getDump(out));
         byte[] result = new byte[in.length];
         enigma.processMessage(out, 0, result, 0, in.length);
 Debug.println("\n" + StringUtil.getDump(result));
-        assertEquals(in, result);
+        assertArrayEquals(in, result);
     }
 
     @Test
@@ -52,6 +56,7 @@ Debug.println("\n" + StringUtil.getDump(result));
         EnigmaCipher cipher = new EnigmaCipher();
         Key key = new EnigmaCipher.EnigmaKey("sanonaohide01234");
         SecureRandom random = new SecureRandom();
+        long seed = 314159265358979L;
         cipher.engineInit(Cipher.ENCRYPT_MODE, key, random);
         String plain = "本日は晴天なり。";
         byte[] input = plain.getBytes(StandardCharsets.UTF_8);

@@ -1,17 +1,17 @@
 /*
- * http://collaboration.cmc.ec.gc.ca/science/rpn/biblio/ddj/Website/articles/DDJ/1999/9903/9903c/9903c.htm
+ * https://archive.org/details/dr_dobbs_journal-1999_03/page/46/mode/2up
  */
 
-package vavi.crypto.enigma;
+package com.beechwood.crypto.chipher.enigma;
 
 import java.security.SecureRandom;
 
 
 public class EnigmaReflector {
 
-    private int[] contacts = new int[256];
+    private final int[] contacts = new int[256];
 
-    protected EnigmaReflector(SecureRandom r) {
+    public EnigmaReflector(SecureRandom r) {
         byte[] rb = new byte[1];
         int[] mi = new int[256];
         for (int i = 0; i < 256; ++i)
