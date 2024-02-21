@@ -23,17 +23,6 @@
     <url>https://github.com/umjammer/vavi-crypto-sandbox/issues</url>
   </issueManagement>
 
-  <properties>
-    <rococoa.version>0.8.5</rococoa.version>
-  </properties>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/umjammer/vavi-crypto-sandbox</url>
-    </repository>
-  </distributionManagement>
-
   <profiles>
     <profile>
       <id>windows</id>
@@ -102,11 +91,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.0</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-          <encoding>utf-8</encoding>
+          <release>17</release>
         </configuration>
       </plugin>
 
@@ -116,29 +103,8 @@
         <version>3.1.0</version>
         <executions>
           <execution>
-            <id>instrumentation</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <jar jarfile="${project.build.directory}/gi.jar"
-                     manifest="src/test/instrumentation/manifest.mf">
-                  <fileset dir="${project.build.testOutputDirectory}">
-                    <include name="instr/*.class" />
-                    <include name="Generic*.properties" />
-                    <include name="Properties*.properties" />
-                  </fileset>
-                  <zipfileset src="${org.javassist:javassist:jar}"
-                              excludes="META-INF/**"/>
-                </jar>
-              </target>
-            </configuration>
-          </execution>
-          <execution>
             <id>keychain</id>
-            <phase>compile</phase>
+            <phase>test-compile</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -158,7 +124,7 @@
           </execution>
           <execution>
             <id>camellia</id>
-            <phase>compile</phase>
+            <phase>test-compile</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -175,31 +141,18 @@
               </target>
             </configuration>
           </execution>
-        </executions>
-      </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.3.0</version>
-        <executions>
           <execution>
-            <id>copy</id>
-            <phase>generate-resources</phase>
+            <id>commons-instrumentation</id>
+            <phase>test-compile</phase>
             <goals>
-              <goal>copy</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.rococoa</groupId>
-                  <artifactId>rococoa-core</artifactId>
-                  <type>dylib</type>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                  <destFileName>librococoa.dylib</destFileName>
-                </artifactItem>
-              </artifactItems>
+              <target>
+                <copy file="${com.github.umjammer.vavi-commons:vavi-instrumentation:jar}"
+                    toFile="${project.build.directory}/vavi-instrumentation.jar" />
+              </target>
             </configuration>
           </execution>
         </executions>
@@ -213,11 +166,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
+        <version>3.2.2</version>
         <configuration>
           <argLine>
-            -javaagent:${project.build.directory}/gi.jar
+            -javaagent:${project.build.directory}/vavi-instrumentation.jar
             -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+            -Dvavix.lang.instrumentation.VaviInstrumentation.1=vavix.lang.instrumentation.PropertiesClassFileTransformer
           </argLine>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
@@ -230,10 +184,6 @@
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/umjammer/*</url>
-    </repository>
   </repositories>
 
   <dependencyManagement>
@@ -241,7 +191,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.9.1</version>
+        <version>5.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -252,23 +202,19 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.1.8</version>
+      <version>1.1.10</version>
     </dependency>
 
     <dependency>
-      <groupId>org.rococoa</groupId>
+      <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-contrib</artifactId>
-      <version>${rococoa.version}</version>
+      <version>0.8.7</version>
     </dependency>
+
     <dependency>
-      <groupId>org.rococoa</groupId>
-      <artifactId>rococoa-core</artifactId>
-      <version>${rococoa.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna-platform</artifactId>
-      <version>5.12.1</version>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>1.76</version>
     </dependency>
 
     <dependency>
@@ -289,13 +235,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.javassist</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.23.1-GA</version> <!-- 3.24.0-GA ~ for java11 -->
       <scope>test</scope>
     </dependency>
   </dependencies>
