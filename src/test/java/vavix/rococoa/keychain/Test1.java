@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import vavi.security.keychain.spi.KeyChainKeyStore;
 import vavi.security.keychain.spi.KeyChainKeyStoreProvider;
 import vavi.util.Debug;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2022/02/24 umjammer initial version <br>
  */
+@DisabledIfEnvironmentVariable(named = "GITHUB_WORKFLOW", matches = ".*")
 class Test1 {
 
     static {
