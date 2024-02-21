@@ -1,27 +1,27 @@
 /*
- * http://collaboration.cmc.ec.gc.ca/science/rpn/biblio/ddj/Website/articles/DDJ/1999/9903/9903c/9903c.htm
+ * https://archive.org/details/dr_dobbs_journal-1999_03/page/46/mode/2up
  */
 
-package vavi.crypto.enigma;
+package com.beechwood.crypto.chipher.enigma;
 
 import java.security.SecureRandom;
 
 
+/**
+ */
 public class EnigmaRotor {
 
-    private int notchIndex;
-
-    @SuppressWarnings("unused")
-    private int startPosition = 0;
+    private final int notchIndex;
 
     private int currentIndex = 0;
 
-    private int[] b = new int[256];
+    private final int[] b = new int[256];
 
-    private int[] f = new int[256];
+    private final int[] f = new int[256];
 
-    protected EnigmaRotor(SecureRandom r, int notchIndex) {
+    public EnigmaRotor(SecureRandom r, int notchIndex, int startPosition) {
         this.notchIndex = notchIndex;
+        this.currentIndex = startPosition;
         int fx = 0;
         int bx;
         for (int i = 0; i < 256; ++i)
@@ -46,10 +46,6 @@ public class EnigmaRotor {
             f[fx] = bx;
             fx++;
         }
-    }
-
-    protected void setStartingPosition(int startPosition) {
-        this.startPosition = currentIndex = startPosition;
     }
 
     protected void advance() throws EnigmaRotorTrippedException {

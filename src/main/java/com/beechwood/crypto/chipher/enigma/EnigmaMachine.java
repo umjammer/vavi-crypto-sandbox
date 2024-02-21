@@ -1,27 +1,27 @@
 /*
- * http://collaboration.cmc.ec.gc.ca/science/rpn/biblio/ddj/Website/articles/DDJ/1999/9903/9903c/9903c.htm
+ * https://archive.org/details/dr_dobbs_journal-1999_03/page/46/mode/2up
  */
 
-package vavi.crypto.enigma;
+package com.beechwood.crypto.chipher.enigma;
 
 import vavi.util.Debug;
 
 public class EnigmaMachine {
 
-    private EnigmaRotor[] rotors;
+    private final EnigmaRotor[] rotors;
 
-    private int rotorCount;
+    private final int rotorCount;
 
-    private EnigmaReflector reflector;
+    private final EnigmaReflector reflector;
 
-    protected EnigmaMachine(EnigmaRotor[] rotors, EnigmaReflector ref) {
+    public EnigmaMachine(EnigmaRotor[] rotors, EnigmaReflector ref) {
         this.rotors = rotors;
         rotorCount = rotors.length;
         reflector = ref;
     }
 
-    protected void processMessage(byte[] in, int inOffset, byte[] out, int outOffset, int len) {
-        int ox = 0;
+    public void processMessage(byte[] in, int inOffset, byte[] out, int outOffset, int len) {
+        int ox = outOffset;
         for (int i = inOffset; i < len; i++) {
             for (int rotorIndex = 0; rotorIndex < rotorCount; rotorIndex++) {
                 try {
@@ -39,7 +39,7 @@ Debug.println(erte.getMessage());
             for (int k = rotorCount - 1; k >= 0; k--) {
                 ic = rotors[k].processByte(ic, false);
             }
-            out[ox++] = (byte) ic;
+            out[ox++] = (byte) (ic & 0xff);
         }
     }
 }

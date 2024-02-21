@@ -13,23 +13,24 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.security.KeyStore;
 import java.security.Security;
-
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import vavi.util.Debug;
+
 
 /**
  * EchoClient.
  *
- * @author  <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
+ * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00    050314  nsano   initial version <br>
  */
 public class EchoClient {
 
-    /** */
+    /**  */
     public static void main(String[] arstring) throws Exception {
 // System.setProperty("javax.net.debug","ssl");
 System.setProperty("mscrypto.debug", "true");
@@ -45,14 +46,13 @@ System.setProperty("mscrypto.debug", "true");
         kmf.init(null, null);
 
         tmf = TrustManagerFactory.getInstance("MSTMF");
-System.out.println("TrustManagerProvider name: " + tmf.getProvider().getInfo());
+        Debug.println("TrustManagerProvider name: " + tmf.getProvider().getInfo());
         tmf.init((KeyStore) null);
 
         ctx = SSLContext.getInstance("TLS");
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         factory = ctx.getSocketFactory();
 
-        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         SSLSocket sslSocket = (SSLSocket) factory.createSocket("localhost", 9999);
 
         InputStream inputStream = System.in;
@@ -67,12 +67,14 @@ System.out.println("TrustManagerProvider name: " + tmf.getProvider().getInfo());
         writer.write(testtext, 0, testtext.length());
         writer.flush();
 
-        String string = null;
+        String string;
         while ((string = bufferedReader.readLine()) != null) {
             string = string + '\n';
             writer.write(string, 0, string.length());
             writer.flush();
         }
+
+        sslSocket.close();
     }
 }
 

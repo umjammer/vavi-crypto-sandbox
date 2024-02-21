@@ -1,15 +1,20 @@
-[![GitHub Packages](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven-publish.yml)
-[![Actions Status](https://github.com/umjammer/vavi-crypto-sandbox/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions)
+[![Release](https://jitpack.io/v/umjammer/vavi-crypto-sandbox.svg)](https://jitpack.io/#umjammer/vavi-crypto-sandbox)
+[![Java CI](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/vavi-crypto-sandbox/actions/workflows/codeql-analysis.yml)
-![Java](https://img.shields.io/badge/Java-8-b07219)
+![Java](https://img.shields.io/badge/Java-17-b07219)
 
 # vavi-crypto-sandbox
 
  * windows certifications
  * Camellia
  * Eniguma (wip)
+ * [KIRK](https://github.com/jpcsp/jpcsp) (wip spi)
 
-## references
+## Install
+
+ * [maven](https://jitpack.io/#umjammer/vavi-crypto-sandbox)
+
+## References
 
  * [Java Security for the Enterprise (jstk)](http://www.j2ee-security.net/)
  * https://github.com/opengl-8080/enigma
@@ -19,6 +24,7 @@
 ### How to ignore JCA signed jar checker
 
  * use [instrumentation](src/test/java/instr/PropertiesClassFileTransformer.java)
+ * just for test, **DON'T** use for production
 
 ## License
 
@@ -35,8 +41,10 @@ For inquires regarding of Camellia, please access here.
 
 ## TODO
 
+ * enigma (doesn't work)
  * rococoa
    * notification
    * keychain (cyberduck/core/dylib)
      * https://github.com/conormcd/osx-keychain-java
  * jna platform contains CFxxx
+ * ~~libkirk [jpcsp](https://github.com/jpcsp/jpcsp)~~

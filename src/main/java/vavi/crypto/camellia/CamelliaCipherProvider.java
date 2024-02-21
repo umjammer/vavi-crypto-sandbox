@@ -19,7 +19,7 @@ public final class CamelliaCipherProvider extends Provider {
 
     /** */
     public CamelliaCipherProvider() {
-        super("Camellia", 1.01, "CamelliaCipherProvider implements NTT Camellia Decryption");
+        super("Camellia", 1.03, "CamelliaCipherProvider implements NTT Camellia Decryption");
         put("Cipher.Camellia", "vavi.crypto.camellia.CamelliaCipher");
         put("SecretKeyFactory.Camellia", "vavi.crypto.camellia.CamelliaKeyFactory");
     }

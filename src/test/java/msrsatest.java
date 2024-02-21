@@ -6,6 +6,7 @@
  * the full license included with this distribution.
  */
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.Principal;
 import java.security.PrivateKey;
@@ -60,7 +61,7 @@ Debug.println("number of CA certs found: " + issuerCerts.length);
         Principal[] issuers = new Principal[issuerCerts.length];
 
         for (int i = 0; i < issuerCerts.length; i++) {
-            issuers[i] = issuerCerts[i].getSubjectDN();
+            issuers[i] = issuerCerts[i].getSubjectX500Principal();
         }
         String[] aliases = xkm.getClientAliases("X509", issuers);
 Debug.println("number of aliases found: " + aliases.length);
@@ -75,7 +76,7 @@ Debug.println("number of aliases found: " + aliases.length);
 //  Debug.println("cert is not valid");
 // }
         String message = "RSA cipher test - OK";
-        byte[] messageBytes = message.getBytes("UTF8");
+        byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
 
         Cipher rc = Cipher.getInstance("RSA/ECB/PKCS1Padding", "MSRSACipher");
 Debug.println("using provider: " + rc.getProvider().getName());
@@ -87,7 +88,7 @@ Debug.println("\n\nM   SrsaEncypt test");
 Debug.println("\n\nMSrsaDecrypt test");
         rc.init(Cipher.DECRYPT_MODE, privkey);
         byte[] decryptedMessage = rc.doFinal(encryptedMessage);
-        String decryptedMessageString = new String(decryptedMessage, "UTF8");
+        String decryptedMessageString = new String(decryptedMessage, StandardCharsets.UTF_8);
 Debug.println("\nDecrypted message: " + decryptedMessageString);
 
 Debug.println("\n\nMD5withRSA Signature test");

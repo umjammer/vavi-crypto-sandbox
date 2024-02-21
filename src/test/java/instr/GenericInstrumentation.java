@@ -16,7 +16,7 @@ import javassist.ClassPool;
 
 
 /**
- * GenericInstrumentation.
+ * GenericInstrumentation. (using properties version, different from original (VaviInstrumentation))
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 051215 nsano initial version <br>
@@ -37,7 +37,7 @@ public class GenericInstrumentation {
             if (name.matches("classFileTransformer\\.\\w+")) {
                 try {
                     String value = props.getProperty(name);
-                    ClassFileTransformer classFileTransformer = (ClassFileTransformer) Class.forName(value).newInstance();
+                    ClassFileTransformer classFileTransformer = (ClassFileTransformer) Class.forName(value).getDeclaredConstructor().newInstance();
 System.err.println(name + ", " + classFileTransformer.getClass());
                     instrumentation.addTransformer(classFileTransformer);
                 } catch (Exception f) {
@@ -50,7 +50,7 @@ System.err.println(name + ", " + classFileTransformer.getClass());
     /** */
     private static Properties props = new Properties();
 
-    /** */
+    /* */
     static {
         try {
             props.load(GenericInstrumentation.class.getResourceAsStream("/GenericInstrumentation.properties"));

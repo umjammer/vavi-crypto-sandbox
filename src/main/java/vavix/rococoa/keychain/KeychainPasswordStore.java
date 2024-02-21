@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import org.rococoa.cocoa.foundation.FoundationKitFunctions;
+import org.rococoa.cocoa.corefoundation.CoreFoundation;
 
 import static vavix.rococoa.keychain.SecurityFunctions.errSecDuplicateItem;
 import static vavix.rococoa.keychain.SecurityFunctions.errSecItemNotFound;
@@ -92,7 +92,7 @@ public final class KeychainPasswordStore {
                 if(0 != err) {
                     throw new IllegalStateException(String.format("Failure saving credentials for %s in Keychain", serviceName));
                 }
-                FoundationKitFunctions.library.CFRelease(new SecKeychainItemRef(itemRef.getValue()));
+                CoreFoundation.library.CFRelease(new SecKeychainItemRef(itemRef.getValue()));
             }
             if(0 != err) {
                 throw new IllegalStateException(String.format("Failure saving credentials for %s in Keychain", serviceName));
@@ -165,7 +165,7 @@ public final class KeychainPasswordStore {
                 if(0 != err) {
                     throw new IllegalStateException(String.format("Failure saving credentials for %s in Keychain", serviceName));
                 }
-                FoundationKitFunctions.library.CFRelease(new SecKeychainItemRef(itemRef.getValue()));
+                CoreFoundation.library.CFRelease(new SecKeychainItemRef(itemRef.getValue()));
             }
             if(0 != err) {
                 throw new IllegalStateException(String.format("Failure saving credentials for %s in Keychain", serviceName));

@@ -11,6 +11,7 @@ package com.boyter.mscrypto;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -172,7 +173,7 @@ Debug.println("isCertRevoked: Entered flag: " + dontKnowFlag);
         if (cdpBlob == null) {
 Debug.println("isCertRevoked: cert does not contain a CDP");
 Debug.println("Cannot determine if certificate is revoked (no CDP)");
-            return !askUserWhatHeWantsToDo(cert.getSubjectDN().toString(), dontKnowFlag);
+            return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
         }
 
         // yes there is a CDP - ASN parse the CDP
@@ -180,20 +181,18 @@ Debug.println("Cannot determine if certificate is revoked (no CDP)");
 //Debug.println("urlArray: " + urlArray.length);
         boolean crlDownloadOk = false;
         if (urlArray != null) {
-            for (int i = 0; i < urlArray.length; i++) {
-                String URL = urlArray[i];
-
+            for (String URL : urlArray) {
                 // go fetch that CRL
-Debug.println("isCertRevoked: fetching the CRL, URL: " + URL);
+                Debug.println("isCertRevoked: fetching the CRL, URL: " + URL);
                 if (getCRL(URL)) {
                     crlDownloadOk = true;
                     break; // url was fetched correctly
                 } else {
-Debug.println("Download failed for CRL: " + URL);
+                    Debug.println("Download failed for CRL: " + URL);
                 }
             }
             if (!crlDownloadOk) {
-                return !askUserWhatHeWantsToDo(cert.getSubjectDN().toString(), dontKnowFlag);
+                return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
             }
         }
 
@@ -205,20 +204,20 @@ Debug.println("Download failed for CRL: " + URL);
         switch (revocationStatus) {
         case 0:
             // cert is revoked
-Debug.println("Certificate " + cert.getSubjectDN().toString() + "is revoked");
-            return !askUserWhatHeWantsToDo(cert.getSubjectDN().toString(), dontKnowFlag);
+Debug.println("Certificate " + cert.getSubjectX500Principal().toString() + "is revoked");
+            return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
         case 1:
             // cert is not revoked
 Debug.println("isCertRevoked: the cert has not been revoked");
             return false;
         default:
-Debug.println("Cannot determine if certificate [" + cert.getSubjectDN().toString() + "] is revoked or not, cause: " + revocationStatus);
-            return !askUserWhatHeWantsToDo(cert.getSubjectDN().toString(), dontKnowFlag);
+Debug.println("Cannot determine if certificate [" + cert.getSubjectX500Principal().toString() + "] is revoked or not, cause: " + revocationStatus);
+            return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
         }
     }
 
-    /** TODO out source */
-    private CallbackHandler handler = new com.sun.security.auth.callback.DialogCallbackHandler();
+    /** */
+    private final CallbackHandler handler = new DialogCallbackHandler();
 
     /**
      * helper function
@@ -315,7 +314,7 @@ Debug.println("getCACerts: " + encodedCerts.length + " CA certs found");
         for (int i = 0; i < encodedCerts.length; i++) {
             try {
 //Debug.println(encodedCerts[i].getBytes().length + " bytes\n" + StringUtil.getDump(encodedCerts[i]));
-                InputStream input = new ByteArrayInputStream(encodedCerts[i].getBytes("UTF-8"));
+                InputStream input = new ByteArrayInputStream(encodedCerts[i].getBytes(StandardCharsets.UTF_8));
                 X509Certificate cert = (X509Certificate) cf.generateCertificate(input);
                 input.close();
 //Debug.println("[" + i + "]: " + cert.getSubjectX500Principal().getName());
