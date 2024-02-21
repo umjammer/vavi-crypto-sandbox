@@ -18,7 +18,7 @@ package vavix.rococoa.keychain;
 import java.util.Collections;
 
 import org.rococoa.ObjCObjectByReference;
-import org.rococoa.cocoa.foundation.CFAllocatorRef;
+import org.rococoa.cocoa.corefoundation.CFAllocatorRef;
 import org.rococoa.cocoa.foundation.NSArray;
 import org.rococoa.cocoa.foundation.NSData;
 import org.rococoa.cocoa.foundation.NSDictionary;

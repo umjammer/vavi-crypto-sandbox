@@ -18,12 +18,13 @@ import javassist.CtMethod;
 
 
 /**
- * PropertiesClassFileTransformer.
+ * PropertiesClassFileTransformer. (regex matching version, different from original)
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
  * @version 0.00 051215 nsano initial version <br>
  */
 class PropertiesClassFileTransformer implements ClassFileTransformer {
+
     /** */
     public byte[] transform(ClassLoader loader,
                             String className,

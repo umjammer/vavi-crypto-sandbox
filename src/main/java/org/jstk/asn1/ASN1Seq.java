@@ -92,8 +92,7 @@ public class ASN1Seq extends ASN1Type {
         }
         List<byte[]> elemEncodings = new ArrayList<>();
         int len = 0;
-        for (int i = 0; i < elems.size(); i++) {
-            ASN1Type elem = elems.get(i);
+        for (ASN1Type elem : elems) {
             byte[] encoded = elem.encode();
             if (encoded != null) {
                 len += encoded.length;
@@ -105,14 +104,13 @@ public class ASN1Seq extends ASN1Type {
         byte[] bytes = new byte[1 + lenEncoding.length + len];
         int idx = 0;
         bytes[idx++] = idOctet;
-        for (int i = 0; i < lenEncoding.length; i++) {
-            bytes[idx++] = lenEncoding[i];
+        for (byte b : lenEncoding) {
+            bytes[idx++] = b;
         }
-        for (int i = 0; i < elemEncodings.size(); i++) {
-            byte[] encoded = elemEncodings.get(i);
+        for (byte[] encoded : elemEncodings) {
             if (encoded != null) {
-                for (int j = 0; j < encoded.length; j++) {
-                    bytes[idx++] = encoded[j];
+                for (byte b : encoded) {
+                    bytes[idx++] = b;
                 }
             }
         }
@@ -138,7 +136,7 @@ public class ASN1Seq extends ASN1Type {
 
     /** */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("SEQ(");
         for (int i = 0; i < elems.size(); i++) {
             if (i > 0) {

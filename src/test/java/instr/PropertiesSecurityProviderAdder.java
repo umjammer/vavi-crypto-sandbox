@@ -1,9 +1,10 @@
-package instr;
 /*
  * Copyright (c) 2005 by Naohide Sano, All rights rserved.
  *
  * Programmed by Naohide Sano
  */
+
+package instr;
 
 import java.io.IOException;
 import java.security.Provider;
@@ -11,9 +12,13 @@ import java.security.Security;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import instr.GenericInstrumentation;
+
 
 /**
  * SystemPropertiesSecurityProviderAdder.
+ *
+ * TODO not used, my purpose is accomplished by PropertiesClassFileTransformer
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 051215 nsano initial version <br>
@@ -28,7 +33,7 @@ System.err.println("PropertiesSecurityProviderAdder::exec: " + props.size());
             String name = (String) e.nextElement();
             if (name.matches("security.provider.\\w+")) {
                 String value = props.getProperty(name);
-                Provider provider = (Provider) Class.forName(value).newInstance();
+                Provider provider = (Provider) Class.forName(value).getDeclaredConstructor().newInstance();
 System.err.println("PropertiesSecurityProviderAdder::exec: " + name + ", " + provider);
                 Security.addProvider(provider);
             }
@@ -38,7 +43,7 @@ System.err.println("PropertiesSecurityProviderAdder::exec: " + name + ", " + pro
     /** */
     private static Properties props = new Properties();
 
-    /** */
+    /* */
     static {
         try {
             props.load(GenericInstrumentation.class.getResourceAsStream("/PropertiesSecurityProviderAdder.properties"));
