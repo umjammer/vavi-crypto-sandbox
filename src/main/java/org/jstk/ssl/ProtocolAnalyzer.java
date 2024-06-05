@@ -11,5 +11,5 @@
 package org.jstk.ssl;
 
 public interface ProtocolAnalyzer {
-    public void analyze(JSTKBuffer buf);
+    void analyze(JSTKBuffer buf);
 }

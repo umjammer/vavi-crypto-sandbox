@@ -11,6 +11,8 @@
 package org.jstk.pki;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import org.jstk.asn1.ASN1OctetString;
 import org.jstk.asn1.ASN1Oid;
@@ -19,18 +21,23 @@ import org.jstk.asn1.ASN1PullParserException;
 import org.jstk.asn1.ASN1Seq;
 import org.jstk.asn1.ASN1Type;
 
+import static java.lang.System.getLogger;
+
 
 /*
  * Extensions := SEQUENCE SIZE (1..MAX) OF Extension
  */
 public class Extensions extends ASN1Type {
-    private ASN1Seq extensions = new ASN1Seq();
+
+    private static final Logger logger = getLogger(Extensions.class.getName());
+
+    private final ASN1Seq extensions = new ASN1Seq();
 
     static class Extension extends ASN1Seq {
-        ASN1Oid extnID = new ASN1Oid();
+        final ASN1Oid extnID = new ASN1Oid();
 
         // ASN1Boolean critical = new ASN1Boolean();
-        ASN1OctetString extnValue = new ASN1OctetString();
+        final ASN1OctetString extnValue = new ASN1OctetString();
 
         Extension() {
             super();
@@ -40,9 +47,7 @@ public class Extensions extends ASN1Type {
         }
 
         public String toString() {
-            StringBuffer sb = new StringBuffer();
-            sb.append("Extension-SEQ(" + extnID.toString() + ", " + extnValue.toString() + ")");
-            return sb.toString();
+            return "Extension-SEQ(" + extnID.toString() + ", " + extnValue.toString() + ")";
         }
     }
 
@@ -70,23 +75,23 @@ public class Extensions extends ASN1Type {
     }
 
     public byte[] encode() {
-        logger.entering(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         byte[] bytes = null;
         if (extensions.size() > 0) {
             bytes = extensions.encode();
             value = bytes;
             length = bytes.length;
             bytes = encode1();
-            logger.fine("extensions encoded");
+            logger.log(Level.DEBUG, "extensions encoded");
         } else {
-            logger.fine("extensions NOT encoded");
+            logger.log(Level.DEBUG, "extensions NOT encoded");
         }
-        logger.exiting(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         return bytes;
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("Extensions-SEQ(");
         for (int i = 0; i < extensions.size(); i++) {
             ASN1Type elem = extensions.get(i);

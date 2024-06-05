@@ -21,11 +21,11 @@ import org.jstk.JSTKOptions;
  * Certificate ::= SEQUENCE { tbsCertificate TBSCertificate, algorithm AlgorithmIdentifier, signatureBytes BIT STRING }
  */
 public class Certificate extends ASN1Seq {
-    private TBSCertificate tbsCertificate = new TBSCertificate();
+    private final TBSCertificate tbsCertificate = new TBSCertificate();
 
-    private AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
+    private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
-    private ASN1BitString signatureBytes = new ASN1BitString();
+    private final ASN1BitString signatureBytes = new ASN1BitString();
 
     public Certificate() {
         super();
@@ -47,10 +47,9 @@ public class Certificate extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Certificate-SEQ(" + tbsCertificate.toString() + ", ");
-        sb.append(algorithm.toString() + ", " + signatureBytes.toString() + ")");
-        return sb.toString();
+        String sb = "Certificate-SEQ(" + tbsCertificate.toString() + ", " +
+                algorithm.toString() + ", " + signatureBytes.toString() + ")";
+        return sb;
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,7 +71,7 @@ public class Certificate extends ASN1Seq {
 
         Certificate cert = new Certificate();
         cert.decode(parser);
-        System.out.println(cert.toString());
+        System.out.println(cert);
 
         JSTKOptions opts = new JSTKOptions();
         opts.parse(args, 1);

@@ -34,7 +34,7 @@ import org.jstk.cert.rep.FileBasedRepository;
 
 
 public class BuildCertPathCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("truststore", "my.ts");
         defaults.put("storetype", "JCEKS");
@@ -77,7 +77,7 @@ public class BuildCertPathCommand extends JSTKCommandAdapter {
             if (dn == null)
                 return new JSTKResult(null, false, "Must specify dn of the target subject.");
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
 
             CertPathBuilder cpb = CertPathBuilder.getInstance("PKIX");
 
@@ -107,9 +107,9 @@ public class BuildCertPathCommand extends JSTKCommandAdapter {
                 FileOutputStream fos = new FileOutputStream(outfile);
                 fos.write(cp.getEncoded());
                 fos.close();
-                sb.append("Build succeeded. CertPath written to file: " + outfile);
+                sb.append("Build succeeded. CertPath written to file: ").append(outfile);
             } catch (CertPathBuilderException cpbe) {
-                sb.append("Build failed:" + cpbe.getMessage());
+                sb.append("Build failed:").append(cpbe.getMessage());
             }
 
             return new JSTKResult(null, true, sb.toString());

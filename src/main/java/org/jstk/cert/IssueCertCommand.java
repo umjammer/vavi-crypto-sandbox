@@ -38,7 +38,7 @@ import org.jstk.pki.SignedData;
 
 
 public class IssueCertCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("csrfile", "my.csr");
         defaults.put("cerfile", "my.cer");
@@ -83,7 +83,7 @@ public class IssueCertCommand extends JSTKCommandAdapter {
             String cerfile = args.get("cerfile");
             String cadir = args.get("cadir");
             String cpfmt = args.get("cpfmt");
-            boolean caFlag = Boolean.valueOf(args.get("ca")).booleanValue();
+            boolean caFlag = Boolean.valueOf(args.get("ca"));
             int pathLen = Integer.parseInt(args.get("capath"));
 //            String keyAlg = args.get("keyalg");
             String sigAlg = args.get("sigalg");

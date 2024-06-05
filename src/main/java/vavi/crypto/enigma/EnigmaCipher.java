@@ -6,6 +6,7 @@
 
 package vavi.crypto.enigma;
 
+import java.lang.System.Logger;
 import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
@@ -14,8 +15,6 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.logging.Level;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherSpi;
@@ -28,7 +27,9 @@ import javax.crypto.spec.SecretKeySpec;
 import com.beechwood.crypto.chipher.enigma.EnigmaMachine;
 import com.beechwood.crypto.chipher.enigma.EnigmaReflector;
 import com.beechwood.crypto.chipher.enigma.EnigmaRotor;
-import vavi.util.Debug;
+
+import static java.lang.System.Logger.Level.DEBUG;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -38,6 +39,8 @@ import vavi.util.Debug;
  * @version 0.00 2012/09/19 nsano initial version <br>
  */
 public final class EnigmaCipher extends CipherSpi {
+
+    private static final Logger logger = getLogger(EnigmaCipher.class.getName());
 
     @Override
     protected byte[] engineDoFinal(byte[] input, int inputOffset, int inputLen) throws IllegalBlockSizeException, BadPaddingException {
@@ -139,38 +142,36 @@ public final class EnigmaCipher extends CipherSpi {
 
         if (opmode == Cipher.ENCRYPT_MODE) {
             byte[] dataBytes = new byte[engineGetOutputSize(inputLen) / 4];
-Debug.println(Level.FINE, "dataBytes: " + dataBytes.length);
+logger.log(DEBUG, "dataBytes: " + dataBytes.length);
             System.arraycopy(input, inputOffset, dataBytes, 0, inputLen);
 
             for (int i = 0; i < dataBytes.length; i += blockSize) {
-                for (int j = 0; j < blockSize; j++) {
-                    in[j] = dataBytes[i + j];
-                }
+                if (blockSize >= 0) System.arraycopy(dataBytes, i + 0, in, 0, blockSize);
                 enigma.processMessage(in, 0, out, 0, blockSize);
                 for (int j = 0; j < blockSize; j++) {
                     // TODO consider endian
                     for (int k = 0; k < 4; k++) {
                         output[outputOffset + i * 4 + j * 4 + k] = (byte) (out[j] >> ((3 - k) * 8));
-Debug.printf(Level.FINE, "Y[%02d] %02x\n", outputOffset + i * 4 + j * 4 + k, output[outputOffset + i + j * 4 + k]);
+logger.log(DEBUG, "Y[%02d] %02x".formatted(outputOffset + i * 4 + j * 4 + k, output[outputOffset + i + j * 4 + k]));
                     }
-Debug.printf(Level.FINE, "E: in[%02d]=%02x, out[%02d]=%08x\n", inputOffset + i + j, dataBytes[i + j], outputOffset + i + j, out[j]);
+logger.log(DEBUG, "E: in[%02d]=%02x, out[%02d]=%08x".formatted(inputOffset + i + j, dataBytes[i + j], outputOffset + i + j, out[j]));
                 }
             }
         } else if (opmode == Cipher.DECRYPT_MODE) {
-Debug.println(Level.FINE, "inputLen: " + inputLen / 4);
+logger.log(DEBUG, "inputLen: " + inputLen / 4);
             for (int i = 0; i < inputLen / 4; i += blockSize) {
                 for (int j = 0; j < blockSize; j++) {
                     // TODO consider endian
                     in[j] = 0;
                     for (int k = 0; k < 4; k++) {
-Debug.printf("X[%02d] %02x\n", inputOffset + i * 4 + j * 4 + k, input[inputOffset + i * 4 + j * 4 + k] & 0xff);
-                        in[j] |= (input[inputOffset + i * 4 + j * 4 + k] & 0xff) << ((3 - k) * 8);
+logger.log(DEBUG, "X[%02d] %02x".formatted(inputOffset + i * 4 + j * 4 + k, input[inputOffset + i * 4 + j * 4 + k] & 0xff));
+                        in[j] = (byte) (in[j] | (byte) ((input[inputOffset + i * 4 + j * 4 + k] & 0xff) << ((3 - k) * 8)));
                     }
                 }
                 enigma.processMessage(in, 0, out, 0, blockSize);
                 for (int j = 0; j < blockSize; j++) {
                     output[outputOffset + i + j] = out[j];
-Debug.printf(Level.FINE, "D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i + j, in[j], outputOffset + i + j, output[outputOffset + i + j]);
+logger.log(DEBUG, "D: in[%02d]=%08x, out[%02d]=%02x".formatted(inputOffset + i + j, in[j], outputOffset + i + j, output[outputOffset + i + j]));
                 }
             }
         } else {
@@ -183,7 +184,7 @@ Debug.printf(Level.FINE, "D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i +
     /** */
     public static class EnigmaKey implements SecretKey {
         /** */
-        String key;
+        final String key;
         /** @param key 16 bytes using UTF-8 encoding */
         public EnigmaKey(String key) {
             this.key = key;
@@ -202,7 +203,7 @@ Debug.printf(Level.FINE, "D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i +
     /** */
     public static class EnigmaKeySpec extends SecretKeySpec {
         /** */
-        String key;
+        final String key;
         /** @param key 16 bytes using UTF-8 encoding */
         public EnigmaKeySpec(String key) {
             super(key.getBytes(StandardCharsets.UTF_8), "Enigma");
@@ -210,6 +211,3 @@ Debug.printf(Level.FINE, "D: in[%02d]=%08x, out[%02d]=%02x\n", inputOffset + i +
         }
     }
 }
-
-/* */
-

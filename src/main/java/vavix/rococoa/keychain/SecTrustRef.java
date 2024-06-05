@@ -23,7 +23,7 @@ public class SecTrustRef extends CoreFoundation.CFTypeRef {
     public SecTrustRef() {
     }
 
-    public SecTrustRef(final Pointer p) {
+    public SecTrustRef(Pointer p) {
         super(p);
     }
 }

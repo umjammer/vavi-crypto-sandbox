@@ -40,13 +40,7 @@ public class t113_1 {
         sslContext.init(null, tm, new SecureRandom());
         SSLSocketFactory sslsf = sslContext.getSocketFactory();
         ((HttpsURLConnection) connection).setSSLSocketFactory(sslsf);
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
+        HostnameVerifier hv = (hostname, session) -> true;
         ((HttpsURLConnection) connection).setHostnameVerifier(hv);
     }
 }
-
-/* */

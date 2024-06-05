@@ -17,24 +17,25 @@
 
 package jpcsp.crypto;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import vavi.util.ByteUtil;
-import vavi.util.Debug;
+
+import static java.lang.System.getLogger;
 
 
 public class KIRK {
 
-    private static final Logger log = Logger.getLogger(KIRK.class.getName());
+    private static final Logger logger = getLogger(KIRK.class.getName());
 
     private static final boolean useLibkirk = true;
 	private static boolean libkirkInitialized = false;
     // PSP specific values.
-    private byte[] priv_iv = new byte[0x10];
-    private byte[] prng_data = new byte[0x14];
+    private final byte[] priv_iv = new byte[0x10];
+    private final byte[] prng_data = new byte[0x14];
 
     // KIRK error values.
     public static final int PSP_KIRK_NOT_ENABLED = 0x1;
@@ -118,11 +119,11 @@ public class KIRK {
     }
 
     private static class AES128_CBC_Header {
-        private int mode;
-        private int unk1;
-        private int unk2;
-        private int keySeed;
-        private int dataSize;
+        private final int mode;
+        private final int unk1;
+        private final int unk2;
+        private final int keySeed;
+        private final int dataSize;
 
         public AES128_CBC_Header(ByteBuffer buf) {
             mode = buf.getInt();
@@ -134,18 +135,18 @@ public class KIRK {
     }
 
     protected static class AES128_CMAC_Header {
-        private byte[] AES128Key = new byte[16];
-        private byte[] CMACKey = new byte[16];
-        private byte[] CMACHeaderHash = new byte[16];
-        private byte[] CMACDataHash = new byte[16];
-        private byte[] unk1 = new byte[32];
+        private final byte[] AES128Key = new byte[16];
+        private final byte[] CMACKey = new byte[16];
+        private final byte[] CMACHeaderHash = new byte[16];
+        private final byte[] CMACDataHash = new byte[16];
+        private final byte[] unk1 = new byte[32];
         private int mode;
-        protected byte useECDSAhash;
-        private byte[] unk2 = new byte[11];
-        private int dataSize;
-        private int dataOffset;
-        private byte[] unk3 = new byte[8];
-        private byte[] unk4 = new byte[16];
+        protected final byte useECDSAhash;
+        private final byte[] unk2 = new byte[11];
+        private final int dataSize;
+        private final int dataOffset;
+        private final byte[] unk3 = new byte[8];
+        private final byte[] unk4 = new byte[16];
 
         public AES128_CMAC_Header(ByteBuffer buf) {
             buf.get(AES128Key, 0, 16);
@@ -174,18 +175,18 @@ public class KIRK {
     }
 
     protected static class AES128_CMAC_ECDSA_Header {
-        private byte[] AES128Key = new byte[16];
-        private byte[] ECDSAHeaderSig_r = new byte[20];
-        private byte[] ECDSAHeaderSig_s = new byte[20];
-        private byte[] ECDSADataSig_r = new byte[20];
-        private byte[] ECDSADataSig_s = new byte[20];
-        protected int mode;
-        protected byte useECDSAhash;
-        private byte[] unk1 = new byte[11];
-        protected int dataSize;
-        protected int dataOffset;
-        private byte[] unk2 = new byte[8];
-        private byte[] unk3 = new byte[16];
+        private final byte[] AES128Key = new byte[16];
+        private final byte[] ECDSAHeaderSig_r = new byte[20];
+        private final byte[] ECDSAHeaderSig_s = new byte[20];
+        private final byte[] ECDSADataSig_r = new byte[20];
+        private final byte[] ECDSADataSig_s = new byte[20];
+        protected final int mode;
+        protected final byte useECDSAhash;
+        private final byte[] unk1 = new byte[11];
+        protected final int dataSize;
+        protected final int dataOffset;
+        private final byte[] unk2 = new byte[8];
+        private final byte[] unk3 = new byte[16];
 
         public AES128_CMAC_ECDSA_Header(ByteBuffer buf) {
             buf.get(AES128Key, 0, 16);
@@ -205,8 +206,8 @@ public class KIRK {
 
     private static class ECDSASig {
 
-        private byte[] r = new byte[0x14];
-        private byte[] s = new byte[0x14];
+        private final byte[] r = new byte[0x14];
+        private final byte[] s = new byte[0x14];
 
         private ECDSASig() {
         }
@@ -214,8 +215,8 @@ public class KIRK {
 
     private static class ECDSAPoint {
 
-        private byte[] x = new byte[0x14];
-        private byte[] y = new byte[0x14];
+        private final byte[] x = new byte[0x14];
+        private final byte[] y = new byte[0x14];
 
         private ECDSAPoint() {
         }
@@ -236,7 +237,7 @@ public class KIRK {
     private static class ECDSAKeygenCtx {
         private byte[] private_key = new byte[0x14];
         private ECDSAPoint public_key;
-        private ByteBuffer out;
+        private final ByteBuffer out;
 
         private ECDSAKeygenCtx(ByteBuffer output) {
             public_key = new ECDSAPoint();
@@ -251,9 +252,9 @@ public class KIRK {
 
     private static class ECDSAMultiplyCtx {
 
-        private byte[] multiplier = new byte[0x14];
-        private ECDSAPoint public_key = new ECDSAPoint();
-        private ByteBuffer out;
+        private final byte[] multiplier = new byte[0x14];
+        private final ECDSAPoint public_key = new ECDSAPoint();
+        private final ByteBuffer out;
 
         private ECDSAMultiplyCtx(ByteBuffer input, ByteBuffer output) {
             out = output;
@@ -270,8 +271,8 @@ public class KIRK {
 
     private static class ECDSASignCtx {
 
-        private byte[] enc = new byte[0x20];
-        private byte[] hash = new byte[0x14];
+        private final byte[] enc = new byte[0x20];
+        private final byte[] hash = new byte[0x14];
 
         private ECDSASignCtx(ByteBuffer buf) {
             buf.get(enc, 0, 0x20);
@@ -281,9 +282,9 @@ public class KIRK {
 
     private static class ECDSAVerifyCtx {
 
-        private ECDSAPoint public_key = new ECDSAPoint();
-        private byte[] hash = new byte[0x14];
-        private ECDSASig sig = new ECDSASig();
+        private final ECDSAPoint public_key = new ECDSAPoint();
+        private final byte[] hash = new byte[0x14];
+        private final ECDSASig sig = new ECDSASig();
 
         private ECDSAVerifyCtx(ByteBuffer buf) {
             buf.get(public_key.x, 0, 0x14);
@@ -309,15 +310,15 @@ public class KIRK {
     public static final String settingsFuseId = "sceSysreg.fuseId";
     public static final long dummyFuseId = 0x12345678ABCDEFL;
 
-    Preferences prefs = Preferences.systemNodeForPackage(KIRK.class);
+    final Preferences prefs = Preferences.systemNodeForPackage(KIRK.class);
 
     public KIRK(byte[] seed, int seedLength) {
-Debug.println(Level.FINER, "useLibkirk: " + useLibkirk);
+logger.log(Level.TRACE,  "useLibkirk: " + useLibkirk);
     	if (useLibkirk) {
-Debug.println(Level.FINER, "libkirkInitialized: " + libkirkInitialized);
+logger.log(Level.TRACE,  "libkirkInitialized: " + libkirkInitialized);
     		if (!libkirkInitialized) {
 	    		long fuseId = prefs.getLong(settingsFuseId, dummyFuseId);
-Debug.println(Level.FINER, "fuseId: " + fuseId);
+logger.log(Level.TRACE,  "fuseId: " + fuseId);
 	    		libkirk.KirkEngine.kirk_init(fuseId);
 	    		libkirkInitialized = true;
     		}
@@ -521,7 +522,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
 
         byte[] encKey = new byte[16];
         for (int i = 0; i < encKey.length; i++) {
-            encKey[i] = (byte) key[i];
+            encKey[i] = key[i];
         }
 
         AES128 aes = new AES128("AES/CBC/NoPadding");
@@ -616,7 +617,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
 
         byte[] decKey = new byte[16];
         for (int i = 0; i < decKey.length; i++) {
-            decKey[i] = (byte) key[i];
+            decKey[i] = key[i];
         }
 
         AES128 aes = new AES128("AES/CBC/NoPadding");
@@ -708,7 +709,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Generate SHA1 hash. */
-    private int executeKIRKCmd11(ByteBuffer out, ByteBuffer in, int size) {
+    private static int executeKIRKCmd11(ByteBuffer out, ByteBuffer in, int size) {
         // Return an error if the crypto engine hasn't been initialized.
 //        if (!CryptoEngine.getCryptoEngineStatus()) {
 //            return PSP_KIRK_NOT_INIT;
@@ -730,7 +731,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Generate ECDSA key pair. */
-    private int executeKIRKCmd12(ByteBuffer out, int size) {
+    private static int executeKIRKCmd12(ByteBuffer out, int size) {
         // Return an error if the crypto engine hasn't been initialized.
 //        if (!CryptoEngine.getCryptoEngineStatus()) {
 //            return PSP_KIRK_NOT_INIT;
@@ -755,7 +756,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Multiply ECDSA point. */
-    private int executeKIRKCmd13(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
+    private static int executeKIRKCmd13(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
         // Return an error if the crypto engine hasn't been initialized.
 //        if (!CryptoEngine.getCryptoEngineStatus()) {
 //            return PSP_KIRK_NOT_INIT;
@@ -840,7 +841,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Sign data with ECDSA key pair. */
-    private int executeKIRKCmd16(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
+    private static int executeKIRKCmd16(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
         // Return an error if the crypto engine hasn't been initialized.
 //        if (!CryptoEngine.getCryptoEngineStatus()) {
 //            return PSP_KIRK_NOT_INIT;
@@ -862,7 +863,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Verify ECDSA signature. */
-    private int executeKIRKCmd17(ByteBuffer in, int size) {
+    private static int executeKIRKCmd17(ByteBuffer in, int size) {
         // Return an error if the crypto engine hasn't been initialized.
 //        if (!CryptoEngine.getCryptoEngineStatus()) {
 //            return PSP_KIRK_NOT_INIT;
@@ -883,7 +884,7 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
     }
 
     // Initialize */
-    private int executeKIRKCmd15(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
+    private static int executeKIRKCmd15(ByteBuffer out, int outSize, ByteBuffer in, int inSize) {
     	if (outSize != 28 && inSize < 8) {
             return PSP_KIRK_INVALID_SIZE;
     	}
@@ -937,14 +938,14 @@ Debug.println(Level.FINER, "fuseId: " + fuseId);
                 case PSP_KIRK_CMD_INIT -> executeKIRKCmd15(out, outsize, in, insize);
                 case PSP_KIRK_CMD_CERT_VERIFY -> 0;
                 default -> {
-                    log.fine("cmd: " + cmd);
+                    logger.log(Level.DEBUG, "cmd: " + cmd);
                     yield PSP_KIRK_INVALID_OPERATION; // Dummy.
                 }
             };
     	}
     }
 
-    private int libkirkUtilsBufferCopyWithRange(ByteBuffer out, int outsize, ByteBuffer in, int insizeAligned, int insize, int cmd) {
+    private static int libkirkUtilsBufferCopyWithRange(ByteBuffer out, int outsize, ByteBuffer in, int insizeAligned, int insize, int cmd) {
     	byte[] inbuff = new byte[insize];
     	if (insize > 0) {
     		int inPosition = in.position();

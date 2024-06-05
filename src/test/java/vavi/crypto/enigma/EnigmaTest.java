@@ -68,5 +68,3 @@ System.err.println(new String(decrypted, StandardCharsets.UTF_8));
         assertEquals(plain, new String(decrypted, StandardCharsets.UTF_8));
     }
 }
-
-/* */

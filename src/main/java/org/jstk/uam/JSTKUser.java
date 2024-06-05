@@ -22,7 +22,7 @@ public class JSTKUser implements java.io.Serializable {
 
     private String passWord;
 
-    private Set<String> roles;
+    private final Set<String> roles;
 
     public JSTKUser(String loginName, String userName, String passWord) {
         this.loginName = loginName;

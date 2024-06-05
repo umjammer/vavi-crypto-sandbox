@@ -48,7 +48,7 @@ System.err.println(name + ", " + classFileTransformer.getClass());
     }
 
     /** */
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
 
     /* */
     static {
@@ -64,5 +64,3 @@ System.err.println(name + ", " + classFileTransformer.getClass());
         return classPool;
     }
 }
-
-/* */

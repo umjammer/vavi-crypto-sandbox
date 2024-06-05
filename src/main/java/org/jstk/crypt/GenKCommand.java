@@ -30,7 +30,7 @@ import org.jstk.JSTKResult;
 
 
 public class GenKCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "DES");
         defaults.put("keysize", "56");
@@ -48,7 +48,10 @@ public class GenKCommand extends JSTKCommandAdapter {
 
     public String[] useForms() {
         String[] forms = {
-            "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action store\n" + "\t[-keystore <keystore>] [-kstype (JCEKS|JKS)] [-storepass <storepass>]\n" + "\t[-alias <alias>] [-keypass <keypass>]] [-provider <provider>]"
+            "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]", """
+[-algorithm <alg> -keysize <keysize>] [-action store
+\t[-keystore <keystore>] [-kstype (JCEKS|JKS)] [-storepass <storepass>]
+\t[-alias <alias>] [-keypass <keypass>]] [-provider <provider>]"""
         };
         return forms;
     }
@@ -83,45 +86,50 @@ public class GenKCommand extends JSTKCommandAdapter {
             kg.init(keysize, new SecureRandom());
             SecretKey key = kg.generateKey();
 
-            if (action.equals("discard")) {
-                return new JSTKResult(key, true, "Secret Key generated");
-            } else if (action.equals("save")) { // Save the serialized object in a file
-                String fileName = args.get("file");
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-                oos.writeObject(key);
-                oos.close();
-                return new JSTKResult(key, true, "SecretKey written to file: " + fileName);
-            } else if (action.equals("store")) { // Store the key in a keystore
-                String keystore = args.get("keystore");
-                String storepass = args.get("storepass");
-                String kstype = args.get("kstype");
-
-                String keypass = args.get("keypass");
-                if (keypass == null)
-                    keypass = storepass;
-                String alias = args.get("alias");
-
-                KeyStore ks;
-                if (providerName != null)
-                    ks = KeyStore.getInstance(kstype, providerName);
-                else
-                    ks = KeyStore.getInstance(kstype);
-
-                FileInputStream fis;
-                try {
-                    fis = new FileInputStream(keystore);
-                    ks.load(fis, storepass.toCharArray());
-                    fis.close();
-                } catch (IOException ioe) { // File cannot be open for reading.
-                    ks.load(null, storepass.toCharArray());
+            switch (action) {
+                case "discard" -> {
+                    return new JSTKResult(key, true, "Secret Key generated");
                 }
+                case "save" -> {
+                    String fileName = args.get("file");
+                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+                    oos.writeObject(key);
+                    oos.close();
+                    return new JSTKResult(key, true, "SecretKey written to file: " + fileName);
+                }
+                case "store" -> {
+                    String keystore = args.get("keystore");
+                    String storepass = args.get("storepass");
+                    String kstype = args.get("kstype");
 
-                ks.setKeyEntry(alias, key, keypass.toCharArray(), null);
-                FileOutputStream fos = new FileOutputStream(keystore);
-                ks.store(fos, storepass.toCharArray());
-                return new JSTKResult(key, true, "SecretKey stored to keystore \"" + keystore + "\" with alias: " + alias);
-            } else if (action.equals("print")) {
-                return new JSTKResult(key, true, KeyUtil.format(key, "SecretKey"));
+                    String keypass = args.get("keypass");
+                    if (keypass == null)
+                        keypass = storepass;
+                    String alias = args.get("alias");
+
+                    KeyStore ks;
+                    if (providerName != null)
+                        ks = KeyStore.getInstance(kstype, providerName);
+                    else
+                        ks = KeyStore.getInstance(kstype);
+
+                    FileInputStream fis;
+                    try {
+                        fis = new FileInputStream(keystore);
+                        ks.load(fis, storepass.toCharArray());
+                        fis.close();
+                    } catch (IOException ioe) { // File cannot be open for reading.
+                        ks.load(null, storepass.toCharArray());
+                    }
+
+                    ks.setKeyEntry(alias, key, keypass.toCharArray(), null);
+                    FileOutputStream fos = new FileOutputStream(keystore);
+                    ks.store(fos, storepass.toCharArray());
+                    return new JSTKResult(key, true, "SecretKey stored to keystore \"" + keystore + "\" with alias: " + alias);
+                }
+                case "print" -> {
+                    return new JSTKResult(key, true, KeyUtil.format(key, "SecretKey"));
+                }
             }
             return new JSTKResult(null, false, "unknown action: " + action);
         } catch (Exception exc) {

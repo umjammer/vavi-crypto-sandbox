@@ -93,10 +93,8 @@ class ThreadedEchoHandler extends Thread {
     }
 
     /** */
-    private Socket socket;
+    private final Socket socket;
 
     /** */
-    private int counter;
+    private final int counter;
 }
-
-/* */

@@ -11,6 +11,8 @@ package com.boyter.mscrypto;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -40,7 +42,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.ConfirmationCallback;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -51,12 +53,14 @@ import vavi.util.Debug;
  */
 public class MSCryptoManager {
 
+    private static final Logger logger = getLogger(MSCryptoManager.class.getName());
+
     /** */
     private MSCryptoManager() {
     }
 
     /** */
-    private static MSCryptoManager cryptoManager = new MSCryptoManager();
+    private static final MSCryptoManager cryptoManager = new MSCryptoManager();
 
     /** */
     public static MSCryptoManager getInstance() {
@@ -73,7 +77,7 @@ public class MSCryptoManager {
         /** */
         AcceptTheCertAnyway,
         /** */
-        AskTheUser;
+        AskTheUser
     }
 
     /**
@@ -93,7 +97,7 @@ public class MSCryptoManager {
      */
     public final boolean isCertValid(X509Certificate cert, Flag dontKnowFlag)
         throws GeneralSecurityException, IOException {
-Debug.println("isCertValid: Entered");
+logger.log(Level.DEBUG, "isCertValid: Entered");
 
         // Get the certificate chain
         X509Certificate[] CertChain = getCertChain(cert);
@@ -111,12 +115,12 @@ Debug.println("isCertValid: Entered");
     public boolean isCertChainValid(X509Certificate[] certChain, Flag dontKnowFlag)
         throws GeneralSecurityException, IOException {
 
-Debug.println("isCertChainValid: Entered: x " + certChain.length);
+logger.log(Level.DEBUG, "isCertChainValid: Entered: x " + certChain.length);
 
         for (int i = 0; i < certChain.length; i++) {
             X509Certificate cert = certChain[i];
             Principal subjectDN = cert.getSubjectDN();
-Debug.println(" CertChain[" + i + "]: " + subjectDN.toString());
+logger.log(Level.DEBUG, " CertChain[" + i + "]: " + subjectDN.toString());
             Principal issuerDN = cert.getIssuerDN();
             X509Certificate issuerCert = cert;
 
@@ -137,17 +141,17 @@ Debug.println(" CertChain[" + i + "]: " + subjectDN.toString());
             // is cert revoked?
             if (subjectDN.equals(issuerDN)) { // test if this is a root CA
                 // cert
-Debug.println(" Assume root CA certs are never revoked: " + subjectDN);
+logger.log(Level.DEBUG, " Assume root CA certs are never revoked: " + subjectDN);
                 continue; // skip the root CA
             }
 
             if (isCertRevoked(cert, dontKnowFlag)) {
-Debug.println("revoked: " + cert.getSubjectDN());
+logger.log(Level.DEBUG, "revoked: " + cert.getSubjectDN());
                 return false;
             }
         }
 
-Debug.println("isCertChainValid: YES - cert chain is trusted");
+logger.log(Level.DEBUG, "isCertChainValid: YES - cert chain is trusted");
 
         return true;
     }
@@ -159,36 +163,36 @@ Debug.println("isCertChainValid: YES - cert chain is trusted");
      * @throws IOException
      * @return true when cert has revoked
      */
-    private final boolean isCertRevoked(X509Certificate cert, Flag dontKnowFlag)
+    private boolean isCertRevoked(X509Certificate cert, Flag dontKnowFlag)
         throws CertificateEncodingException, IOException {
 
         byte[] certBlob = null;
 
-Debug.println("isCertRevoked: Entered flag: " + dontKnowFlag);
+logger.log(Level.DEBUG, "isCertRevoked: Entered flag: " + dontKnowFlag);
 
         certBlob = cert.getEncoded();
 
         // Does the cert have a CDP (CRL distribution point)???
         byte[] cdpBlob = cert.getExtensionValue("2.5.29.31");
         if (cdpBlob == null) {
-Debug.println("isCertRevoked: cert does not contain a CDP");
-Debug.println("Cannot determine if certificate is revoked (no CDP)");
+logger.log(Level.DEBUG, "isCertRevoked: cert does not contain a CDP");
+logger.log(Level.DEBUG, "Cannot determine if certificate is revoked (no CDP)");
             return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
         }
 
         // yes there is a CDP - ASN parse the CDP
         String[] urlArray = CDPParser.parseCDP(cdpBlob);
-//Debug.println("urlArray: " + urlArray.length);
+//logger.log(Level.TRACE, "urlArray: " + urlArray.length);
         boolean crlDownloadOk = false;
         if (urlArray != null) {
             for (String URL : urlArray) {
                 // go fetch that CRL
-                Debug.println("isCertRevoked: fetching the CRL, URL: " + URL);
+                logger.log(Level.DEBUG, "isCertRevoked: fetching the CRL, URL: " + URL);
                 if (getCRL(URL)) {
                     crlDownloadOk = true;
                     break; // url was fetched correctly
                 } else {
-                    Debug.println("Download failed for CRL: " + URL);
+                    logger.log(Level.DEBUG, "Download failed for CRL: " + URL);
                 }
             }
             if (!crlDownloadOk) {
@@ -199,21 +203,24 @@ Debug.println("Cannot determine if certificate is revoked (no CDP)");
         // is the cert revoked???
         int revocationStatus = verifyCertRevocation(certBlob);
 
-//Debug.println("isCertRevoked: revocationStatus: " + revocationStatus);
+//logger.log(Level.TRACE, "isCertRevoked: revocationStatus: " + revocationStatus);
 
-        switch (revocationStatus) {
-        case 0:
-            // cert is revoked
-Debug.println("Certificate " + cert.getSubjectX500Principal().toString() + "is revoked");
-            return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
-        case 1:
-            // cert is not revoked
-Debug.println("isCertRevoked: the cert has not been revoked");
-            return false;
-        default:
-Debug.println("Cannot determine if certificate [" + cert.getSubjectX500Principal().toString() + "] is revoked or not, cause: " + revocationStatus);
-            return !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
-        }
+        return switch (revocationStatus) {
+            case 0 -> {
+                // cert is revoked
+                logger.log(Level.DEBUG, "Certificate " + cert.getSubjectX500Principal().toString() + "is revoked");
+                yield !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
+            }
+            case 1 -> {
+                // cert is not revoked
+                logger.log(Level.DEBUG, "isCertRevoked: the cert has not been revoked");
+                yield false;
+            }
+            default -> {
+                logger.log(Level.DEBUG, "Cannot determine if certificate [" + cert.getSubjectX500Principal().toString() + "] is revoked or not, cause: " + revocationStatus);
+                yield !askUserWhatHeWantsToDo(cert.getSubjectX500Principal().toString(), dontKnowFlag);
+            }
+        };
     }
 
     /** */
@@ -223,7 +230,7 @@ Debug.println("Cannot determine if certificate [" + cert.getSubjectX500Principal
      * helper function
      * @return true if accepted
      */
-    private final boolean askUserWhatHeWantsToDo(String dn, Flag dontKnowFlag) {
+    private boolean askUserWhatHeWantsToDo(String dn, Flag dontKnowFlag) {
 
         switch (dontKnowFlag) {
         case RejectTheCertIfWeCannotTellIfItIsRevoked: // reject the cert
@@ -240,10 +247,10 @@ Debug.println("Cannot determine if certificate [" + cert.getSubjectX500Principal
                 cc
             });
             boolean result = cc.getOptionType() == ConfirmationCallback.YES;
-Debug.println("result: " + result);
+logger.log(Level.DEBUG, "result: " + result);
             return  result;
         } catch (Exception e) {
-Debug.printStackTrace(e);
+logger.log(Level.DEBUG, e);
             return false;
         }
     }
@@ -251,16 +258,16 @@ Debug.printStackTrace(e);
     /**
      * helper function
      */
-    private final boolean isCertWithinValidityPeriod(X509Certificate cert) {
+    private static boolean isCertWithinValidityPeriod(X509Certificate cert) {
 
         // check the validity period
         try {
             cert.checkValidity();
         } catch (CertificateExpiredException e) {
-Debug.println("isCertWithinValidityPeriod: NO - cert is expired");
+logger.log(Level.DEBUG, "isCertWithinValidityPeriod: NO - cert is expired");
             return false;
         } catch (CertificateNotYetValidException e) {
-Debug.println("isCertWithinValidityPeriod: NO - cert is notYetValid");
+logger.log(Level.DEBUG, "isCertWithinValidityPeriod: NO - cert is notYetValid");
             return false;
         }
 
@@ -275,18 +282,18 @@ Debug.println("isCertWithinValidityPeriod: NO - cert is notYetValid");
      * @throws CertificateException
      * @throws InvalidKeyException
      */
-    private final boolean verifySignature(X509Certificate issuerCert, X509Certificate cert)
+    private static boolean verifySignature(X509Certificate issuerCert, X509Certificate cert)
         throws InvalidKeyException, CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
 
         PublicKey key = issuerCert.getPublicKey();
         try {
             cert.verify(key);
         } catch (SignatureException e) {
-Debug.println("verifySignature: NG - cert has been corrupted");
+logger.log(Level.DEBUG, "verifySignature: NG - cert has been corrupted");
             return false;
         }
 
-Debug.println("verifySignature: OK - cert signature verified");
+logger.log(Level.DEBUG, "verifySignature: OK - cert signature verified");
         return true;
     }
 
@@ -299,38 +306,38 @@ Debug.println("verifySignature: OK - cert signature verified");
      */
     public final CertStore getCaCerts() throws GeneralSecurityException, IOException {
 
-Debug.println("getCACerts: entered\n");
+logger.log(Level.DEBUG, "getCACerts: entered\n");
 
         if (caCerts != null) {
             return caCerts;
         }
 
         String[] encodedCerts = getCACerts();
-Debug.println("getCACerts: " + encodedCerts.length + " CA certs found");
+logger.log(Level.DEBUG, "getCACerts: " + encodedCerts.length + " CA certs found");
         List<X509Certificate> caList = new ArrayList<>(encodedCerts.length);
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
         for (int i = 0; i < encodedCerts.length; i++) {
             try {
-//Debug.println(encodedCerts[i].getBytes().length + " bytes\n" + StringUtil.getDump(encodedCerts[i]));
+//logger.log(Level.TRACE, encodedCerts[i].getBytes().length + " bytes\n" + StringUtil.getDump(encodedCerts[i]));
                 InputStream input = new ByteArrayInputStream(encodedCerts[i].getBytes(StandardCharsets.UTF_8));
                 X509Certificate cert = (X509Certificate) cf.generateCertificate(input);
                 input.close();
-//Debug.println("[" + i + "]: " + cert.getSubjectX500Principal().getName());
+//logger.log(Level.TRACE, "[" + i + "]: " + cert.getSubjectX500Principal().getName());
                 caList.add(cert);
             } catch (GeneralSecurityException e) {
-Debug.println("error in following cert:[" + i + "]\n" + encodedCerts[i]);
-Debug.printStackTrace(e);
+logger.log(Level.DEBUG, "error in following cert:[" + i + "]\n" + encodedCerts[i]);
+logger.log(Level.DEBUG, e);
             }
         }
 
-Debug.println("getCACerts: get list of CRL URLs");
+logger.log(Level.DEBUG, "getCACerts: get list of CRL URLs");
 
         CollectionCertStoreParameters caCcsp = new CollectionCertStoreParameters(caList);
         caCerts = CertStore.getInstance("Collection", caCcsp);
 
-Debug.println("getCACerts: normal exit");
+logger.log(Level.DEBUG, "getCACerts: normal exit");
 
         return caCerts;
     }
@@ -343,7 +350,7 @@ Debug.println("getCACerts: normal exit");
      */
     public final X509Certificate[] getCertChain(X509Certificate cert) throws GeneralSecurityException, IOException {
 
-Debug.println("getCertChain: entered");
+logger.log(Level.DEBUG, "getCertChain: entered");
 
         List<X509Certificate> certChainList = new ArrayList<>();
         // X509Certificate issuercert;
@@ -354,7 +361,7 @@ Debug.println("getCertChain: entered");
 
         Principal subject = cert.getSubjectDN();
         Principal issuer = cert.getIssuerDN();
-Debug.println("  add to cert chain: " + subject);
+logger.log(Level.DEBUG, "  add to cert chain: " + subject);
         certChainList.add(cert);
 
         while (!(issuer.equals(subject))) { // stop if issuer==subject (root CA)
@@ -382,22 +389,22 @@ Debug.println("  add to cert chain: " + subject);
                 }
             }
 
-Debug.println(certCollection.size() + " certs found");
+logger.log(Level.DEBUG, certCollection.size() + " certs found");
             issuerArray = new X509Certificate[certCollection.size()];
             issuerArray = certCollection.toArray(issuerArray);
 
-            for (int i = 0; i < issuerArray.length; i++)
-                if (verifySignature(issuerArray[i], cert)) {
+            for (X509Certificate x509Certificate : issuerArray)
+                if (verifySignature(x509Certificate, cert)) {
                     match = true;
-                    cert = issuerArray[i];
+                    cert = x509Certificate;
                     subject = cert.getSubjectDN();
                     issuer = cert.getIssuerDN();
-Debug.println("  add to cert chain: " + subject);
+                    logger.log(Level.DEBUG, "  add to cert chain: " + subject);
                     certChainList.add(cert);
                     break;
                 }
             if (!match) {
-Debug.println("ERROR - certChain is broken");
+logger.log(Level.DEBUG, "ERROR - certChain is broken");
                 return null;
             }
         }
@@ -405,10 +412,10 @@ Debug.println("ERROR - certChain is broken");
         X509Certificate[] certChain = new X509Certificate[certChainList.size()];
         certChainList.toArray(certChain);
 
-Debug.println(certChain.length + " certs in cert chain");
+logger.log(Level.DEBUG, certChain.length + " certs in cert chain");
 
 //for (int i = 0; i < certChain.length; i++) {
-// Debug.println("getCertChain: " + certChain[i].getSubjectDN());
+//logger.log(Level.TRACE, "getCertChain: " + certChain[i].getSubjectDN());
 //}
 
         return certChain;
@@ -457,5 +464,3 @@ Debug.println(certChain.length + " certs in cert chain");
         System.loadLibrary("mscrypto");
     }
 }
-
-/* */

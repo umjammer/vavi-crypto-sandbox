@@ -40,6 +40,6 @@ public class ASN1PrintableString extends ASN1Type {
         };
         ASN1PrintableString ps = new ASN1PrintableString();
         ps.setValue(bytes);
-        System.out.println(ps.toString());
+        System.out.println(ps);
     }
 }

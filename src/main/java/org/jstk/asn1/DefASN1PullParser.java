@@ -68,16 +68,16 @@ public class DefASN1PullParser implements ASN1PullParser {
     private static class STypeObj {
         int remainingLen;
 
-        int type;
+        final int type;
 
         STypeObj(int len, int type) {
             this.remainingLen = len;
             this.type = type;
         }
-    };
+    }
 
     /** */
-    private Stack<STypeObj> activeSTypes = new Stack<>();
+    private final Stack<STypeObj> activeSTypes = new Stack<>();
 
     /** */
     public int next() throws ASN1PullParserException, IOException {
@@ -224,34 +224,21 @@ public class DefASN1PullParser implements ASN1PullParser {
         if ((consMask == ASN1Type.CONSTRUCTED) && (curTagNumber != SEQ) && (curTagNumber != SET)) {
             return "cons: [" + curTagNumber + "]";
         }
-        switch (curTagNumber) {
-        case BOOLEAN:
-            return "prim: BOOLEAN";
-        case INTEGER:
-            return "prim: INTEGER";
-        case BIT_STRING:
-            return "prim: BIT STRING";
-        case OCTET_STRING:
-            return "prim: OCTET STRING";
-        case NULL:
-            return "prim: NULL";
-        case OID:
-            return "prim: OBJECT";
-        case SEQ:
-            return "cons: SEQUENCE";
-        case SET:
-            return "cons: SET";
-        case PrintableString:
-            return "prim: PRINTABLESTRING";
-        case T61String:
-            return "prim: T61STRING";
-        case IA5String:
-            return "prim: IA5STRING";
-        case UTCTime:
-            return "prim: UTCTIME";
-        default:
-            return "cons: " + curTagNumber;
-        }
+        return switch (curTagNumber) {
+            case BOOLEAN -> "prim: BOOLEAN";
+            case INTEGER -> "prim: INTEGER";
+            case BIT_STRING -> "prim: BIT STRING";
+            case OCTET_STRING -> "prim: OCTET STRING";
+            case NULL -> "prim: NULL";
+            case OID -> "prim: OBJECT";
+            case SEQ -> "cons: SEQUENCE";
+            case SET -> "cons: SET";
+            case PrintableString -> "prim: PRINTABLESTRING";
+            case T61String -> "prim: T61STRING";
+            case IA5String -> "prim: IA5STRING";
+            case UTCTime -> "prim: UTCTIME";
+            default -> "cons: " + curTagNumber;
+        };
     }
 
     /** */
@@ -299,16 +286,14 @@ public class DefASN1PullParser implements ASN1PullParser {
 
     /** */
     private static String formatString(String s, int size, boolean leftJustify) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (s.length() >= size) {
             return s;
         }
         if (leftJustify) {
             sb.append(s);
         }
-        for (int i = size - s.length(); i > 0; i--) {
-            sb.append(" ");
-        }
+        sb.append(" ".repeat(size - s.length()));
         if (!leftJustify) {
             sb.append(s);
         }
@@ -330,7 +315,7 @@ public class DefASN1PullParser implements ASN1PullParser {
                 continue;
             }
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(formatInt(getOffset(), 5));
             sb.append(":d=");
             sb.append(formatInt(getDepth(), 1));
@@ -362,7 +347,7 @@ public class DefASN1PullParser implements ASN1PullParser {
                 ab.setValue(getContent());
                 sb.append(formatString(ab.toString(), 28, true));
             }
-            ps.println(sb.toString());
+            ps.println(sb);
         }
     }
 
@@ -408,5 +393,3 @@ public class DefASN1PullParser implements ASN1PullParser {
         }
     }
 }
-
-/* */

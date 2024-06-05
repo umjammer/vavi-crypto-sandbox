@@ -16,7 +16,7 @@ import java.util.Map;
 
 
 public abstract class JSTKAbstractTool {
-    protected static Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
+    protected static final Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
 
     public String progName() {
         return "java org.jstk..JSTKAbstractTool";
@@ -27,18 +27,15 @@ public abstract class JSTKAbstractTool {
     }
 
     public String extendedUsageString() {
-        StringBuffer sb = new StringBuffer();
-        Iterator<Map.Entry<String, JSTKCommand>> itr = cmds.entrySet().iterator();
-        while (itr.hasNext()) {
-            Map.Entry<String, JSTKCommand> ent = itr.next();
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, JSTKCommand> ent : cmds.entrySet()) {
             String key = ent.getKey();
             JSTKCommand cmd = ent.getValue();
 
-            sb.append("  " + key);
+            sb.append("  ").append(key);
             int blanksNeeded = 12 - key.length();
-            for (int i = 0; i < blanksNeeded; i++)
-                sb.append(" ");
-            sb.append(cmd.briefDescription() + "\n");
+            sb.append(" ".repeat(Math.max(0, blanksNeeded)));
+            sb.append(cmd.briefDescription()).append("\n");
         }
         return sb.toString();
     }
@@ -49,16 +46,15 @@ public abstract class JSTKAbstractTool {
     }
 
     public String usageString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Description:: \n  " + briefDescription() + "\n");
-        sb.append("Usage:: \n  " + progName() + " <cmd> [<options>]\n");
-        sb.append("Commands:: \n");
-        sb.append(extendedUsageString() + "\n");
-        sb.append("Notes:: \n");
-        sb.append("  -- Type \"" + progName() + " <cmd> help\" to get command specific help.\n");
-        sb.append("  -- Specify option \"-showtime\" to get command execution time. Example:\n");
-        sb.append("       " + progName() + " <command> -showtime\n");
-        return sb.toString();
+        String sb = "Description:: \n  " + briefDescription() + "\n" +
+                "Usage:: \n  " + progName() + " <cmd> [<options>]\n" +
+                "Commands:: \n" +
+                extendedUsageString() + "\n" +
+                "Notes:: \n" +
+                "  -- Type \"" + progName() + " <cmd> help\" to get command specific help.\n" +
+                "  -- Specify option \"-showtime\" to get command execution time. Example:\n" +
+                "       " + progName() + " <command> -showtime\n";
+        return sb;
     }
 
     public void printCmdUsage(JSTKCommand cmd, String cmdString) {
@@ -67,24 +63,24 @@ public abstract class JSTKAbstractTool {
     }
 
     public String cmdUsageString(JSTKCommand cmd, String cmdString) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Description:: \n  " + cmd.briefDescription() + "\n");
-        sb.append("\nUsage:: \n  " + progName() + " " + cmdString + " [<options>]\n\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Description:: \n  ").append(cmd.briefDescription()).append("\n");
+        sb.append("\nUsage:: \n  ").append(progName()).append(" ").append(cmdString).append(" [<options>]\n\n");
 
         String[] forms = cmd.useForms();
         if (forms != null) {
-            for (int i = 0; i < forms.length; i++) {
-                sb.append("  " + progName() + " " + cmdString + " " + forms[i] + "\n");
+            for (String form : forms) {
+                sb.append("  " + progName() + " " + cmdString + " " + form + "\n");
             }
         }
 
         sb.append("\nOptions:: \n");
-        sb.append(cmd.optionsDescription() + "\n");
+        sb.append(cmd.optionsDescription()).append("\n");
         String[] uses = cmd.sampleUses();
         if (uses != null) {
             sb.append("Sample Uses:: \n");
-            for (int i = 0; i < uses.length; i++) {
-                sb.append("  " + progName() + " " + cmdString + " " + uses[i] + "\n");
+            for (String use : uses) {
+                sb.append("  " + progName() + " " + cmdString + " " + use + "\n");
             }
         }
         return sb.toString();
@@ -115,7 +111,7 @@ public abstract class JSTKAbstractTool {
         }
 
         opts.parse(args, 1);
-        boolean showtime = Boolean.valueOf(opts.get("showtime")).booleanValue();
+        boolean showtime = Boolean.valueOf(opts.get("showtime"));
         long ts = 0, tt = 0;
         if (showtime) {
             ts = System.currentTimeMillis();

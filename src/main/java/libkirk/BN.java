@@ -177,7 +177,7 @@ public class BN {
 	}
 
 	public static void bn_mon_mul(byte[] d, int offsetDst, byte[] a, int offset1, byte[] b, int offset2, byte[] N, int offsetN, int n) {
-		final byte[] t = new byte[n];
+		byte[] t = new byte[n];
 
 		//bn_zero(t, 0, n);
 
@@ -203,7 +203,7 @@ public class BN {
 	}
 
 	public static void bn_from_mon(byte[] d, int offsetDst, byte[] N, int offsetN, int n) {
-		final byte[] t = new byte[n];
+		byte[] t = new byte[n];
 
 		//bn_zero(t, 0, n);
 		t[n - 1] = (byte) 1;
@@ -215,7 +215,7 @@ public class BN {
 	}
 
 	public static void bn_mon_exp(byte[] d, int offsetDst, byte[] a, int offset1, byte[] N, int offsetN, int n, byte[] e, int offsetE, int en) {
-		final byte[] t = new byte[n];
+		byte[] t = new byte[n];
 
 		bn_zero(d, offsetDst, n);
 		d[offsetDst + n - 1] = (byte) 1;
@@ -238,8 +238,8 @@ public class BN {
 	}
 
 	public static void bn_mon_inv(byte[] d, int offsetDst, byte[] a, int offset1, byte[] N, int offsetN, int n) {
-		final byte[] t = new byte[n];
-		final byte[] s = new byte[n];
+		byte[] t = new byte[n];
+		byte[] s = new byte[n];
 
 		//bn_zero(s, 0, n);
 		s[n - 1] = (byte) 2;

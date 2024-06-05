@@ -29,7 +29,7 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class SetupCACommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cadir", "cadir");
         defaults.put("capath", "2");

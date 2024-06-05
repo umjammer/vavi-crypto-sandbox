@@ -27,5 +27,3 @@ public final class MSRSASignProvider extends Provider {
         put("Signature.SHA1withRSA", "com.boyter.mscrypto.MSSHARSASignature");
     }
 }
-
-/* */

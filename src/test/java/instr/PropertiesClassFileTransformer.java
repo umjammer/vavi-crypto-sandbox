@@ -54,13 +54,13 @@ e.printStackTrace(System.err);
     }
 
     /** */
-    static String instruction;
+    static final String instruction;
 
     /** */
-    static String clazz;
+    static final String clazz;
 
     /** */
-    static String method;
+    static final String method;
 
     /* */
     static {
@@ -80,5 +80,3 @@ System.err.println(" instruction: " + instruction);
         }
     }
 }
-
-/* */

@@ -18,9 +18,9 @@ import org.jstk.asn1.ASN1UTCTime;
  * Validity ::= SEQUENCE { notBefore UTCTime, notAfter UTCTime }
  */
 public class Validity extends ASN1Seq {
-    private ASN1UTCTime notBefore = new ASN1UTCTime();
+    private final ASN1UTCTime notBefore = new ASN1UTCTime();
 
-    private ASN1UTCTime notAfter = new ASN1UTCTime();
+    private final ASN1UTCTime notAfter = new ASN1UTCTime();
 
     public Validity() {
         super();
@@ -37,9 +37,8 @@ public class Validity extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Validity-SEQ(" + notBefore.toString() + ", ");
-        sb.append(notAfter.toString() + ")");
-        return sb.toString();
+        String sb = "Validity-SEQ(" + notBefore.toString() + ", " +
+                notAfter.toString() + ")";
+        return sb;
     }
 }

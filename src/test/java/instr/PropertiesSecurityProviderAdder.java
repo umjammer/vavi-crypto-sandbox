@@ -41,7 +41,7 @@ System.err.println("PropertiesSecurityProviderAdder::exec: " + name + ", " + pro
     }
 
     /** */
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
 
     /* */
     static {
@@ -53,5 +53,3 @@ e.printStackTrace(System.err);
         }
     }
 }
-
-/* */

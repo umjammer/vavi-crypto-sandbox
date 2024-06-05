@@ -9,6 +9,8 @@
 package com.boyter.mscrypto;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -24,7 +26,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -34,6 +36,8 @@ import vavi.util.Debug;
  * @version 0.00 050314 nsano modified <br>
  */
 public final class MSRSACipherFactoryImpl extends CipherSpi {
+
+    private static final Logger logger = getLogger(MSRSACipherFactoryImpl.class.getName());
 
     /** */
     private static final MSCryptoManager msCryptoManager = MSCryptoManager.getInstance();
@@ -45,14 +49,14 @@ public final class MSRSACipherFactoryImpl extends CipherSpi {
     private static int ciphermode = 0;
 
     /** */
-    private static int keySize = msCryptoManager.getRSAKeysize() / 8;
+    private static final int keySize = msCryptoManager.getRSAKeysize() / 8;
 
     /** */
-    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
     /** */
     protected byte[] engineDoFinal(byte[] input, int inputOffset, int inputLen) throws IllegalBlockSizeException, BadPaddingException {
-Debug.println("\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
 
         byte[] outputData = null;
         buffer.write(input, inputOffset, inputLen);
@@ -78,7 +82,7 @@ Debug.println("\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
 
     /** */
     protected int engineDoFinal(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset) throws ShortBufferException, IllegalBlockSizeException, BadPaddingException {
-Debug.println("\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
 
         byte[] outputData = engineDoFinal(input, inputOffset, inputLen);
         System.arraycopy(outputData, 0, output, outputOffset, outputData.length);
@@ -87,50 +91,50 @@ Debug.println("\nMSRSACipherFactoryImpl: engineDoFinal entered\n");
 
     /** */
     protected int engineGetBlockSize() {
-Debug.println("\nMSRSACipherFactoryImpl: engineGetBlockSize entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineGetBlockSize entered\n");
         return keySize;
     }
 
     /** */
     protected byte[] engineGetIV() {
-Debug.println("\nMSRSACipherFactoryImpl: engineGetIV entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineGetIV entered\n");
         return null;
     }
 
     /** */
     protected int engineGetKeySize(Key key) {
-Debug.println("\nMSRSACipherFactoryImpl: engineGetKeySize entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineGetKeySize entered\n");
         return keySize; // keysize is in bytes
     }
 
     /** */
     protected int engineGetOutputSize(int inputLen) {
-Debug.println("\nMSRSACipherFactoryImpl: engineOutputSize entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineOutputSize entered\n");
         return keySize;
     }
 
     /** */
     protected AlgorithmParameters engineGetParameters() {
-Debug.println("\nMSRSACipherFactoryImpl: engineGetParameters entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineGetParameters entered\n");
         return null;
     }
 
     /** */
     protected void engineInit(int opmode, Key key, AlgorithmParameterSpec params, SecureRandom random) throws InvalidAlgorithmParameterException, InvalidKeyException {
-Debug.println("\nMSRSACipherFactoryImpl: engineInit entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineInit entered\n");
         engineInit(opmode, key, random);
     }
 
     /** */
     protected void engineInit(int opmode, Key key, AlgorithmParameters params, SecureRandom random) throws InvalidAlgorithmParameterException {
-Debug.println("\nMSRSACipherFactoryImpl: engineInit entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineInit entered\n");
         buffer.reset();
         throw new InvalidAlgorithmParameterException("MSRSA does not accept AlgorithmParameterSpec");
     }
 
     /** */
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
-Debug.println("\nMSRSACipherFactoryImpl: engineInit entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineInit entered\n");
 
         buffer.reset();
         if (opmode != Cipher.ENCRYPT_MODE && opmode != Cipher.DECRYPT_MODE) {
@@ -141,7 +145,7 @@ Debug.println("\nMSRSACipherFactoryImpl: engineInit entered\n");
 
     /** */
     protected void engineSetMode(String mode) throws NoSuchAlgorithmException {
-Debug.println("\nMSRSACipherFactoryImpl: engineSetMode entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineSetMode entered\n");
         if (!mode.equalsIgnoreCase("ECB")) {
             throw new NoSuchAlgorithmException("MSRSA supports only ECB mode");
         }
@@ -149,7 +153,7 @@ Debug.println("\nMSRSACipherFactoryImpl: engineSetMode entered\n");
 
     /** */
     protected void engineSetPadding(String padding) throws NoSuchPaddingException {
-Debug.println("\nMSRSACipherFactoryImpl: engineSetPadding entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineSetPadding entered\n");
 
         if (padding.substring(0, 5).equalsIgnoreCase("PKCS1")) {
             paddingAlgorithm = "PKCS1";
@@ -160,7 +164,7 @@ Debug.println("\nMSRSACipherFactoryImpl: engineSetPadding entered\n");
 
     /** */
     protected byte[] engineUpdate(byte[] input, int inputOffset, int inputLen) {
-Debug.println("\nMSRSACipherFactoryImpl: engineUpdate entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineUpdate entered\n");
 
         buffer.write(input, inputOffset, inputLen);
         return null;
@@ -168,9 +172,7 @@ Debug.println("\nMSRSACipherFactoryImpl: engineUpdate entered\n");
 
     /** */
     protected int engineUpdate(byte[] input, int inputOffset, int inputLen, byte[] output, int outputOffset) {
-Debug.println("\nMSRSACipherFactoryImpl: engineUpdate entered\n");
+logger.log(Level.DEBUG, "\nMSRSACipherFactoryImpl: engineUpdate entered\n");
         return 0;
     }
 }
-
-/* */

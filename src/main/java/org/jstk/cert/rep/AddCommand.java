@@ -13,6 +13,8 @@ package org.jstk.cert.rep;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -27,9 +29,15 @@ import org.jstk.JSTKException;
 import org.jstk.JSTKOptions;
 import org.jstk.JSTKResult;
 
+import static java.lang.System.getLogger;
+
 
 public class AddCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+
+    private static final Logger logger = getLogger(AddCommand.class.getName());
+
+    private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("reptype", "JSTK");
         defaults.put("repfile", "my.rep");
@@ -84,8 +92,8 @@ public class AddCommand extends JSTKCommandAdapter {
                 fbr.save();
                 return new JSTKResult(null, true, "X509 Certificate added to repository: " + repfile);
             } catch (CertificateException ce) {
-                RepTool.logger.fine("Cannot parse input as a Certificate");
-                RepTool.logger.log(java.util.logging.Level.FINER, "Not a Certificate", ce);
+                logger.log(Level.DEBUG, "Cannot parse input as a Certificate");
+                logger.log(Level.DEBUG, "Not a Certificate: " + ce);
             } // Fall through.
 
             bis.reset();
@@ -95,8 +103,8 @@ public class AddCommand extends JSTKCommandAdapter {
                 fbr.save();
                 return new JSTKResult(null, true, "X509 CRL added to repository: " + repfile);
             } catch (CRLException crle) {
-                RepTool.logger.fine("Cannot parse input as a CRL");
-                RepTool.logger.log(java.util.logging.Level.FINER, "Not a CRL", crle);
+                logger.log(Level.DEBUG, "Cannot parse input as a CRL");
+                logger.log(Level.DEBUG, "Not a CRL: " + crle);
             } // Fall through.
 
             return new JSTKResult(null, false, "Unknown format");

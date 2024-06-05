@@ -73,7 +73,7 @@ public class AES128 {
         init(mode);
     }
 
-    private Key getKeySpec(byte[] encKey) {
+    private static Key getKeySpec(byte[] encKey) {
     	return new SecretKeySpec(encKey, "AES");
     }
 
@@ -208,7 +208,7 @@ public class AES128 {
         return true;
     }
 
-    private byte[] doPaddingCMAC(byte[] input) {
+    private static byte[] doPaddingCMAC(byte[] input) {
         byte[] padded = new byte[16];
 
         for (int j = 0; j < 16; j++) {

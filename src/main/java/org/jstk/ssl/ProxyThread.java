@@ -17,16 +17,16 @@ import org.jstk.JSTKArgs;
 
 
 public class ProxyThread extends Thread {
-    public class Forwarder extends Thread {
-        private JSTKSocket inSock;
+    public static class Forwarder extends Thread {
+        private final JSTKSocket inSock;
 
-        private JSTKSocket outSock;
+        private final JSTKSocket outSock;
 
-        private JSTKBuffer buf;
+        private final JSTKBuffer buf;
 
-        String id;
+        final String id;
 
-        private Vector<ProtocolAnalyzer> paVec = new Vector<>();
+        private final Vector<ProtocolAnalyzer> paVec = new Vector<>();
 
         public Forwarder(String id, JSTKSocket inSock, JSTKSocket outSock, JSTKBuffer buf) {
             super(id);
@@ -74,7 +74,7 @@ public class ProxyThread extends Thread {
 
     private JSTKArgs args = null;
 
-    private int thdIndex;
+    private final int thdIndex;
 
     String host;
 
@@ -85,7 +85,7 @@ public class ProxyThread extends Thread {
         this.socket1 = socket;
         this.thdIndex = thdIndex;
 //        showdata = Boolean.valueOf(args.get("showdata")).booleanValue();
-        verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
+        verbose = Boolean.valueOf(args.get("verbose"));
         bufsize = Integer.parseInt(args.get("bufsize"));
         this.args = args;
 
@@ -116,8 +116,8 @@ public class ProxyThread extends Thread {
         String patype = args.get("patype");
         if (patype != null) {
             String[] patypes = patype.split(",");
-            for (int i = 0; i < patypes.length; i++) {
-                String pt = patypes[i].trim();
+            for (String s : patypes) {
+                String pt = s.trim();
                 ProtocolAnalyzer fpa = ProtocolAnalyzerFactory.getInstance(pt, "-->");
                 ProtocolAnalyzer rpa = ProtocolAnalyzerFactory.getInstance(pt, "<--");
                 if (fpa != null && rpa != null) {

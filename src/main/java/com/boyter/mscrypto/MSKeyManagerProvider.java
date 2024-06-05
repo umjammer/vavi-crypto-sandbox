@@ -26,5 +26,3 @@ public final class MSKeyManagerProvider extends Provider {
         put("KeyManagerFactory.MSKMF", "com.boyter.mscrypto.MSKeyManagerFactoryImpl");
     }
 }
-
-/* */

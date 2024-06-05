@@ -69,17 +69,14 @@ public class AES {
 		if (cipher == null && !inInit) {
 			inInit = true;
 			// Run in a background thread as the initialization is taking around 300 milliseconds
-			Thread staticInit = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						cipher = Cipher.getInstance("AES/CBC/NoPadding");
-						inInit = false;
-					} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-						log.log(Level.SEVERE, "AES Cipher init", e);
-					}
+			Thread staticInit = new Thread(() -> {
+                try {
+                    cipher = Cipher.getInstance("AES/CBC/NoPadding");
+                    inInit = false;
+                } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+                    log.log(Level.SEVERE, "AES Cipher init", e);
                 }
-			});
+});
 			staticInit.start();
 		}
 	}
@@ -159,7 +156,7 @@ public class AES {
 	}
 
 	public static void AES_cbc_decrypt(AES_ctx ctx, byte[] src, int srcOffset, header_keys dst, int size) {
-		final byte[] buffer = new byte[header_keys.SIZEOF];
+		byte[] buffer = new byte[header_keys.SIZEOF];
 		AES_cbc_decrypt(ctx, src, srcOffset, buffer, 0, size);
 		dst.read(buffer, 0);
 	}
@@ -205,9 +202,9 @@ public class AES {
 	}
 
 	private static void generate_subkey(AES_ctx ctx, byte[] K1, byte[] K2) {
-		final byte[] L = new byte[16];
-		final byte[] Z = new byte[16];
-		final byte[] tmp = new byte[16];
+		byte[] L = new byte[16];
+		byte[] Z = new byte[16];
+		byte[] tmp = new byte[16];
 
 		//for ( i=0; i<16; i++ ) Z[i] = 0;
 
@@ -246,12 +243,12 @@ public class AES {
 	}
 
 	public static void AES_CMAC(AES_ctx ctx, byte[] input, int inputOffset, int length, byte[] mac) {
-		final byte[] X = new byte[16];
-		final byte[] Y = new byte[16];
-		final byte[] M_last = new byte[16];
-		final byte[] padded = new byte[16];
-		final byte[] K1 = new byte[16];
-		final byte[] K2 = new byte[16];
+		byte[] X = new byte[16];
+		byte[] Y = new byte[16];
+		byte[] M_last = new byte[16];
+		byte[] padded = new byte[16];
+		byte[] K1 = new byte[16];
+		byte[] K2 = new byte[16];
 		boolean flag;
 		generate_subkey(ctx,K1,K2);
 

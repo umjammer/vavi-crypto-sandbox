@@ -18,19 +18,6 @@ package libkirk;
 import jpcsp.crypto.KeyVault;
 import vavi.util.StringUtil;
 
-import static libkirk.AES.AES_cbc_decrypt;
-import static libkirk.AES.AES_cbc_encrypt;
-import static libkirk.AES.rijndael_encrypt;
-import static libkirk.AES.rijndael_set_key;
-import static libkirk.EC.ec_priv_to_pub;
-import static libkirk.EC.ec_pub_mult;
-import static libkirk.EC.ecdsa_set_curve;
-import static libkirk.EC.ecdsa_set_priv;
-import static libkirk.EC.ecdsa_set_pub;
-import static libkirk.EC.ecdsa_sign;
-import static libkirk.EC.ecdsa_verify;
-import static libkirk.SHA1.SHAFinal;
-import static libkirk.SHA1.SHAUpdate;
 import static libkirk.Utilities.alignUp;
 import static libkirk.Utilities.curtime;
 import static libkirk.Utilities.log;
@@ -578,11 +565,11 @@ public class KirkEngine {
     }
 
     private static int kirk_init2(byte[] rnd_seed, int seed_size, int fuseid_90, int fuseid_94) {
-        final byte[] temp = new byte[0x104];
+        byte[] temp = new byte[0x104];
 
         KIRK_SHA1_HEADER header = new KIRK_SHA1_HEADER();
         // Another randomly selected data for a "key" to add to each randomization
-        final byte[] key = {(byte) 0x07, (byte) 0xAB, (byte) 0xEF, (byte) 0xF8, (byte) 0x96, (byte) 0x8C, (byte) 0xF3, (byte) 0xD6, (byte) 0x14, (byte) 0xE0, (byte) 0xEB, (byte) 0xB2, (byte) 0x9D, (byte) 0x8B, (byte) 0x4E, (byte) 0x74};
+        byte[] key = {(byte) 0x07, (byte) 0xAB, (byte) 0xEF, (byte) 0xF8, (byte) 0x96, (byte) 0x8C, (byte) 0xF3, (byte) 0xD6, (byte) 0x14, (byte) 0xE0, (byte) 0xEB, (byte) 0xB2, (byte) 0x9D, (byte) 0x8B, (byte) 0x4E, (byte) 0x74};
 
         //Set PRNG_DATA initially, otherwise use what ever uninitialized data is in the buffer
         if (seed_size > 0) {
@@ -636,8 +623,8 @@ public class KirkEngine {
         int chk_size;
         AES.AES_ctx k1 = new AES.AES_ctx();
         AES.AES_ctx cmac_key = new AES.AES_ctx();
-        final byte[] cmac_header_hash = new byte[16];
-        final byte[] cmac_data_hash = new byte[16];
+        byte[] cmac_header_hash = new byte[16];
+        byte[] cmac_data_hash = new byte[16];
 
         if (!is_kirk_initialized) {
             return KIRK_NOT_INITIALIZED;
@@ -686,9 +673,9 @@ public class KirkEngine {
     }
 
     public static int kirk_CMD1(byte[] outbuff, int outoffset, byte[] inbuff, int inoffset, int size) {
-        final KIRK_CMD1_HEADER header = new KIRK_CMD1_HEADER(inbuff, inoffset);
-        final header_keys keys = new header_keys(); //0-15 AES key, 16-31 CMAC key
-        final AES.AES_ctx k1 = new AES.AES_ctx();
+        KIRK_CMD1_HEADER header = new KIRK_CMD1_HEADER(inbuff, inoffset);
+        header_keys keys = new header_keys(); //0-15 AES key, 16-31 CMAC key
+        AES.AES_ctx k1 = new AES.AES_ctx();
 
         if (size < 0x90) {
             return KIRK_INVALID_SIZE;
@@ -707,9 +694,9 @@ public class KirkEngine {
         if (header.ecdsa_hash == 1) {
             SHA1.SHA_CTX sha = new SHA1.SHA_CTX();
             KIRK_CMD1_ECDSA_HEADER eheader = new KIRK_CMD1_ECDSA_HEADER(inbuff, inoffset);
-            final byte[] kirk1_pub = new byte[40];
-            final byte[] header_hash = new byte[20];
-            final byte[] data_hash = new byte[20];
+            byte[] kirk1_pub = new byte[40];
+            byte[] header_hash = new byte[20];
+            byte[] data_hash = new byte[20];
             EC.ecdsa_set_curve(ec_p, ec_a, ec_b1, ec_N1, Gx1, Gy1);
             memcpy(kirk1_pub, Px1, 20);
             memcpy(kirk1_pub, 20, Py1, 20);
@@ -956,8 +943,8 @@ public class KirkEngine {
     public static int kirk_CMD10(byte[] inbuff, int inoffset, int insize) {
         KIRK_CMD1_HEADER header = new KIRK_CMD1_HEADER(inbuff, inoffset);
         header_keys keys = new header_keys(); //0-15 AES key, 16-31 CMAC key
-        final byte[] cmac_header_hash = new byte[16];
-        final byte[] cmac_data_hash = new byte[16];
+        byte[] cmac_header_hash = new byte[16];
+        byte[] cmac_data_hash = new byte[16];
         AES.AES_ctx cmac_key = new AES.AES_ctx();
 
         if (!is_kirk_initialized) {
@@ -1025,7 +1012,7 @@ public class KirkEngine {
     }
 
     public static int kirk_CMD12(byte[] outbuff, int outoffset, int outsize) {
-        final byte[] k = new byte[EC.BIGNUMBER_SIZE];
+        byte[] k = new byte[EC.BIGNUMBER_SIZE];
         KIRK_CMD12_BUFFER keypair = new KIRK_CMD12_BUFFER();
 
         if (outsize != KIRK_CMD12_BUFFER.SIZEOF) {
@@ -1053,7 +1040,7 @@ public class KirkEngine {
     }
 
     public static int kirk_CMD13(byte[] outbuff, int outoffset, int outsize, byte[] inbuff, int inoffset, int insize) {
-        final byte[] k = new byte[0x15];
+        byte[] k = new byte[0x15];
         KIRK_CMD13_BUFFER pointmult = new KIRK_CMD13_BUFFER(inbuff, inoffset);
         //k[0]=0;
         if (outsize != 0x28 && outsize != KIRK_CMD13_BUFFER.SIZEOF) {
@@ -1077,11 +1064,11 @@ public class KirkEngine {
     }
 
     public static int kirk_CMD14(byte[] outbuff, int outoffset, int outsize) {
-        final byte[] temp = new byte[0x104];
+        byte[] temp = new byte[0x104];
         KIRK_SHA1_HEADER header = new KIRK_SHA1_HEADER();
 
         // Some randomly selected data for a "key" to add to each randomization
-        final byte[] key = {(byte) 0xA7, (byte) 0x2E, (byte) 0x4C, (byte) 0xB6, (byte) 0xC3, (byte) 0x34, (byte) 0xDF, (byte) 0x85, (byte) 0x70, (byte) 0x01, (byte) 0x49, (byte) 0xFC, (byte) 0xC0, (byte) 0x87, (byte) 0xC4, (byte) 0x77};
+        byte[] key = {(byte) 0xA7, (byte) 0x2E, (byte) 0x4C, (byte) 0xB6, (byte) 0xC3, (byte) 0x34, (byte) 0xDF, (byte) 0x85, (byte) 0x70, (byte) 0x01, (byte) 0x49, (byte) 0xFC, (byte) 0xC0, (byte) 0x87, (byte) 0xC4, (byte) 0x77};
         //if(outsize != 0x14) return KIRK_INVALID_SIZE; // Need real error code
         if (outsize <= 0) {
             return KIRK_OPERATION_SUCCESS;
@@ -1147,8 +1134,8 @@ public class KirkEngine {
 
     public static void decrypt_kirk16_private(byte[] dA_out, int dA_outoffset, byte[] dA_enc, int dA_encoffset) {
         kirk16_data keydata = new kirk16_data();
-        final byte[] subkey_1 = new byte[0x10];
-        final byte[] subkey_2 = new byte[0x10];
+        byte[] subkey_1 = new byte[0x10];
+        byte[] subkey_2 = new byte[0x10];
         AES.AES_ctx aes_ctx = new AES.AES_ctx();
 
         keydata.fuseid[7] = (byte) (g_fuse90 & 0xFF);
@@ -1213,8 +1200,8 @@ public class KirkEngine {
 
     public static void encrypt_kirk16_private(byte[] dA_out, int dA_outoffset, byte[] dA_dec, int dA_decoffset) {
         kirk16_data keydata = new kirk16_data();
-        final byte[] subkey_1 = new byte[0x10];
-        final byte[] subkey_2 = new byte[0x10];
+        byte[] subkey_1 = new byte[0x10];
+        byte[] subkey_2 = new byte[0x10];
         AES.AES_ctx aes_ctx = new AES.AES_ctx();
 
         keydata.fuseid[7] = (byte) (g_fuse90 & 0xFF);
@@ -1278,7 +1265,7 @@ public class KirkEngine {
     }
 
     public static int kirk_CMD16(byte[] outbuff, int outoffset, int outsize, byte[] inbuff, int inoffset, int insize) {
-        final byte[] dec_private = new byte[0x20];
+        byte[] dec_private = new byte[0x20];
         KIRK_CMD16_BUFFER signbuf = new KIRK_CMD16_BUFFER(inbuff, inoffset);
         ECDSA_SIG sig = new ECDSA_SIG();
         if (insize != KIRK_CMD16_BUFFER.SIZEOF) {

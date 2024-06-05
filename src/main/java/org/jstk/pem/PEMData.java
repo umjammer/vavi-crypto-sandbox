@@ -45,7 +45,7 @@ public class PEMData {
                                          InvalidPEMFormatException {
         String curLine;
         int state = BEGIN;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while ((curLine = reader.readLine()) != null) {
             if (state == BEGIN) {
                 if (curLine.startsWith(MARKER) && curLine.endsWith(MARKER)) {
@@ -134,7 +134,7 @@ public class PEMData {
     }
 
     public String encode(byte[] raw) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int n24bits = raw.length / 3;
         int rem = raw.length - (n24bits * 3);
         int niters = n24bits + (rem > 0 ? 1 : 0);
@@ -164,7 +164,7 @@ public class PEMData {
         return text;
     }
 
-    private int getValue(char c) {
+    private static int getValue(char c) {
         if ((c >= 'A') && (c <= 'Z'))
             return c - 'A';
         else if ((c >= 'a') && (c <= 'z'))
@@ -181,7 +181,7 @@ public class PEMData {
         return -1;
     }
 
-    private char getChar(int b6bit) {
+    private static char getChar(int b6bit) {
         if (b6bit >= 0 && b6bit < 26)
             return (char) ('A' + b6bit);
         else if (b6bit < 52)

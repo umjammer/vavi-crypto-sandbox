@@ -20,7 +20,7 @@ public class JSTKRole implements java.io.Serializable {
 
     String roleDesc;
 
-    Set<String> users;
+    final Set<String> users;
 
     public JSTKRole(String roleName, String roleDesc) {
         this.roleName = roleName;

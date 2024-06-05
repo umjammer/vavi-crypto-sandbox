@@ -228,11 +228,11 @@ public final class Camellia {
 
     private int pt0, pt1, pt2, pt3;
 
-    private final int rotateRight(int x, int s) {
+    private static int rotateRight(int x, int s) {
         return ((x >>> s) + (x << (32 - s)));
     }
 
-    private final long rotateLeft(int x, int s) {
+    private static long rotateLeft(int x, int s) {
         return (x << s) + (x >>> (32 - s));
     }
 
@@ -241,12 +241,12 @@ public final class Camellia {
      *
      * z = x ^ y
      */
-    private void xorBlock(int[] x, int xp, int[] y, int yp, int[] z, int zp) {
+    private static void xorBlock(int[] x, int xp, int[] y, int yp, int[] z, int zp) {
         z[0 + zp] = x[0 + xp] ^ y[0 + yp];
         z[1 + zp] = x[1 + xp] ^ y[1 + yp];
         z[2 + zp] = x[2 + xp] ^ y[2 + yp];
         z[3 + zp] = x[3 + xp] ^ y[3 + yp];
-    };
+    }
 
     /**
      * This function is only used in key generation.
@@ -280,12 +280,12 @@ public final class Camellia {
         0x10e527fa, 0xde682d1d, 0xb05688c2, 0xb3e6c1fd
     };
 
-    private static int[] ksft1 = {
+    private static final int[] ksft1 = {
         0, 64, 0, 64, 15, 79, 15, 79, 30, 94, 45, 109, 45, 124, 60, 124, 77, 13,
         94, 30, 94, 30, 111, 47, 111, 47
     };
 
-    private static int[] kidx1 = {
+    private static final int[] kidx1 = {
         0, 0, 8, 8, 0, 0, 8, 8, 8, 8, 0, 0, 8, 0, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 8, 8
     };
 
@@ -293,7 +293,7 @@ public final class Camellia {
      * As for this variable, it is used in 192/256 bit version camellia.
      */
     @SuppressWarnings("unused")
-    private static int[] ksft2 = {
+    private static final int[] ksft2 = {
         0, 64, 0, 64, 15, 79, 15, 79, 30, 94, 30, 94, 45, 109, 45, 109,
         60, 124, 60, 124, 60, 124, 77, 13, 77, 13, 94, 30, 94, 30, 111, 47, 111, 47
     };
@@ -302,12 +302,12 @@ public final class Camellia {
      * As for this variable, it is used in 192/256 bit version camellia.
      */
     @SuppressWarnings("unused")
-    private static int[] kIdx2 = {
+    private static final int[] kIdx2 = {
         0, 0, 12, 12, 4, 4, 8, 8, 4, 4, 12, 12, 0, 0, 8, 8, 0, 0, 4, 4, 12, 12,
         0, 0, 8, 8, 4, 4, 8, 8, 0, 0, 12, 12
     };
 
-    private void feistel(int[] x, int xp, int[] k, int kp, int keyOffset) {
+    private static void feistel(int[] x, int xp, int[] k, int kp, int keyOffset) {
 
         int s1 = x[0 + xp] ^ k[0 + kp];
 
@@ -412,7 +412,7 @@ public final class Camellia {
      * @param keyTable 52 bytes table, 52 means ???
      */
     public void genEkey(int[] rawKey, int[] keyTable) {
-        int t[] = new int[16];
+        int[] t = new int[16];
 
         System.arraycopy(rawKey, 0, t, 0, 4);
         for (int i = 4; i < 8; i++) {
@@ -502,6 +502,3 @@ public final class Camellia {
         plainText[3] = keyTable[k + 3] ^ (pt1);
     }
 }
-
-/* */
-

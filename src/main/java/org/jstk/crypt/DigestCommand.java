@@ -23,7 +23,7 @@ import org.jstk.JSTKUtil;
 
 
 public class DigestCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "SHA");
     }
@@ -58,7 +58,7 @@ public class DigestCommand extends JSTKCommandAdapter {
 
             String providerName = args.get("provider");
             String algorithm = args.get("algorithm");
-            boolean verify = Boolean.valueOf(args.get("verify")).booleanValue();
+            boolean verify = Boolean.valueOf(args.get("verify"));
 //            boolean stream = Boolean.valueOf(args.get("stream")).booleanValue();
             String mdString = args.get("mdbytes");
             String infile = args.get("infile");

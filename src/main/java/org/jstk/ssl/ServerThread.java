@@ -21,15 +21,15 @@ public class ServerThread extends Thread {
 
     private JSTKBuffer buf = null;
 
-    private int outIdx;
+    private final int outIdx;
 
-    private boolean verbose;
+    private final boolean verbose;
 
-    private boolean bench;
+    private final boolean bench;
 
-    private boolean echo;
+    private final boolean echo;
 
-    private boolean invalidate;
+    private final boolean invalidate;
 
     public ServerThread(JSTKSocket socket, JSTKBuffer buf, int outIdx, boolean verbose, boolean bench, boolean echo, boolean invalidate) throws IOException {
         super("ServerThread");
@@ -62,10 +62,9 @@ public class ServerThread extends Thread {
                 System.out.println("[" + outIdx + "]ServerThread:: Exception on read: " + ioe);
         }
 
-        if (invalidate && socket.getSocket() instanceof SSLSocket) {
+        if (invalidate && socket.getSocket() instanceof SSLSocket sslSock) {
             if (verbose)
                 System.out.println("[" + outIdx + "]Invalidating the SSLSession ...");
-            SSLSocket sslSock = (SSLSocket) socket.getSocket();
             SSLSession sess = sslSock.getSession();
             sess.invalidate();
         }

@@ -17,15 +17,15 @@ import java.math.BigInteger;
 
 
 public interface CADatabaseSpi {
-    public IssuedCerts getIssuedCerts();
+    IssuedCerts getIssuedCerts();
 
-    public RevokedCerts getRevokedCerts();
+    RevokedCerts getRevokedCerts();
 
-    public Certificate getCACert();
+    Certificate getCACert();
 
-    public CertPath getCACertPath();
+    CertPath getCACertPath();
 
-    public PrivateKey getCAPrivateKey();
+    PrivateKey getCAPrivateKey();
 
-    public BigInteger nextSerialNumber() throws CADatabaseException;
+    BigInteger nextSerialNumber() throws CADatabaseException;
 }

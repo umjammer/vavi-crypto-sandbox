@@ -32,7 +32,7 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class RevokeCertCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cerfile", "my.cer");
         defaults.put("cadir", "cadir");

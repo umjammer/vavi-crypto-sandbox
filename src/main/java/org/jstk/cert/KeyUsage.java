@@ -35,7 +35,7 @@ public class KeyUsage {
         "digitalSignature", "nonRepudiation", "keyEncipherment", "dataEncipherment", "keyAgreement", "keyCertSign", "cRLSign", "encipherOnly", "decipherOnly"
     };
 
-    private boolean[] keyUsage = new boolean[MAX_KEYUSAGE_INDEX + 1];
+    private final boolean[] keyUsage = new boolean[MAX_KEYUSAGE_INDEX + 1];
 
     public KeyUsage() {
         // No key usage set by default.
@@ -63,7 +63,7 @@ public class KeyUsage {
     }
 
     public String getKeyUsageString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (int i = 0; i < this.keyUsage.length; i++) {
             if (keyUsage[i]) {

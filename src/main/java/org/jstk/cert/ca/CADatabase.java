@@ -25,7 +25,7 @@ public class CADatabase {
 
     public final static String escapedRecordSeparator = "\\|";
 
-    private CADatabaseSpi spi;
+    private final CADatabaseSpi spi;
 
 //    private String type;
 

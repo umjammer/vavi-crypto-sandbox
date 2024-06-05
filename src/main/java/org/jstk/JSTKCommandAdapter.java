@@ -12,15 +12,15 @@ package org.jstk;
 
 public abstract class JSTKCommandAdapter implements JSTKCommand {
 
-    protected String briefDesc = "Unspecified";
+    protected final String briefDesc = "Unspecified";
 
-    protected String optionsDesc = "Unspecified";
+    protected final String optionsDesc = "Unspecified";
 
-    protected String[] sampleUses = {
+    protected final String[] sampleUses = {
         "Unspecified"
     };
 
-    protected String[] useForms = {
+    protected final String[] useForms = {
         "Unspecified"
     };
 
@@ -28,9 +28,9 @@ public abstract class JSTKCommandAdapter implements JSTKCommand {
 
     protected JSTKPerfData perfData = new JSTKPerfData();
 
-    protected String resultDesc = "Failed";
+    protected final String resultDesc = "Failed";
 
-    protected boolean success = false;
+    protected final boolean success = false;
 
     public Object execute(JSTKArgs args) throws JSTKException {
         return null;

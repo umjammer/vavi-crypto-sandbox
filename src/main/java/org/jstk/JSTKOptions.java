@@ -24,13 +24,13 @@ import java.util.Map;
  */
 public class JSTKOptions implements JSTKArgs {
     /** */
-    private Map<String, String> options = new HashMap<>();
+    private final Map<String, String> options = new HashMap<>();
 
     /** */
     private Map<String, String> defaults = null;
 
     /** */
-    private List<String> pArgs = new ArrayList<>(); // Positional Args.
+    private final List<String> pArgs = new ArrayList<>(); // Positional Args.
 
     /** */
     public void parse(String[] args, int beginIndex) {

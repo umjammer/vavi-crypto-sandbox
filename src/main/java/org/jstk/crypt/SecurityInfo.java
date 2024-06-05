@@ -23,7 +23,7 @@ import java.util.Vector;
 
 public class SecurityInfo {
     public static class AlgInfo {
-        Set<String> aliases;
+        final Set<String> aliases;
 
         Properties props;
 
@@ -58,7 +58,7 @@ public class SecurityInfo {
         }
 
         public String toString() {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             Iterator<String> aitr = aliases.iterator();
             boolean firstAlias = true;
             while (aitr.hasNext()) {
@@ -73,15 +73,15 @@ public class SecurityInfo {
     }
 
     public static class ProviderInfo {
-        String name;
+        final String name;
 
-        double version;
+        final double version;
 
-        String info;
+        final String info;
 
-        Properties props;
+        final Properties props;
 
-        Map<String, Vector<SecurityInfo.AlgInfo>> svcmap;
+        final Map<String, Vector<SecurityInfo.AlgInfo>> svcmap;
 
         public ProviderInfo(Provider provider) {
             name = provider.getName();
@@ -90,9 +90,7 @@ public class SecurityInfo {
 
             props = new Properties();
             svcmap = new HashMap<>();
-            Iterator<Map.Entry<Object, Object>> itr = provider.entrySet().iterator();
-            while (itr.hasNext()) {
-                Map.Entry<Object, Object> ent = itr.next();
+            for (Map.Entry<Object, Object> ent : provider.entrySet()) {
                 String key = (String) ent.getKey();
                 String value = (String) ent.getValue();
                 props.setProperty(key, value);

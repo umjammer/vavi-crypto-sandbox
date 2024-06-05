@@ -35,15 +35,15 @@ public class JSTKShellClient {
     public static class JSTKShellCallbackHandler implements CallbackHandler {
         public void handle(Callback[] cb) {
             try {
-                for (int i = 0; i < cb.length; i++) {
-                    if (cb[i] instanceof NameCallback) {
-                        NameCallback nc = (NameCallback) cb[i];
+                for (Callback callback : cb) {
+                    if (callback instanceof NameCallback) {
+                        NameCallback nc = (NameCallback) callback;
                         System.out.print(nc.getPrompt() + " ");
                         System.out.flush();
                         String name = new BufferedReader(new InputStreamReader(System.in)).readLine();
                         nc.setName(name);
-                    } else if (cb[i] instanceof PasswordCallback) {
-                        PasswordCallback pc = (PasswordCallback) cb[i];
+                    } else if (callback instanceof PasswordCallback) {
+                        PasswordCallback pc = (PasswordCallback) callback;
                         System.out.print(pc.getPrompt() + " ");
                         System.out.flush();
                         String pw = new BufferedReader(new InputStreamReader(System.in)).readLine();
@@ -92,7 +92,7 @@ public class JSTKShellClient {
                 shell.destroySession(sessId);
                 return; // Break out of the loop.
             } catch (ServerException se) {
-                if ((se.getCause() instanceof RemoteException) && (((RemoteException) se.getCause()).getCause() instanceof JSTKQuitException)) {
+                if ((se.getCause() instanceof RemoteException) && (se.getCause().getCause() instanceof JSTKQuitException)) {
                     shell.destroySession(sessId);
                     return;
                 }
@@ -101,7 +101,7 @@ public class JSTKShellClient {
         }
     }
 
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("proto", "local");
     }
@@ -135,7 +135,7 @@ public class JSTKShellClient {
         opts.parse(args, 0);
         opts.setDefaults(defaults);
         String proto = opts.get("proto");
-        boolean login = Boolean.valueOf(opts.get("login")).booleanValue();
+        boolean login = Boolean.valueOf(opts.get("login"));
 
         if (proto.equalsIgnoreCase("local")) { // JSTKShell object within the same JVM.
             if (login) {

@@ -11,10 +11,15 @@
 package org.jstk.asn1;
 
 import java.io.IOException;
-import java.util.logging.Logger;
+import java.lang.System.Logger.Level;
+
+import static java.lang.System.getLogger;
 
 
 public abstract class ASN1Type {
+
+    private static final System.Logger logger = getLogger(ASN1Type.class.getName());
+
     // tag classes
     public static final byte UNIVERSAL = 0;
 
@@ -67,8 +72,6 @@ public abstract class ASN1Type {
     public static final int IA5String = 22;
 
     public static final int UTCTime = 23;
-
-    public static final Logger logger = Logger.getLogger("org.jstk.asn1");
 
     // variables to hold different values
     protected byte tagClass;
@@ -155,18 +158,18 @@ public abstract class ASN1Type {
     }
 
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
-        logger.entering(getClass().getName(), "decode");
+        logger.log(Level.TRACE,  getClass().getName() + ": decode");
         boolean processEvent = true;
         int event = parser.next();
         length = parser.getLength();
-        logger.fine("[ASN1Type.decode()] event = " + event + ", off = " + parser.getOffset() + ", len = " + length);
+        logger.log(Level.DEBUG, "[ASN1Type.decode()] event = " + event + ", off = " + parser.getOffset() + ", len = " + length);
 
         if ((event != tagNumber) || (parser.getTagClass() != tagClass)) {
             if (optional || (defvalue != null)) {
                 parser.prev(); // skip
                 processEvent = false;
                 length = 0;
-                logger.fine("skipping ..." + (optional ? "optional tag not found" : "assuming default value"));
+                logger.log(Level.DEBUG, "skipping ..." + (optional ? "optional tag not found" : "assuming default value"));
             } else {
                 throw new ASN1PullParserException("unexpected type");
             }
@@ -174,7 +177,7 @@ public abstract class ASN1Type {
         consMask = parser.getConsMask();
         if (processEvent)
             value = parser.getContent();
-        logger.exiting(getClass().getName(), "decode");
+        logger.log(Level.TRACE,  getClass().getName() + ": decode");
     }
 
     protected byte[] encodeLen(int len) {
@@ -211,20 +214,18 @@ public abstract class ASN1Type {
             len = value.length;
         byte[] bytes = new byte[1 + lenEncoding.length + len];
         bytes[0] = idOctet;
-        for (int i = 0; i < lenEncoding.length; i++) {
-            bytes[1 + i] = lenEncoding[i];
-        }
+        System.arraycopy(lenEncoding, 0, bytes, 1, lenEncoding.length);
         for (int i = 0; i < len; i++) {
             bytes[1 + lenEncoding.length + i] = value[i];
         }
-        logger.fine("[ASN1Type.encode1()] idOctet = " + Integer.toHexString(idOctet) + ", #lenOctets = " + lenEncoding.length + ", length = " + length + ", len = " + len);
+        logger.log(Level.DEBUG, "[ASN1Type.encode1()] idOctet = " + Integer.toHexString(idOctet) + ", #lenOctets = " + lenEncoding.length + ", length = " + length + ", len = " + len);
         return bytes;
     }
 
     public byte[] encode() {
-        logger.entering(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         byte[] bytes = encode1();
-        logger.exiting(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         return bytes;
     }
 }

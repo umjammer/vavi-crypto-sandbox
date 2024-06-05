@@ -11,15 +11,16 @@
 package org.jstk;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 public class JSTKUtil {
-    private static char[] hexChars = {
+    private static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
     public static String hexStringFromBytes(byte[] ba) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ba.length; i++) {
             if (i > 0 && (i & 0x0000001f) == 0)
                 sb.append("\n");
@@ -37,9 +38,9 @@ public class JSTKUtil {
 
         String[] sa = new String[n];
         for (int i = 0; i < n; i++) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             int off = i * bps;
-            int remaining = (ba.length - off < bps ? ba.length - off : bps);
+            int remaining = (Math.min(ba.length - off, bps));
             for (int j = 0; j < remaining; j++) {
                 if (j > 0 && (j & 0x00000003) == 0)
                     sb.append("  ");
@@ -56,15 +57,14 @@ public class JSTKUtil {
     }
 
     public static String readableFromBytes(byte[] ba, int off, int length) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = off; i < off + length; i += 20) { // 16 bytes per line.
             // Format::
             // offset: hhhh hhhh hhhh hhhh hhhh hhhh hhhh hhhh pppppppppppppppp
             // 1(b + 6 + 1(:) + 2(b) + [4(h) + 1(b)]*4 + 4(b) + [4(h) + 1(b)]*4 + 8(b) + 16(p)
             // sb.append(" ");
             String addr = String.valueOf(i);
-            for (int j = 6 - addr.length(); j > 0; j--)
-                sb.append("0");
+            sb.append("0".repeat(Math.max(0, 6 - addr.length())));
             sb.append(addr);
             sb.append(":");
             for (int j = 0; j < 20; j++) {
@@ -82,16 +82,16 @@ public class JSTKUtil {
             sb.append("    ");
             String s = null;
             try {
-                s = new String(ba, i, Math.min(20, off + length - i), "US-ASCII");
+                s = new String(ba, i, Math.min(20, off + length - i), StandardCharsets.US_ASCII);
             } catch (Exception exc) {
                 System.err.println("Condition Impossible. Exception: " + exc);
             }
             char[] ca = s.toCharArray();
-            for (int j = 0; j < ca.length; j++) {
-                if (Character.isISOControl(ca[j]))
+            for (char c : ca) {
+                if (Character.isISOControl(c))
                     sb.append(".");
                 else
-                    sb.append(ca[j]);
+                    sb.append(c);
             }
             sb.append("\n");
         }
@@ -105,60 +105,25 @@ public class JSTKUtil {
         int bb = 0;
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            int b;
-            switch (ch) {
-            case '0':
-                b = 0x00;
-                break;
-            case '1':
-                b = 0x01;
-                break;
-            case '2':
-                b = 0x02;
-                break;
-            case '3':
-                b = 0x03;
-                break;
-            case '4':
-                b = 0x04;
-                break;
-            case '5':
-                b = 0x05;
-                break;
-            case '6':
-                b = 0x06;
-                break;
-            case '7':
-                b = 0x07;
-                break;
-            case '8':
-                b = 0x08;
-                break;
-            case '9':
-                b = 0x09;
-                break;
-            case 'a':
-                b = 0x0a;
-                break;
-            case 'b':
-                b = 0x0b;
-                break;
-            case 'c':
-                b = 0x0c;
-                break;
-            case 'd':
-                b = 0x0d;
-                break;
-            case 'e':
-                b = 0x0e;
-                break;
-            case 'f':
-                b = 0x0f;
-                break;
-            default:
-                b = 0x10;
-                break;
-            }
+            int b = switch (ch) {
+                case '0' -> 0x00;
+                case '1' -> 0x01;
+                case '2' -> 0x02;
+                case '3' -> 0x03;
+                case '4' -> 0x04;
+                case '5' -> 0x05;
+                case '6' -> 0x06;
+                case '7' -> 0x07;
+                case '8' -> 0x08;
+                case '9' -> 0x09;
+                case 'a' -> 0x0a;
+                case 'b' -> 0x0b;
+                case 'c' -> 0x0c;
+                case 'd' -> 0x0d;
+                case 'e' -> 0x0e;
+                case 'f' -> 0x0f;
+                default -> 0x10;
+            };
             if (b != 0x10) {
                 if (firstHalf) {
                     bb = (b << 4);

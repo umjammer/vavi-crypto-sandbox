@@ -20,9 +20,9 @@ import org.jstk.asn1.ASN1Type;
  * AlgorithmIdentifier ::= SEQUENCE { algorithm OBJECT IDENTIFIER, parameters ANY DEFINED BY algorithm OPTIONAL }
  */
 public class AlgorithmIdentifier extends ASN1Seq {
-    private ASN1Oid algorithm = new ASN1Oid();
+    private final ASN1Oid algorithm = new ASN1Oid();
 
-    private ASN1Any parameters = new ASN1Any();
+    private final ASN1Any parameters = new ASN1Any();
 
     public AlgorithmIdentifier() {
         super();
@@ -39,9 +39,8 @@ public class AlgorithmIdentifier extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("AlgorithmIdentifier-SEQ(" + algorithm.toString() + ", ");
-        sb.append(parameters.toString() + ")");
-        return sb.toString();
+        String sb = "AlgorithmIdentifier-SEQ(" + algorithm.toString() + ", " +
+                parameters.toString() + ")";
+        return sb;
     }
 }

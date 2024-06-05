@@ -21,19 +21,17 @@ import java.util.Map;
  */
 public interface JSTKArgs {
     /** */
-    public void setDefaults(Map<String, String> defaults);
+    void setDefaults(Map<String, String> defaults);
 
     /** */
-    public String get(String name);
+    String get(String name);
 
     /** */
-    public void set(String name, String value);
+    void set(String name, String value);
 
     /** */
-    public int getNum();
+    int getNum();
 
     /** */
-    public String get(int position);
+    String get(int position);
 }
-
-/* */

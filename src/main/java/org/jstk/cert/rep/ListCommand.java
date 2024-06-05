@@ -26,7 +26,7 @@ import org.jstk.JSTKResult;
 public class ListCommand extends JSTKCommandAdapter {
     private int index = 0;
 
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("reptype", "JSTK");
         defaults.put("repfile", "my.rep");
@@ -57,17 +57,17 @@ public class ListCommand extends JSTKCommandAdapter {
     }
 
     public void formatX509Certificate(X509Certificate cert, StringBuffer sb) {
-        sb.append("X509CERT[" + index + "]: ");
-        sb.append("Serial No: " + cert.getSerialNumber());
-        sb.append(", Issuer: " + cert.getIssuerX500Principal());
-        sb.append(", Subject: " + cert.getSubjectX500Principal() + "\n");
+        sb.append("X509CERT[").append(index).append("]: ");
+        sb.append("Serial No: ").append(cert.getSerialNumber());
+        sb.append(", Issuer: ").append(cert.getIssuerX500Principal());
+        sb.append(", Subject: ").append(cert.getSubjectX500Principal()).append("\n");
     }
 
     public void formatX509CRL(X509CRL crl, StringBuffer sb) {
-        sb.append("X509CRL[" + index + "]: ");
-        sb.append("Issuer: " + crl.getIssuerX500Principal());
-        sb.append(", This Update: " + crl.getThisUpdate());
-        sb.append(", Next Update: " + crl.getNextUpdate() + "\n");
+        sb.append("X509CRL[").append(index).append("]: ");
+        sb.append("Issuer: ").append(crl.getIssuerX500Principal());
+        sb.append(", This Update: ").append(crl.getThisUpdate());
+        sb.append(", Next Update: ").append(crl.getNextUpdate()).append("\n");
     }
 
     public Object execute(JSTKArgs args) throws JSTKException {

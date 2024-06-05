@@ -49,5 +49,3 @@ public class EnigmaKeyFactory extends SecretKeyFactorySpi {
         throw new InvalidKeyException("to translate key is unsupported: " + key);
     }
 }
-
-/* */

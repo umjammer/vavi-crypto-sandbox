@@ -14,9 +14,9 @@ import java.security.Principal;
 
 
 public class JSTKUserPrincipal implements Principal {
-    String loginName;
+    final String loginName;
 
-    String userName;
+    final String userName;
 
     public JSTKUserPrincipal(String loginName, String userName) {
         this.loginName = loginName;

@@ -23,7 +23,7 @@ import org.jstk.JSTKUtil;
 
 
 public class GenSRCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "SHA1PRNG");
         defaults.put("size", "16");
@@ -37,7 +37,10 @@ public class GenSRCommand extends JSTKCommandAdapter {
 
     public String[] useForms() {
         String[] forms = {
-            "[-algorithm <alg>] [-size <size>] [-seed <seed>]\n" + "\t[-num <num>] [-pprovider <provider>]\n"
+                """
+[-algorithm <alg>] [-size <size>] [-seed <seed>]
+\t[-num <num>] [-pprovider <provider>]
+"""
         };
         return forms;
     }
@@ -54,7 +57,7 @@ public class GenSRCommand extends JSTKCommandAdapter {
     }
 
     public Object execute(JSTKArgs args) throws JSTKException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         try {
             args.setDefaults(defaults);
             String providerName = args.get("provider");
@@ -78,7 +81,7 @@ public class GenSRCommand extends JSTKCommandAdapter {
             sb.append("Generated Random Bytes: \n");
             for (int i = 0; i < num; i++) {
                 sr.nextBytes(randomBytes);
-                sb.append("[" + i + "]: " + JSTKUtil.hexStringFromBytes(randomBytes) + "\n");
+                sb.append("[").append(i).append("]: ").append(JSTKUtil.hexStringFromBytes(randomBytes)).append("\n");
             }
         } catch (Exception exc) {
             throw new JSTKException("GenKCommand.execute() failed", exc);

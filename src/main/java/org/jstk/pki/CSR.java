@@ -21,11 +21,11 @@ import org.jstk.JSTKOptions;
  * CSR ::= SEQUENCE { csrInfo CSRInfo, algorithm AlgorithmIdentifier, signatureBytes BIT STRING }
  */
 public class CSR extends ASN1Seq {
-    private CSRInfo csrInfo = new CSRInfo();
+    private final CSRInfo csrInfo = new CSRInfo();
 
-    private AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
+    private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
-    private ASN1BitString signatureBytes = new ASN1BitString();
+    private final ASN1BitString signatureBytes = new ASN1BitString();
 
     public CSR() {
         super();
@@ -47,10 +47,9 @@ public class CSR extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("CSR-SEQ(" + csrInfo.toString() + ", ");
-        sb.append(algorithm.toString() + ", " + signatureBytes.toString() + ")");
-        return sb.toString();
+        String sb = "CSR-SEQ(" + csrInfo.toString() + ", " +
+                algorithm.toString() + ", " + signatureBytes.toString() + ")";
+        return sb;
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,7 +71,7 @@ public class CSR extends ASN1Seq {
 
         CSR csr = new CSR();
         csr.decode(parser);
-        System.out.println(csr.toString());
+        System.out.println(csr);
 
         JSTKOptions opts = new JSTKOptions();
         opts.parse(args, 1);

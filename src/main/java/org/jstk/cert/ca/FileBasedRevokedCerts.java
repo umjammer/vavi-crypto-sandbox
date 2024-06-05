@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 
 public class FileBasedRevokedCerts implements RevokedCerts {
-    private String indexFileName;
+    private final String indexFileName;
 
 //    private String dir;
 
@@ -91,14 +91,14 @@ public class FileBasedRevokedCerts implements RevokedCerts {
     public void add(BigInteger serialNo) throws CADatabaseException {
 //        String certFileName = dir + File.separator + serialNo.toString() + ".cer";
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Calendar cal = Calendar.getInstance();
-        sb.append(cal.getTime().toString() + CADatabase.recordSeparator);
-        sb.append(serialNo.toString() + CADatabase.recordSeparator);
+        sb.append(cal.getTime()).append(CADatabase.recordSeparator);
+        sb.append(serialNo.toString()).append(CADatabase.recordSeparator);
 
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(indexFileName, true)); // Append mode
-            pw.println(sb.toString());
+            pw.println(sb);
             pw.close();
         } catch (Exception exc) {
             throw new CADatabaseException("cannot write to index file: " + indexFileName, exc);

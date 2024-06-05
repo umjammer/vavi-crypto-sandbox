@@ -221,6 +221,5 @@ public class UserAccountManager implements java.io.Serializable {
             throw new NoSuchUserException();
         if (!passWord.equals(user.getPassWord()))
             throw new InvalidPasswordException();
-        return;
     }
 }

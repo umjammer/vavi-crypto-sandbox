@@ -24,5 +24,3 @@ public final class CamelliaCipherProvider extends Provider {
         put("SecretKeyFactory.Camellia", "vavi.crypto.camellia.CamelliaKeyFactory");
     }
 }
-
-/* */

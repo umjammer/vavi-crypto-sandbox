@@ -24,5 +24,3 @@ public final class EnigmaCipherProvider extends Provider {
         put("SecretKeyFactory.Enigma", "vavi.crypto.enigma.EnigmaKeyFactory");
     }
 }
-
-/* */

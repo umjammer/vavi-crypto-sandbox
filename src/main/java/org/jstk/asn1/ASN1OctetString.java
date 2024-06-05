@@ -17,7 +17,7 @@ package org.jstk.asn1;
  * @version 0.00 050317 nsano initial version <br>
  */
 public class ASN1OctetString extends ASN1Type {
-    private static char[] hexChars = {
+    private static final char[] hexChars = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
@@ -30,13 +30,12 @@ public class ASN1OctetString extends ASN1Type {
             return "ASN1OctetString: null";
         }
 
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < value.length; i++) {
-            byte cbyte = value[i];
+        StringBuilder sb = new StringBuilder();
+        for (byte cbyte : value) {
             sb.append(hexChars[(0x000000f0 & cbyte) >> 4]);
             sb.append(hexChars[(0x0000000f & cbyte)]);
         }
-        return "ASN1OctetString: " + sb.toString();
+        return "ASN1OctetString: " + sb;
     }
 
     public static void main(String[] args) {
@@ -45,6 +44,6 @@ public class ASN1OctetString extends ASN1Type {
         };
         ASN1OctetString os = new ASN1OctetString();
         os.setValue(bytes);
-        System.out.println(os.toString());
+        System.out.println(os);
     }
 }

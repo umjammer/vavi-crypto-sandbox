@@ -25,7 +25,7 @@ import org.jstk.JSTKUtil;
 
 
 public class MacCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "HmacSHA1");
         defaults.put("keystore", "my.keystore");
@@ -66,7 +66,7 @@ public class MacCommand extends JSTKCommandAdapter {
 
             String providerName = args.get("provider");
             String algorithm = args.get("algorithm");
-            boolean verify = Boolean.valueOf(args.get("verify")).booleanValue();
+            boolean verify = Boolean.valueOf(args.get("verify"));
             String macString = args.get("macbytes");
             String infile = args.get("infile");
             String macfile = args.get("macfile");

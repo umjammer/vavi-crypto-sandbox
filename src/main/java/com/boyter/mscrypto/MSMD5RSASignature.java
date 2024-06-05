@@ -26,5 +26,3 @@ public final class MSMD5RSASignature extends MSRSASignFactoryImpl {
         super.setMessageDigestType("MD5");
     }
 }
-
-/* */

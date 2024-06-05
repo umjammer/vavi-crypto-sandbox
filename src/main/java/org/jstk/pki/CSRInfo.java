@@ -20,13 +20,13 @@ import org.jstk.asn1.ASN1Seq;
  */
 public class CSRInfo extends ASN1Seq {
     // A sequence of following elements.
-    private ASN1Integer version = new ASN1Integer();
+    private final ASN1Integer version = new ASN1Integer();
 
     private Name subject = new Name();
 
-    private SubjectPublicKeyInfo publicKeyInfo = new SubjectPublicKeyInfo();
+    private final SubjectPublicKeyInfo publicKeyInfo = new SubjectPublicKeyInfo();
 
-    private ASN1Any attributes = new ASN1Any();
+    private final ASN1Any attributes = new ASN1Any();
 
     public CSRInfo() {
         super();
@@ -60,9 +60,8 @@ public class CSRInfo extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("CSRInfo-SEQ(" + version.toString() + ", " + subject.toString() + ", ");
-        sb.append(publicKeyInfo.toString() + ", " + attributes.toString() + ")");
-        return sb.toString();
+        String sb = "CSRInfo-SEQ(" + version.toString() + ", " + subject.toString() + ", " +
+                publicKeyInfo.toString() + ", " + attributes.toString() + ")";
+        return sb;
     }
 }

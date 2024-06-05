@@ -22,15 +22,15 @@ import javax.security.auth.callback.PasswordCallback;
 public class DefaultCallbackHandler implements CallbackHandler {
     public void handle(Callback[] cb) {
         try {
-            for (int i = 0; i < cb.length; i++) {
-                if (cb[i] instanceof NameCallback) {
-                    NameCallback nc = (NameCallback) cb[i];
+            for (Callback callback : cb) {
+                if (callback instanceof NameCallback) {
+                    NameCallback nc = (NameCallback) callback;
                     System.out.print(nc.getPrompt() + " ");
                     System.out.flush();
                     String name = new BufferedReader(new InputStreamReader(System.in)).readLine();
                     nc.setName(name);
-                } else if (cb[i] instanceof PasswordCallback) {
-                    PasswordCallback pc = (PasswordCallback) cb[i];
+                } else if (callback instanceof PasswordCallback) {
+                    PasswordCallback pc = (PasswordCallback) callback;
                     System.out.print(pc.getPrompt() + " ");
                     System.out.flush();
                     String pw = new BufferedReader(new InputStreamReader(System.in)).readLine();

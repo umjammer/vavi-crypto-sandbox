@@ -32,7 +32,7 @@ import org.jstk.pem.PEMData;
 
 
 public class ExportCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
 
     private boolean pkcs12Output = false;
     static {
@@ -53,7 +53,10 @@ public class ExportCommand extends JSTKCommandAdapter {
 
     public String[] useForms() {
         String[] forms = {
-            "[-keystore <keystore>] [-kstype (JCEKS|JKS|PKCS12)]\n" + "\t[-storepass <storepass>] [-alias <alias>] [-keypass <keypass>]\n" + "\t[-outform <outform>][-provider <provider>]"
+                """
+[-keystore <keystore>] [-kstype (JCEKS|JKS|PKCS12)]
+\t[-storepass <storepass>] [-alias <alias>] [-keypass <keypass>]
+\t[-outform <outform>][-provider <provider>]"""
         };
         return forms;
     }
@@ -65,7 +68,7 @@ public class ExportCommand extends JSTKCommandAdapter {
         return uses;
     }
 
-    private void exportKey(Key key, String alias, StringBuffer sb, String outform) throws Exception {
+    private static void exportKey(Key key, String alias, StringBuffer sb, String outform) throws Exception {
         String keytype = (key instanceof SecretKey ? "SecretKey" : (key instanceof PrivateKey ? "PrivateKey" : "PublicKey"));
         String keyfile = alias + (outform.equalsIgnoreCase("PEM") ? ".pem" : ".key.der");
         FileOutputStream fos = new FileOutputStream(keyfile);
@@ -82,16 +85,16 @@ public class ExportCommand extends JSTKCommandAdapter {
             fos.write(derEncodedKey);
         }
         fos.close();
-        sb.append("Exported " + keytype + " to file: " + keyfile + "\n");
+        sb.append("Exported ").append(keytype).append(" to file: ").append(keyfile).append("\n");
     }
 
-    private void exportCertChain(Certificate[] certs, String alias, StringBuffer sb, String outform) throws Exception {
+    private static void exportCertChain(Certificate[] certs, String alias, StringBuffer sb, String outform) throws Exception {
         if (certs == null)
             return;
 
         for (int i = 0; i < certs.length; i++) {
             String cerfile = alias + (outform.equalsIgnoreCase("PEM") ? ".pem" : ".crt." + i + ".der");
-            boolean append = (outform.equalsIgnoreCase("PEM") ? true : false);
+            boolean append = (outform.equalsIgnoreCase("PEM"));
             FileOutputStream fos = new FileOutputStream(cerfile, append);
             byte[] derEncodedCert = certs[i].getEncoded();
             if (outform.equalsIgnoreCase("PEM")) {
@@ -106,7 +109,7 @@ public class ExportCommand extends JSTKCommandAdapter {
                 fos.write(derEncodedCert);
             }
             fos.close();
-            sb.append("Appended Certificate#" + i + " to file: " + cerfile + "\n");
+            sb.append("Appended Certificate#").append(i).append(" to file: ").append(cerfile).append("\n");
         }
     }
 
@@ -143,14 +146,14 @@ public class ExportCommand extends JSTKCommandAdapter {
             String cmd = "openssl pkcs12 -export -in " + pemfile + " -out " + p12file + " -password pass:" + keypass;
             int r = runOSCommand(cmd);
             if (r == 0) {
-                sb.append("Converted PEM file " + pemfile + " to PKCS12 file " + p12file);
+                sb.append("Converted PEM file ").append(pemfile).append(" to PKCS12 file ").append(p12file);
             } else {
-                sb.append("*** ERROR *** Conversion of PEM file " + pemfile + " to PKCS12 file " + p12file + " FAILED");
+                sb.append("*** ERROR *** Conversion of PEM file ").append(pemfile).append(" to PKCS12 file ").append(p12file).append(" FAILED");
             }
         }
     }
 
-    private boolean opensslPresent() {
+    private static boolean opensslPresent() {
         if (runOSCommand("openssl exit") == 0) {
             return true;
         } else {
@@ -158,19 +161,17 @@ public class ExportCommand extends JSTKCommandAdapter {
         }
     }
 
-    private int runOSCommand(String cmd) {
+    private static int runOSCommand(String cmd) {
         try {
             Process p = Runtime.getRuntime().exec(cmd);
             return p.waitFor();
-        } catch (IOException ioe) {
-            return 1;
-        } catch (InterruptedException ie) {
+        } catch (IOException | InterruptedException ioe) {
             return 1;
         }
     }
 
     public Object execute(JSTKArgs args) throws JSTKException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         try {
             args.setDefaults(defaults);
             pkcs12Output = false;
@@ -202,7 +203,7 @@ public class ExportCommand extends JSTKCommandAdapter {
                 if (ks.containsAlias(alias)) {
                     sb.append(exportEntry(ks, alias, keypass, outform));
                 } else {
-                    sb.append("No such Entry: " + alias + ".\n");
+                    sb.append("No such Entry: ").append(alias).append(".\n");
                 }
             } else {
                 Enumeration<String> enumeration = ks.aliases();

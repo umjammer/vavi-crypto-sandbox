@@ -16,11 +16,11 @@ import javax.security.auth.Subject;
 
 
 public interface JSTKShell extends Remote {
-    public String execCommand(String[] cmdargs) throws Exception;
+    String execCommand(String[] cmdargs) throws Exception;
 
-    public String createSession() throws Exception;
+    String createSession() throws Exception;
 
-    public void destroySession(String sessId) throws Exception;
+    void destroySession(String sessId) throws Exception;
 
-    public void setSubject(Subject sub) throws Exception;
+    void setSubject(Subject sub) throws Exception;
 }
