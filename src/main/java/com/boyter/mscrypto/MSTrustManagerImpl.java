@@ -8,6 +8,8 @@
 
 package com.boyter.mscrypto;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.CertStore;
@@ -22,7 +24,7 @@ import javax.net.ssl.X509TrustManager;
 
 import com.boyter.mscrypto.MSCryptoManager.Flag;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -32,6 +34,8 @@ import vavi.util.Debug;
  * @version 0.00 050314 nsano modified <br>
  */
 final class MSTrustManagerImpl implements X509TrustManager {
+
+    private static final Logger logger = getLogger(MSTrustManagerImpl.class.getName());
 
     /** */
     private static final MSCryptoManager msCryptoManager = MSCryptoManager.getInstance();
@@ -52,7 +56,7 @@ final class MSTrustManagerImpl implements X509TrustManager {
         X509Certificate[] caArray = null;
 
         try {
-Debug.println("getAcceptedIssuers: entered");
+logger.log(Level.DEBUG, "getAcceptedIssuers: entered");
 
             CertStore caCerts = msCryptoManager.getCaCerts();
 
@@ -60,7 +64,7 @@ Debug.println("getAcceptedIssuers: entered");
             xcs.setCertificateValid(new Date());
 
             Collection<? extends Certificate> certcollection = caCerts.getCertificates(xcs);
-Debug.println("getAcceptedIssuers: " + certcollection.size() + " certs found");
+logger.log(Level.DEBUG, "getAcceptedIssuers: " + certcollection.size() + " certs found");
 
             caArray = new X509Certificate[certcollection.size()];
             caArray = certcollection.toArray(caArray);
@@ -70,7 +74,7 @@ Debug.println("getAcceptedIssuers: " + certcollection.size() + " certs found");
         }
 
 //for (int i = 0; i < caArray.length; i++) {
-// Debug.println("(" + i + ") " + caArray[i].getSubjectDN());
+//logger.log(Level.TRACE, "(" + i + ") " + caArray[i].getSubjectDN());
 //}
 
         return caArray;
@@ -84,12 +88,12 @@ Debug.println("getAcceptedIssuers: " + certcollection.size() + " certs found");
 
         Flag dontKnowFlag = Flag.AskTheUser;
 
-Debug.println(">>>>>>>> checkClientTrusted: Entered: " + authType);
+logger.log(Level.DEBUG, ">>>>>>>> checkClientTrusted: Entered: " + authType);
 
         try {
             msCryptoManager.isCertChainValid(chain, dontKnowFlag);
         } catch (CertificateException e) {
-Debug.printStackTrace(e);
+logger.log(Level.DEBUG, e);
             throw e;
         } catch (Exception e) {
             throw new IllegalStateException(e);
@@ -104,17 +108,15 @@ Debug.printStackTrace(e);
 
         Flag dontKnowFlag = Flag.AskTheUser;
 
-Debug.println(">>>>>>>> checkServerTrusted: Entered: " + authType);
+logger.log(Level.DEBUG, ">>>>>>>> checkServerTrusted: Entered: " + authType);
 
         try {
             msCryptoManager.isCertChainValid(chain, dontKnowFlag);
         } catch (CertificateException e) {
-Debug.printStackTrace(e);
+logger.log(Level.DEBUG, e);
             throw e;
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 }
-
-/* */

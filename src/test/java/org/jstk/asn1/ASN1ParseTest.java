@@ -16,9 +16,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import org.jstk.pem.InvalidPEMFormatException;
@@ -31,14 +32,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import vavi.util.Debug;
 import vavi.util.StringUtil;
 
+import static java.lang.System.getLogger;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+
 public class ASN1ParseTest {
-    public static final Logger logger = ASN1Type.logger;
+
+    private static final Logger logger = getLogger(ASN1ParseTest.class.getName());
 
     static class InputFile {
-        byte[] bytes;
-        String file;
+        final byte[] bytes;
+        final String file;
         InputFile(byte[] bytes, String file) {
             this.bytes = bytes;
             this.file = file;
@@ -52,7 +56,7 @@ public class ASN1ParseTest {
         "data/test1.csr", "data/test.crt", "data/test2.pem"
     };
 
-    protected static List<InputFile> inputFileList = new ArrayList<>();
+    protected static final List<InputFile> inputFileList = new ArrayList<>();
 
     @BeforeAll
     static void setUp() {
@@ -73,12 +77,12 @@ public class ASN1ParseTest {
                         baos.write(buf, 0, n);
                     is.close();
                 } catch (IOException ioe) { // Input file has a problem
-                    logger.info("I/O problem with : " + file + ", Exception: " + ioe + ". Skipping ...");
+                    logger.log(Level.INFO, "I/O problem with : " + file + ", Exception: " + ioe + ". Skipping ...");
                     continue;
                 }
                 bytes = baos.toByteArray();
             } catch (IOException ioe) { // Input file has a problem
-                logger.info("I/O problem with : " + file + ", Exception: " + ioe + ". Skipping ...");
+                logger.log(Level.INFO, "I/O problem with : " + file + ", Exception: " + ioe + ". Skipping ...");
                 continue;
             }
             inputFileList.add(new InputFile(bytes, file));
@@ -92,36 +96,36 @@ public class ASN1ParseTest {
     @ParameterizedTest
     @MethodSource("fileProvider")
     void testParse(InputFile inpf) throws Exception {
-        logger.entering(getClass().getName(), "testParse");
+        logger.log(Level.TRACE, getClass().getName() + ": testParse");
 
         DefASN1PullParser parser = new DefASN1PullParser();
         parser.setInput(new ByteArrayInputStream(inpf.bytes));
         while (parser.next() != ASN1PullParser.EOF)
             ;
 
-        logger.info("parsing succeeded for file: " + inpf.file);
-        logger.exiting(getClass().getName(), "testParse");
+        logger.log(Level.INFO, "parsing succeeded for file: " + inpf.file);
+        logger.log(Level.TRACE, getClass().getName() + ": testParse");
     }
 
     @ParameterizedTest
     @MethodSource("fileProvider")
     void testDecode(InputFile inpf) throws Exception {
-        logger.entering(getClass().getName(), "testDecode");
+        logger.log(Level.TRACE, getClass().getName() + ": testDecode");
 
         DefASN1PullParser parser = new DefASN1PullParser();
         parser.setInput(new ByteArrayInputStream(inpf.bytes));
         ASN1Any any = new ASN1Any();
         any.decode(parser);
 
-        logger.info("decode succeeded for file: " + inpf.file);
-        logger.exiting(getClass().getName(), "testDecode");
+        logger.log(Level.INFO, "decode succeeded for file: " + inpf.file);
+        logger.log(Level.TRACE, getClass().getName() + ": testDecode");
     }
 
     @Disabled("first 8 bytes differ")
     @ParameterizedTest
     @MethodSource("fileProvider")
     void testRoundTrip(InputFile inpf) throws Exception {
-        logger.entering(getClass().getName(), "testRoundTrip");
+        logger.log(Level.TRACE, getClass().getName() + ": testRoundTrip");
 
         DefASN1PullParser parser = new DefASN1PullParser();
         parser.setInput(new ByteArrayInputStream(inpf.bytes));
@@ -132,7 +136,7 @@ Debug.println("before:\n" + StringUtil.getDump(inpf.bytes, 128));
 Debug.println("after:\n" + StringUtil.getDump(encoded, 128));
         assertArrayEquals(inpf.bytes, encoded);
 
-        logger.info("roundtrip test succeeded for file: " + inpf.file);
-        logger.exiting(getClass().getName(), "testRoundTrip");
+        logger.log(Level.INFO, "roundtrip test succeeded for file: " + inpf.file);
+        logger.log(Level.TRACE, getClass().getName() + ": testRoundTrip");
     }
 }

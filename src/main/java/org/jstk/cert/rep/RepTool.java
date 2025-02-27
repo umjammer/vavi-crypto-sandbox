@@ -23,7 +23,7 @@ import org.jstk.JSTKResult;
 public class RepTool {
     public static final Logger logger = Logger.getLogger("org.jstk.cert.rep");
 
-    static Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
+    static final Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
     static {
         cmds.put("add", new AddCommand());
         cmds.put("list", new ListCommand());
@@ -42,18 +42,15 @@ public class RepTool {
     }
 
     public String extendedUsageString() {
-        StringBuffer sb = new StringBuffer();
-        Iterator<Map.Entry<String, JSTKCommand>> itr = cmds.entrySet().iterator();
-        while (itr.hasNext()) {
-            Map.Entry<String, JSTKCommand> ent = itr.next();
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, JSTKCommand> ent : cmds.entrySet()) {
             String key = ent.getKey();
             JSTKCommand cmd = ent.getValue();
 
-            sb.append("  " + key);
+            sb.append("  ").append(key);
             int blanksNeeded = 12 - key.length();
-            for (int i = 0; i < blanksNeeded; i++)
-                sb.append(" ");
-            sb.append(cmd.briefDescription() + "\n");
+            sb.append(" ".repeat(Math.max(0, blanksNeeded)));
+            sb.append(cmd.briefDescription()).append("\n");
         }
         return sb.toString();
     }
@@ -75,8 +72,8 @@ public class RepTool {
 
         String[] forms = cmd.useForms();
         if (forms != null) {
-            for (int i = 0; i < forms.length; i++) {
-                System.out.println("  " + progName() + " " + cmdString + " " + forms[i]);
+            for (String form : forms) {
+                System.out.println("  " + progName() + " " + cmdString + " " + form);
             }
         }
 
@@ -85,8 +82,8 @@ public class RepTool {
         String[] uses = cmd.sampleUses();
         if (uses != null) {
             System.out.println("Sample Uses:: ");
-            for (int i = 0; i < uses.length; i++) {
-                System.out.println("  " + progName() + " " + cmdString + " " + uses[i]);
+            for (String use : uses) {
+                System.out.println("  " + progName() + " " + cmdString + " " + use);
             }
         }
     }
@@ -117,7 +114,7 @@ public class RepTool {
         }
 
         opts.parse(args, 1);
-        boolean showtime = Boolean.valueOf(opts.get("showtime")).booleanValue();
+        boolean showtime = Boolean.valueOf(opts.get("showtime"));
         long ts = 0, tt = 0;
         if (showtime)
             ts = System.currentTimeMillis();

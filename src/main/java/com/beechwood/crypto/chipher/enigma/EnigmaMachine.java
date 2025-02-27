@@ -4,9 +4,15 @@
 
 package com.beechwood.crypto.chipher.enigma;
 
-import vavi.util.Debug;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
+import static java.lang.System.getLogger;
+
 
 public class EnigmaMachine {
+
+    private static final Logger logger = getLogger(EnigmaMachine.class.getName());
 
     private final EnigmaRotor[] rotors;
 
@@ -28,7 +34,7 @@ public class EnigmaMachine {
                     rotors[rotorIndex].advance();
                     break;
                 } catch (EnigmaRotorTrippedException erte) {
-Debug.println(erte.getMessage());
+logger.log(Level.DEBUG, erte.getMessage());
                 }
             }
             int ic = in[i] & 0xff;

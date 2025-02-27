@@ -25,9 +25,9 @@ import java.security.cert.X509Certificate;
 
 
 public class FileBasedIssuedCerts implements IssuedCerts {
-    private String indexFileName;
+    private final String indexFileName;
 
-    private String dir;
+    private final String dir;
 
     public FileBasedIssuedCerts(String indexFileName, String dir) {
         this.indexFileName = indexFileName;
@@ -59,17 +59,17 @@ public class FileBasedIssuedCerts implements IssuedCerts {
             throw new CADatabaseException("cannot write certificate to file: " + certFileName, exc);
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Calendar cal = Calendar.getInstance();
-        sb.append(cal.getTime().toString() + CADatabase.recordSeparator);
-        sb.append(x509Cert.getSerialNumber().toString() + CADatabase.recordSeparator);
-        sb.append(x509Cert.getNotBefore().toString() + CADatabase.recordSeparator);
-        sb.append(x509Cert.getNotAfter().toString() + CADatabase.recordSeparator);
+        sb.append(cal.getTime()).append(CADatabase.recordSeparator);
+        sb.append(x509Cert.getSerialNumber().toString()).append(CADatabase.recordSeparator);
+        sb.append(x509Cert.getNotBefore().toString()).append(CADatabase.recordSeparator);
+        sb.append(x509Cert.getNotAfter().toString()).append(CADatabase.recordSeparator);
         sb.append(x509Cert.getSubjectDN().toString());
 
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(indexFileName, true)); // Append mode
-            pw.println(sb.toString());
+            pw.println(sb);
             pw.close();
         } catch (Exception exc) {
             throw new CADatabaseException("cannot write to index file: " + indexFileName, exc);

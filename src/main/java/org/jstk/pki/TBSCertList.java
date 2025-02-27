@@ -23,11 +23,11 @@ import org.jstk.asn1.ASN1UTCTime;
  */
 public class TBSCertList extends ASN1Seq {
     public static class RevokedCert extends ASN1Seq {
-        public ASN1Integer userCertificate = new ASN1Integer();
+        public final ASN1Integer userCertificate = new ASN1Integer();
 
-        public ASN1UTCTime revocationDate = new ASN1UTCTime();
+        public final ASN1UTCTime revocationDate = new ASN1UTCTime();
 
-        public ASN1Seq crlEntryExtensions = new ASN1Seq();
+        public final ASN1Seq crlEntryExtensions = new ASN1Seq();
 
         public RevokedCert() {
             super();
@@ -57,19 +57,19 @@ public class TBSCertList extends ASN1Seq {
         }
     }
 
-    private ASN1Integer version = new ASN1Integer();
+    private final ASN1Integer version = new ASN1Integer();
 
-    private AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
+    private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
-    private Name issuer = new Name();
+    private final Name issuer = new Name();
 
-    private ASN1UTCTime thisUpdate = new ASN1UTCTime();
+    private final ASN1UTCTime thisUpdate = new ASN1UTCTime();
 
-    private ASN1UTCTime nextUpdate = new ASN1UTCTime();
+    private final ASN1UTCTime nextUpdate = new ASN1UTCTime();
 
-    private RevokedCerts revokedCerts = new RevokedCerts();
+    private final RevokedCerts revokedCerts = new RevokedCerts();
 
-    private ASN1Explicit crlExtensions = new ASN1Explicit(CONTEXT, EXPLICIT, 0);
+    private final ASN1Explicit crlExtensions = new ASN1Explicit(CONTEXT, EXPLICIT, 0);
 
     public TBSCertList() {
         super();
@@ -116,11 +116,10 @@ public class TBSCertList extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TBSCertList-SEQ(" + version.toString() + ", ");
-        sb.append(algorithm.toString());
-        sb.append(", " + issuer.toString() + ", " + thisUpdate.toString());
-        sb.append(", " + nextUpdate.toString() + ", " + revokedCerts.toString() + crlExtensions.toString() + ")");
-        return sb.toString();
+        String sb = "TBSCertList-SEQ(" + version.toString() + ", " +
+                algorithm.toString() +
+                ", " + issuer.toString() + ", " + thisUpdate.toString() +
+                ", " + nextUpdate.toString() + ", " + revokedCerts.toString() + crlExtensions.toString() + ")";
+        return sb;
     }
 }

@@ -10,16 +10,23 @@
 
 package org.jstk.pki;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.math.BigInteger;
 import java.io.IOException;
 import org.jstk.asn1.*;
+
+import static java.lang.System.getLogger;
 
 
 /*
  * Version ::= INTEGER { v1(0), v2(1), v3(2) }
  */
 public class Version extends ASN1Type {
-    private ASN1Integer version = new ASN1Integer();
+
+    private static final Logger logger = getLogger(Version.class.getName());
+
+    private final ASN1Integer version = new ASN1Integer();
 
     public Version(byte tagClass, int taggingMethod, int tagNumber) {
         super(tagClass, taggingMethod, tagNumber, 0);
@@ -42,23 +49,21 @@ public class Version extends ASN1Type {
     }
 
     public byte[] encode() {
-        logger.entering(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         byte[] bytes = version.encode();
         if (bytes != null) {
             value = bytes;
             length = bytes.length;
             bytes = encode1();
-            logger.fine("non-default version encoded");
+            logger.log(Level.DEBUG, "non-default version encoded");
         } else {
-            logger.fine("default version NOT encoded");
+            logger.log(Level.DEBUG, "default version NOT encoded");
         }
-        logger.exiting(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         return bytes;
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("Version-INTEGER(" + version.toString() + ")");
-        return sb.toString();
+        return "Version-INTEGER(" + version + ")";
     }
 }

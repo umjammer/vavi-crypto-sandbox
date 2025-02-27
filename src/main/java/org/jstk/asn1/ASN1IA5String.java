@@ -47,6 +47,6 @@ public class ASN1IA5String extends ASN1Type {
         };
         ASN1IA5String ps = new ASN1IA5String();
         ps.setValue(bytes);
-        System.out.println(ps.toString());
+        System.out.println(ps);
     }
 }

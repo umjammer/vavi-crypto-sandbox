@@ -23,28 +23,28 @@ import org.jstk.asn1.ASN1Seq;
  * OPTIONAL }
  */
 public class TBSCertificate extends ASN1Seq {
-    private Version version = new Version(CONTEXT, EXPLICIT, 0);
+    private final Version version = new Version(CONTEXT, EXPLICIT, 0);
 
-    private ASN1Integer serialNumber = new ASN1Integer();
+    private final ASN1Integer serialNumber = new ASN1Integer();
 
-    private AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
+    private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
-    private Name issuer = new Name();
+    private final Name issuer = new Name();
 
-    private Validity validity = new Validity();
+    private final Validity validity = new Validity();
 
-    private Name subject = new Name();
+    private final Name subject = new Name();
 
-    private SubjectPublicKeyInfo publicKeyInfo = new SubjectPublicKeyInfo();
+    private final SubjectPublicKeyInfo publicKeyInfo = new SubjectPublicKeyInfo();
 
-    private ASN1BitString issuerUniqueID = new ASN1BitString(CONTEXT, IMPLICIT, 1);
+    private final ASN1BitString issuerUniqueID = new ASN1BitString(CONTEXT, IMPLICIT, 1);
 
-    private ASN1BitString subjectUniqueID = new ASN1BitString(CONTEXT, IMPLICIT, 2);
+    private final ASN1BitString subjectUniqueID = new ASN1BitString(CONTEXT, IMPLICIT, 2);
 
     /*
      * private Extensions extensions = new Extensions(CONTEXT, EXPLICIT, 3);
      */
-    private ASN1Explicit extensions = new ASN1Explicit(CONTEXT, EXPLICIT, 3);
+    private final ASN1Explicit extensions = new ASN1Explicit(CONTEXT, EXPLICIT, 3);
 
     public TBSCertificate() {
         super();
@@ -97,11 +97,10 @@ public class TBSCertificate extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TBSCertificate-SEQ(" + version.toString() + ", ");
-        sb.append(serialNumber.toString() + ", " + algorithm.toString());
-        sb.append(", " + issuer.toString() + ", " + validity.toString());
-        sb.append(", " + subject.toString() + ", " + publicKeyInfo.toString() + extensions.toString() + ")");
-        return sb.toString();
+        String sb = "TBSCertificate-SEQ(" + version.toString() + ", " +
+                serialNumber.toString() + ", " + algorithm.toString() +
+                ", " + issuer.toString() + ", " + validity.toString() +
+                ", " + subject.toString() + ", " + publicKeyInfo.toString() + extensions.toString() + ")";
+        return sb;
     }
 }

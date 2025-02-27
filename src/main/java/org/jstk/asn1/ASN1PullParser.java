@@ -23,100 +23,98 @@ import java.io.PrintStream;
  */
 public interface ASN1PullParser {
     /** */
-    public static final int ANY = 0;
+    int ANY = 0;
 
     /** */
-    public static final int BOOLEAN = 1;
+    int BOOLEAN = 1;
 
     /** */
-    public final static int INTEGER = 2;
+    int INTEGER = 2;
 
     /** */
-    public final static int BIT_STRING = 3;
+    int BIT_STRING = 3;
 
     /** */
-    public final static int OCTET_STRING = 4;
+    int OCTET_STRING = 4;
 
     /** */
-    public final static int NULL = 5;
+    int NULL = 5;
 
     /** */
-    public final static int OID = 6;
+    int OID = 6;
 
     /** */
-    public final static int START_SEQ = 7;
+    int START_SEQ = 7;
 
     /** */
-    public final static int END_SEQ = 8;
+    int END_SEQ = 8;
 
     /** */
-    public final static int START_SET = 9;
+    int START_SET = 9;
 
     /** */
-    public final static int END_SET = 10;
+    int END_SET = 10;
 
     /** */
-    public final static int SEQ = 16;
+    int SEQ = 16;
 
     /** */
-    public final static int SET = 17;
+    int SET = 17;
 
     /** */
-    public final static int PrintableString = 19;
+    int PrintableString = 19;
 
     /** */
-    public final static int T61String = 20;
+    int T61String = 20;
 
     /** */
-    public final static int IA5String = 22;
+    int IA5String = 22;
 
     /** */
-    public final static int UTCTime = 23;
+    int UTCTime = 23;
 
     /** */
-    public final static int EOF = -1;
+    int EOF = -1;
 
     /** */
-    public final static int UNKNOWN = -2;
+    int UNKNOWN = -2;
 
     /** */
-    public final static byte CLASSBITS = (byte) 0xc0;
+    byte CLASSBITS = (byte) 0xc0;
 
     /** */
-    public final static byte TAGBITS = 0x1f;
+    byte TAGBITS = 0x1f;
 
     /** */
-    public int next() throws ASN1PullParserException, IOException;
+    int next() throws ASN1PullParserException, IOException;
 
     /** */
-    public void prev() throws ASN1PullParserException;
+    void prev() throws ASN1PullParserException;
 
     /** */
-    public int getLength();
+    int getLength();
 
     /** */
-    public int getOffset();
+    int getOffset();
 
     /** */
-    public byte[] getContent();
+    byte[] getContent();
 
     /** */
-    public int getInteger();
+    int getInteger();
 
     /** */
-    public int getTagNumber();
+    int getTagNumber();
 
     /** */
-    public byte getTagClass();
+    byte getTagClass();
 
     /** */
-    public byte getConsMask();
+    byte getConsMask();
 
     /** */
-    public void setInput(InputStream is);
+    void setInput(InputStream is);
 
     /** */
-    public void printParsed(PrintStream ps) throws IOException, ASN1PullParserException;
+    void printParsed(PrintStream ps) throws IOException, ASN1PullParserException;
 }
-
-/* */

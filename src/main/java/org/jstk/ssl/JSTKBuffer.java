@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
 
 public abstract class JSTKBuffer {
     public static class NIOByteBuffer extends JSTKBuffer {
-        private ByteBuffer bb;
+        private final ByteBuffer bb;
 
         protected NIOByteBuffer(int bufsize) {
             bb = ByteBuffer.allocateDirect(bufsize);
@@ -64,7 +64,7 @@ public abstract class JSTKBuffer {
     }
 
     public static class OrdByteBuffer extends JSTKBuffer {
-        byte[] buf;
+        final byte[] buf;
 
         int n;
 
@@ -115,7 +115,7 @@ public abstract class JSTKBuffer {
     }
 
     public static JSTKBuffer getInstance(int bufsize, JSTKArgs args) {
-        boolean nio = Boolean.valueOf(args.get("nio")).booleanValue();
+        boolean nio = Boolean.valueOf(args.get("nio"));
         if (nio)
             return new NIOByteBuffer(bufsize);
         else

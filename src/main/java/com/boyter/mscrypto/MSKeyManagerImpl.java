@@ -10,6 +10,8 @@ package com.boyter.mscrypto;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
@@ -26,15 +28,15 @@ import java.security.spec.RSAPrivateCrtKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-
 import javax.net.ssl.X509KeyManager;
 
 import com.boyter.mscrypto.MSCryptoManager.Flag;
 
-import vavi.util.Debug;
+import static java.lang.System.Logger.Level.DEBUG;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -44,6 +46,9 @@ import vavi.util.Debug;
  * @version 0.00 050314 nsano modified <br>
  */
 final class MSKeyManagerImpl implements X509KeyManager {
+
+    private static final Logger logger = getLogger(MSKeyManagerImpl.class.getName());
+
     /**
      * @param ks use windows key store, so this means nothing, set null
      * @param passphrase use windows key store, so this means nothing, set null
@@ -62,26 +67,26 @@ final class MSKeyManagerImpl implements X509KeyManager {
     public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
         String alias = null;
 
-Debug.println(">>>> chooseClientAlias: entered: issures: " + issuers.length + ", types: " + keyType.length);
+logger.log(DEBUG, ">>>> chooseClientAlias: entered: issures: " + issuers.length + ", types: " + keyType.length);
 
         try {
             List<String> aliases = new ArrayList<>();
             for (int i = 0; i < keyType.length; i++) {
-Debug.println(i + ": " + keyType[i]);
+logger.log(DEBUG, i + ": " + keyType[i]);
                 String[] tmp = getClientAliases(keyType[i], issuers);
                 aliases.addAll(Arrays.asList(tmp));
             }
-            if (aliases.size() == 0) {
-Debug.println("chooseClientAlias: something wrong - no aliases");
+            if (aliases.isEmpty()) {
+logger.log(DEBUG, "chooseClientAlias: something wrong - no aliases");
                 return null;
             }
-Debug.println("aliases: " + aliases.size());
+logger.log(DEBUG, "aliases: " + aliases.size());
             alias = aliases.get(0);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
 
-Debug.println("<<<< chooseClientAlias: " + alias);
+logger.log(DEBUG, "<<<< chooseClientAlias: " + alias);
         return alias;
     }
 
@@ -93,12 +98,12 @@ Debug.println("<<<< chooseClientAlias: " + alias);
     public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
         String alias = null;
 
-Debug.println(">>>> chooseServerAlias: return server alias");
+logger.log(DEBUG, ">>>> chooseServerAlias: return server alias");
 
         try {
             String[] aliases = getServerAliases(keyType, issuers);
             if (aliases == null) {
-Debug.println("chooseServerAlias: something wrong - no aliases");
+logger.log(DEBUG, "chooseServerAlias: something wrong - no aliases");
                 return null;
             }
             alias = aliases[0];
@@ -106,7 +111,7 @@ Debug.println("chooseServerAlias: something wrong - no aliases");
             throw new IllegalStateException(e);
         }
 
-Debug.println("<<<< chooseServerAlias: " + alias);
+logger.log(DEBUG, "<<<< chooseServerAlias: " + alias);
 
         return alias;
     }
@@ -116,7 +121,7 @@ Debug.println("<<<< chooseServerAlias: " + alias);
      */
     public X509Certificate[] getCertificateChain(String alias) {
 
-Debug.println(">>>> getCertificateChain: entered, alias:" + alias);
+logger.log(DEBUG, ">>>> getCertificateChain: entered, alias:" + alias);
 
         X509Certificate[] certChain = null;
         X509Certificate cert = null;
@@ -135,7 +140,7 @@ Debug.println(">>>> getCertificateChain: entered, alias:" + alias);
             throw new IllegalStateException(e);
         }
 
-Debug.println("<<<< getCertificateChain: certChain:" + (certChain != null ? certChain.length : -1));
+logger.log(DEBUG, "<<<< getCertificateChain: certChain:" + (certChain != null ? certChain.length : -1));
         return certChain;
     }
 
@@ -145,7 +150,7 @@ Debug.println("<<<< getCertificateChain: certChain:" + (certChain != null ? cert
      * authorities recognized by the peer (if any).
      */
     public String[] getClientAliases(String keyType, Principal[] issuers) {
-Debug.println(">>>> getClientAliases: entered: " + keyType);
+logger.log(DEBUG, ">>>> getClientAliases: entered: " + keyType);
         String[] validAliases = null;
 
         try {
@@ -156,17 +161,17 @@ Debug.println(">>>> getClientAliases: entered: " + keyType);
 
             // now throw out any aliases not signed by an approved issuer,
             // expired, or revoked
-Debug.println("Number of accepted issuers: " + (issuers != null ? issuers.length : -1));
+logger.log(DEBUG, "Number of accepted issuers: " + (issuers != null ? issuers.length : -1));
             validAliases = checkAlias(aliases, issuers);
 
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
 
-Debug.println("<<<< aliases found: " + validAliases.length);
-for (int i = 0; i < validAliases.length; i++) {
- Debug.println("getClientAliases: alias: " + validAliases[i]);
-}
+logger.log(DEBUG, "<<<< aliases found: " + validAliases.length);
+        for (String validAlias : validAliases) {
+            logger.log(DEBUG, "getClientAliases: alias: " + validAlias);
+        }
 
         return validAliases;
     }
@@ -177,13 +182,13 @@ for (int i = 0; i < validAliases.length; i++) {
      * authorities recognized by the peer (if any).
      */
     public String[] getServerAliases(String keyType, Principal[] issuers) {
-Debug.println("<<<< getServerAliases: return array of aliases ");
+logger.log(DEBUG, "<<<< getServerAliases: return array of aliases ");
         String[] validAliases = null;
 
         try {
             String[] aliases = msCryptoManager.getAliases("My");
             if (aliases == null) {
-Debug.println(">>>> No server aliases found");
+logger.log(DEBUG, ">>>> No server aliases found");
                 return null;
             }
 
@@ -195,10 +200,10 @@ Debug.println(">>>> No server aliases found");
             throw new IllegalStateException(e);
         }
 
-Debug.println(">>>> aliases found: " + validAliases.length);
-for (int i = 0; i < validAliases.length; i++) {
- Debug.println("getServerAliases: alias: " + validAliases[i]);
-}
+logger.log(DEBUG, ">>>> aliases found: " + validAliases.length);
+        for (String validAlias : validAliases) {
+            logger.log(DEBUG, "getServerAliases: alias: " + validAlias);
+        }
 
         return validAliases;
     }
@@ -221,7 +226,7 @@ for (int i = 0; i < validAliases.length; i++) {
         byte[] keySizeBlob = new byte[4];
         int keySize;
 
-Debug.println("<<<< getPrivateKey: entered, alias: " + alias);
+logger.log(DEBUG, "<<<< getPrivateKey: entered, alias: " + alias);
 
         try {
             byte[] keyblob = msCryptoManager.getPrivateKey(alias);
@@ -238,7 +243,7 @@ Debug.println("<<<< getPrivateKey: entered, alias: " + alias);
                 RSAPrivateKeySpec privKeySpec = new RSAPrivateKeySpec(mod, exp);
                 rsaprivkey = (RSAPrivateKey) kf.generatePrivate(privKeySpec);
 
-Debug.println("getPrivateKey: normal exit");
+logger.log(DEBUG, "getPrivateKey: normal exit");
                 return rsaprivkey;
 
             } else { // use the key that got exported
@@ -248,7 +253,7 @@ Debug.println("getPrivateKey: normal exit");
                 }
                 BigInteger bigKeySize = new BigInteger(keySizeBlob);
                 keySize = bigKeySize.intValue();
-Debug.println("keysize: " + keySize);
+logger.log(DEBUG, "keysize: " + keySize);
 
                 byte[] modBlob = new byte[(keySize / 8)];
                 byte[] expBlob = new byte[(keySize / 8)];
@@ -284,21 +289,21 @@ Debug.println("keysize: " + keySize);
                 rsaprivcrtkey = (RSAPrivateCrtKey) kf.generatePrivate(privCrtKeySpec);
             }
         } catch (Exception e) {
-            Debug.println(Level.SEVERE, ">>>> " + e);
+            logger.log(Level.ERROR, ">>>> " + e);
 //            throw new IllegalStateException(e);
         }
 
-// Debug.println("mod: " + rsaprivcrtkey.getModulus());
-// Debug.println("pubexp: " + rsaprivcrtkey.getPublicExponent());
-// Debug.println("privexp: " + rsaprivcrtkey.getPrivateExponent());
-// Debug.println("p: " + rsaprivcrtkey.getPrimeP());
-// Debug.println("q: " + rsaprivcrtkey.getPrimeQ());
-// Debug.println("expp: " + rsaprivcrtkey.getPrimeExponentP());
-// Debug.println("expq: " + rsaprivcrtkey.getPrimeExponentQ());
-// Debug.println("coeff: " + rsaprivcrtkey.getCrtCoefficient());
+//logger.log(Level.TRACE, "mod: " + rsaprivcrtkey.getModulus());
+//logger.log(Level.TRACE, "pubexp: " + rsaprivcrtkey.getPublicExponent());
+//logger.log(Level.TRACE, "privexp: " + rsaprivcrtkey.getPrivateExponent());
+//logger.log(Level.TRACE, "p: " + rsaprivcrtkey.getPrimeP());
+//logger.log(Level.TRACE, "q: " + rsaprivcrtkey.getPrimeQ());
+//logger.log(Level.TRACE, "expp: " + rsaprivcrtkey.getPrimeExponentP());
+//logger.log(Level.TRACE, "expq: " + rsaprivcrtkey.getPrimeExponentQ());
+//logger.log(Level.TRACE, "coeff: " + rsaprivcrtkey.getCrtCoefficient());
 
 if (rsaprivcrtkey != null) {
-Debug.println(">>>> getPrivateKey: normal exit");
+logger.log(DEBUG, ">>>> getPrivateKey: normal exit");
 }
         return rsaprivcrtkey;
     }
@@ -311,20 +316,18 @@ Debug.println(">>>> getPrivateKey: normal exit");
      */
     private static String[] checkAlias(String[] aliases, Principal[] issuers) throws GeneralSecurityException, IOException {
 
-Debug.println(">>>> CheckAlias: entered");
+logger.log(DEBUG, ">>>> CheckAlias: entered");
         X509Certificate cert = null;
         List<String> aliasList = new ArrayList<>();
         List<String> issuerList = new ArrayList<>();
 
-Debug.println("aliases: " + aliases.length);
-Debug.println("issuers: " + (issuers != null ? issuers.length : -1));
-        for (int i = 0; i < aliases.length; i++) {
-            aliasList.add(aliases[i]);
-        }
+logger.log(DEBUG, "aliases: " + aliases.length);
+logger.log(DEBUG, "issuers: " + (issuers != null ? issuers.length : -1));
+        Collections.addAll(aliasList, aliases);
 
         if (issuers != null) {
-            for (int i = 0; i < issuers.length; i++) {
-                issuerList.add(issuers[i].toString());
+            for (Principal issuer : issuers) {
+                issuerList.add(issuer.toString());
             }
         }
 
@@ -341,31 +344,29 @@ Debug.println("issuers: " + (issuers != null ? issuers.length : -1));
             input.close();
 
             // is this alias's cert signed by an approved issuer?
-            if (issuerList.size() != 0) {
+            if (!issuerList.isEmpty()) {
                 String certIssuer = cert.getIssuerDN().toString();
-Debug.println("CheckAlias: certIssuer: " + certIssuer);
+logger.log(DEBUG, "CheckAlias: certIssuer: " + certIssuer);
                 if (!issuerList.contains(certIssuer)) {
                     iter.remove();
-Debug.println("CheckAlias: no issuer found for alias " + alias);
+logger.log(DEBUG, "CheckAlias: no issuer found for alias " + alias);
                     continue;
                 }
             }
 
             if (!msCryptoManager.isCertValid(cert, Flag.AcceptTheCertAnyway)) {
                 iter.remove();
-Debug.println("CheckAlias: cert is expired or revoked for alias " + alias);
+logger.log(DEBUG, "CheckAlias: cert is expired or revoked for alias " + alias);
                 continue;
             }
 
-Debug.println("CheckAlias: alias is valid " + alias);
+logger.log(DEBUG, "CheckAlias: alias is valid " + alias);
         }
 
         aliases = new String[aliasList.size()];
         aliasList.toArray(aliases);
 
-Debug.println("<<<< CheckAlias: valid aliases: " + aliases.length);
+logger.log(DEBUG, "<<<< CheckAlias: valid aliases: " + aliases.length);
         return aliases;
     }
 }
-
-/* */

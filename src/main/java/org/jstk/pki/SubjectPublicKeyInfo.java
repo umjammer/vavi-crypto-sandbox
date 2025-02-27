@@ -18,9 +18,9 @@ import org.jstk.asn1.ASN1Seq;
  * SubjectPublicKeyInfo ::= SEQUENCE { algorithm AlgorithmIdentifier, subjectPublicKey BIT STRING }
  */
 public class SubjectPublicKeyInfo extends ASN1Seq {
-    private AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
+    private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
-    private ASN1BitString subjectPublicKey = new ASN1BitString();
+    private final ASN1BitString subjectPublicKey = new ASN1BitString();
 
     public SubjectPublicKeyInfo() {
         super();
@@ -33,9 +33,8 @@ public class SubjectPublicKeyInfo extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("SubjectPublicKeyInfo-SEQ(" + algorithm.toString() + ", ");
-        sb.append(subjectPublicKey.toString() + ")");
-        return sb.toString();
+        String sb = "SubjectPublicKeyInfo-SEQ(" + algorithm.toString() + ", " +
+                subjectPublicKey.toString() + ")";
+        return sb;
     }
 }

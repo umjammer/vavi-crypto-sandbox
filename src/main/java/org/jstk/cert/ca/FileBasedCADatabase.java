@@ -24,6 +24,7 @@ import java.security.PrivateKey;
 import java.security.cert.CertPath;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.Collections;
 import java.util.Vector;
 
 
@@ -51,7 +52,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
     private CertPath caCertPath;
     private File caDir;
 //    private boolean initialized = false;
-    private String password;
+    private final String password;
     private String storeType;
 
     public FileBasedCADatabase(FileBasedCADatabaseParams params) throws CADatabaseException {
@@ -109,9 +110,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
             }
             CertificateFactory certFac = CertificateFactory.getInstance("X.509");
             Vector<Certificate> certVec = new Vector<>();
-            for (int i = 0; i < caCerts.length; i++) {
-                certVec.add(caCerts[i]);
-            }
+            Collections.addAll(certVec, caCerts);
             caCertPath = certFac.generateCertPath(certVec);
         } else {
             throw new CADatabaseException("PrivateKey not found in keystore: " + ksFileName);
@@ -209,7 +208,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
             br.close();
             serialNo = serialNo.add(BigInteger.ONE);
             PrintWriter pw = new PrintWriter(new FileWriter(serialNoFileName));
-            pw.println(serialNo.toString());
+            pw.println(serialNo);
             pw.close();
             return serialNo;
         } catch (Exception e) {

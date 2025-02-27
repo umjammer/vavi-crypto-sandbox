@@ -79,5 +79,3 @@ public class JSTKResult {
         desc = new StringBuffer(txt);
     }
 }
-
-/* */

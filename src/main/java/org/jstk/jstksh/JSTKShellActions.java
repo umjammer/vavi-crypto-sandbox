@@ -15,9 +15,9 @@ import java.security.PrivilegedExceptionAction;
 
 public class JSTKShellActions {
     public static class ExecCommandAction implements PrivilegedExceptionAction<Object> {
-        private JSTKShell shell;
+        private final JSTKShell shell;
 
-        private String[] cmdargs;
+        private final String[] cmdargs;
 
         public ExecCommandAction(JSTKShell shell, String[] cmdargs) {
             this.shell = shell;
@@ -30,7 +30,7 @@ public class JSTKShellActions {
     }
 
     public static class CreateSessionAction implements PrivilegedExceptionAction<Object> {
-        private JSTKShell shell;
+        private final JSTKShell shell;
 
         public CreateSessionAction(JSTKShell shell) {
             this.shell = shell;
@@ -42,9 +42,9 @@ public class JSTKShellActions {
     }
 
     public static class DestroySessionAction implements PrivilegedExceptionAction<Object> {
-        private JSTKShell shell;
+        private final JSTKShell shell;
 
-        private String sessId;
+        private final String sessId;
 
         public DestroySessionAction(JSTKShell shell, String sessId) {
             this.shell = shell;

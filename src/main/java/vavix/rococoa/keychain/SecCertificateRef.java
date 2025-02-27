@@ -23,7 +23,7 @@ public class SecCertificateRef extends CoreFoundation.CFTypeRef {
     public SecCertificateRef() {
     }
 
-    public SecCertificateRef(final Pointer p) {
+    public SecCertificateRef(Pointer p) {
         super(p);
     }
 }

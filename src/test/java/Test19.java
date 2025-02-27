@@ -87,12 +87,12 @@ public class Test19 {
     /** */
     public static String toHexString(byte[] bs) {
 
-        StringBuffer buffer = new StringBuffer(bs.length * 2);
-        for (int i = 0; i < bs.length; i++) {
-            if (bs[i] >= 0 && bs[i] < 0x10) {
+        StringBuilder buffer = new StringBuilder(bs.length * 2);
+        for (byte b : bs) {
+            if (b >= 0 && b < 0x10) {
                 buffer.append('0');
             }
-            buffer.append(Integer.toHexString(0xff & bs[i]));
+            buffer.append(Integer.toHexString(0xff & b));
         }
         return buffer.toString();
     }

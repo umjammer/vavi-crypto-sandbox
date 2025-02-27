@@ -25,7 +25,7 @@ import org.jstk.JSTKResult;
 
 
 public class GenKPCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "DSA");
         defaults.put("keysize", "512");
@@ -73,16 +73,20 @@ public class GenKPCommand extends JSTKCommandAdapter {
             kpg.initialize(keysize);
             KeyPair kp = kpg.generateKeyPair();
 
-            if (action.equals("discard")) {
-                return new JSTKResult(kp, true, "Public and Private key pair generated");
-            } else if (action.equals("save")) { // Save the serialized object in a file
-                String fileName = args.get("file");
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-                oos.writeObject(kp);
-                oos.close();
-                return new JSTKResult(kp, true, "KeyPair written to file: " + fileName);
-            } else if (action.equals("print")) {
-                return new JSTKResult(kp, true, KeyUtil.format(kp.getPublic(), "PublicKey") + KeyUtil.format(kp.getPrivate(), "PrivateKey"));
+            switch (action) {
+                case "discard" -> {
+                    return new JSTKResult(kp, true, "Public and Private key pair generated");
+                }
+                case "save" -> {
+                    String fileName = args.get("file");
+                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+                    oos.writeObject(kp);
+                    oos.close();
+                    return new JSTKResult(kp, true, "KeyPair written to file: " + fileName);
+                }
+                case "print" -> {
+                    return new JSTKResult(kp, true, KeyUtil.format(kp.getPublic(), "PublicKey") + KeyUtil.format(kp.getPrivate(), "PrivateKey"));
+                }
             }
             return new JSTKResult(null, false, "unknown action: " + action);
         } catch (Exception exc) {

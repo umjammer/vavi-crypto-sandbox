@@ -29,7 +29,7 @@ import org.jstk.JSTKResult;
 
 
 public class AddKSCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("dbprops", "lib/db.properties");
         defaults.put("type", "KS");

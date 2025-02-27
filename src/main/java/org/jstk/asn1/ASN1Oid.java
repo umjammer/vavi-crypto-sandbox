@@ -68,7 +68,7 @@ public class ASN1Oid extends ASN1Type {
             return null;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int firstOctet = value[0];
         int value1 = firstOctet / 40;
         int value2 = firstOctet % 40;
@@ -91,16 +91,14 @@ public class ASN1Oid extends ASN1Type {
         };
         ASN1Oid oid = new ASN1Oid();
         oid.setValue(bytes);
-        System.out.println(oid.toString());
+        System.out.println(oid);
         oid.setOid("1.5.8");
-        System.out.println(oid.toString());
+        System.out.println(oid);
         oid.setOid("1.2.840.113549.1");
-        System.out.println(oid.toString());
+        System.out.println(oid);
         oid.setOid("2.5.4.6");
-        System.out.println(oid.toString());
+        System.out.println(oid);
         oid.setOid("2.5.4.3");
-        System.out.println(oid.toString());
+        System.out.println(oid);
     }
 }
-
-/* */

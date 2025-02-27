@@ -131,19 +131,19 @@ public class UAMShell extends JSTKAbstractTool {
     static class RolesCommand extends JSTKCommandAdapter {
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 Iterator<Principal> itr = uam.roles();
                 while (itr.hasNext()) {
                     Principal roleP = itr.next();
-                    sb.append(roleP.getName() + ":");
+                    sb.append(roleP.getName()).append(":");
                     Iterator<Principal> itr1 = uam.roleUsers(roleP.getName());
                     while (itr1.hasNext()) {
                         Principal userP = itr1.next();
-                        sb.append(" " + userP.getName());
+                        sb.append(" ").append(userP.getName());
                     }
                     sb.append("\n");
                 }
-                return new JSTKResult(null, true, "----- All Roles -----\n" + sb.toString());
+                return new JSTKResult(null, true, "----- All Roles -----\n" + sb);
             } catch (UserAccountManager.NoSuchRoleException e) {
                 return new JSTKResult(null, false, "internal inconsistency");
             }
@@ -153,19 +153,19 @@ public class UAMShell extends JSTKAbstractTool {
     static class UsersCommand extends JSTKCommandAdapter {
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 Iterator<Principal> itr = uam.users();
                 while (itr.hasNext()) {
                     Principal userP = itr.next();
-                    sb.append(userP.getName() + ":");
+                    sb.append(userP.getName()).append(":");
                     Iterator<Principal> itr1 = uam.userRoles(userP.getName());
                     while (itr1.hasNext()) {
                         Principal roleP = itr1.next();
-                        sb.append(" " + roleP.getName());
+                        sb.append(" ").append(roleP.getName());
                     }
                     sb.append("\n");
                 }
-                return new JSTKResult(null, true, "----- All Users -----\n" + sb.toString());
+                return new JSTKResult(null, true, "----- All Users -----\n" + sb);
             } catch (UserAccountManager.NoSuchUserException e) {
                 return new JSTKResult(null, false, "internal inconsistency");
             }
@@ -177,7 +177,7 @@ public class UAMShell extends JSTKAbstractTool {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. userroles failed.");
             String loginName = args.get(0);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             Iterator<Principal> itr = null;
             try {
                 itr = uam.userRoles(loginName);
@@ -186,9 +186,9 @@ public class UAMShell extends JSTKAbstractTool {
             }
             while (itr.hasNext()) {
                 Principal role = itr.next();
-                sb.append(role.getName() + "\n");
+                sb.append(role.getName()).append("\n");
             }
-            return new JSTKResult(null, true, "All Roles:\n" + sb.toString());
+            return new JSTKResult(null, true, "All Roles:\n" + sb);
         }
     }
 

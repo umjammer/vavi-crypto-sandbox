@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -78,11 +79,9 @@ public class t13 {
 
         // ******************************************************************
         // ホスト名を無視させる
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
+        HostnameVerifier hv = (hostname, session) -> {
 Debug.println(hostname + ", " + session);
-                return true;
-            }
+            return true;
         };
         ((HttpsURLConnection) connection).setHostnameVerifier(hv);
 
@@ -127,18 +126,16 @@ Debug.println(chain);
         /** */
         public void checkClientTrusted(X509Certificate[] chain,
                                        String authType) {
-Debug.println(chain + ", " + authType);
+Debug.println(Arrays.toString(chain) + ", " + authType);
         }
 
         /** */
         public void checkServerTrusted(X509Certificate[] chain,
                                        String authType) {
 Debug.println(authType);
-            for (int i = 0; i < chain.length; i++) {
-Debug.println(StringUtil.paramString(chain[i]));
+            for (X509Certificate x509Certificate : chain) {
+                Debug.println(StringUtil.paramString(x509Certificate));
             }
         }
     }
 }
-
-/* */

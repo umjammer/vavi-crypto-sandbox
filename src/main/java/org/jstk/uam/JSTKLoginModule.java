@@ -11,6 +11,7 @@
 package org.jstk.uam;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -148,8 +149,7 @@ public class JSTKLoginModule implements LoginModule {
         if (debug) {
             System.out.println("\t\t[JSTKLoginModule] " + "user entered user name: " + username);
             System.out.print("\t\t[JSTKLoginModule] " + "user entered password: ");
-            for (int i = 0; i < password.length; i++)
-                System.out.print(password[i]);
+            for (char c : password) System.out.print(c);
             System.out.println();
         }
 
@@ -169,8 +169,7 @@ public class JSTKLoginModule implements LoginModule {
                 System.out.println("\t\t[JSTKLoginModule] " + "authentication failed");
             succeeded = false;
             username = null;
-            for (int i = 0; i < password.length; i++)
-                password[i] = ' ';
+            Arrays.fill(password, ' ');
             password = null;
             if (!usernameCorrect) {
                 throw new FailedLoginException("User Name Incorrect");
@@ -235,8 +234,7 @@ public class JSTKLoginModule implements LoginModule {
 
             // in any case, clean out state
             username = null;
-            for (int i = 0; i < password.length; i++)
-                password[i] = ' ';
+            Arrays.fill(password, ' ');
             password = null;
 
             commitSucceeded = true;
@@ -267,8 +265,7 @@ public class JSTKLoginModule implements LoginModule {
             succeeded = false;
             username = null;
             if (password != null) {
-                for (int i = 0; i < password.length; i++)
-                    password[i] = ' ';
+                Arrays.fill(password, ' ');
                 password = null;
             }
             userPrincipal = null;
@@ -296,9 +293,7 @@ public class JSTKLoginModule implements LoginModule {
     public boolean logout() throws LoginException {
 
         subject.getPrincipals().remove(userPrincipal);
-        Iterator<Principal> itr = rolePrincipals.iterator();
-        while (itr.hasNext()) {
-            Principal rolePrincipal = itr.next();
+        for (Principal rolePrincipal : rolePrincipals) {
             subject.getPrincipals().remove(rolePrincipal);
         }
 
@@ -306,8 +301,7 @@ public class JSTKLoginModule implements LoginModule {
         succeeded = commitSucceeded;
         username = null;
         if (password != null) {
-            for (int i = 0; i < password.length; i++)
-                password[i] = ' ';
+            Arrays.fill(password, ' ');
             password = null;
         }
         userPrincipal = null;

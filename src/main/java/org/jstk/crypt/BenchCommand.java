@@ -28,7 +28,7 @@ import org.jstk.JSTKResult;
 
 
 public class BenchCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cmdfile", "bin/ctbench.cmds");
         defaults.put("runcount", "1");
@@ -42,7 +42,13 @@ public class BenchCommand extends JSTKCommandAdapter {
     }
 
     public String optionsDescription() {
-        return "  -cmdfile <file>     : read commands from this file.\n" + "  -warmuptime <wt>    : minimum JVM warmup time in seconds.\n" + "  -runcount <rc>      : how many runs?.\n" + "  -minmize_et         : compute loopcount to minimize execution time.\n" + "  -loopcount <lc>     : how many loops for each command within a run.\n";
+        return """
+                  -cmdfile <file>     : read commands from this file.
+                  -warmuptime <wt>    : minimum JVM warmup time in seconds.
+                  -runcount <rc>      : how many runs?.
+                  -minmize_et         : compute loopcount to minimize execution time.
+                  -loopcount <lc>     : how many loops for each command within a run.
+                """;
     }
 
     public String[] useForms() {
@@ -59,7 +65,7 @@ public class BenchCommand extends JSTKCommandAdapter {
         return uses;
     }
 
-    private String[][] parseCmdFile(String cmdfile) throws IOException {
+    private static String[][] parseCmdFile(String cmdfile) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(cmdfile)));
 
         // Create and initialize the tokenizer so that it can read the command script file.

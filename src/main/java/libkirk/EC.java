@@ -126,7 +126,7 @@ public class EC {
 	}
 
 	public static void elt_inv(byte[] d, int offsetDst, byte[] a, int offset1) {
-		final byte[] s = new byte[ELT_SIZE];
+		byte[] s = new byte[ELT_SIZE];
 		elt_copy(s, 0, a, offset1);
 		BN.bn_mon_inv(d, offsetDst, s, 0, ec_p, 0, ELT_SIZE);
 	}
@@ -151,13 +151,13 @@ public class EC {
 	}
 
 	public static void point_double(ECPoint r, ECPoint p) {
-		final byte[] s = new byte[ELT_SIZE];
-		final byte[] t = new byte[ELT_SIZE];
-		final ECPoint pp = new ECPoint(p);
-		final byte[] px = pp.x;
-		final byte[] py = pp.y;
-		final byte[] rx = r.x;
-		final byte[] ry = r.y;
+		byte[] s = new byte[ELT_SIZE];
+		byte[] t = new byte[ELT_SIZE];
+		ECPoint pp = new ECPoint(p);
+		byte[] px = pp.x;
+		byte[] py = pp.y;
+		byte[] rx = r.x;
+		byte[] ry = r.y;
 
 		if (elt_is_zero(py)) {
 			point_zero(r);
@@ -182,17 +182,17 @@ public class EC {
 	}
 
 	public static void point_add(ECPoint r, ECPoint p, ECPoint q) {
-		final byte[] s = new byte[ELT_SIZE];
-		final byte[] t = new byte[ELT_SIZE];
-		final byte[] u = new byte[ELT_SIZE];
-		final ECPoint pp = new ECPoint(p);
-		final ECPoint qq = new ECPoint(q);
-		final byte[] px = pp.x;
-		final byte[] py = pp.y;
-		final byte[] qx = qq.x;
-		final byte[] qy = qq.y;
-		final byte[] rx = r.x;
-		final byte[] ry = r.y;
+		byte[] s = new byte[ELT_SIZE];
+		byte[] t = new byte[ELT_SIZE];
+		byte[] u = new byte[ELT_SIZE];
+		ECPoint pp = new ECPoint(p);
+		ECPoint qq = new ECPoint(q);
+		byte[] px = pp.x;
+		byte[] py = pp.y;
+		byte[] qx = qq.x;
+		byte[] qy = qq.y;
+		byte[] rx = r.x;
+		byte[] ry = r.y;
 
 		if (point_is_zero(pp)) {
 			elt_copy(rx, qx);
@@ -253,13 +253,13 @@ public class EC {
 	}
 
 	public static void generate_ecdsa(byte[] outR, int outRoffset, byte[] outS, int outSoffset, byte[] k, int koffset, byte[] hash, int hashoffset) {
-		final byte[] e = new byte[BIGNUMBER_SIZE];
-		final byte[] kk = new byte[BIGNUMBER_SIZE];
-		final byte[] m = new byte[BIGNUMBER_SIZE];
-		final byte[] R = new byte[BIGNUMBER_SIZE];
-		final byte[] S = new byte[BIGNUMBER_SIZE];
-		final byte[] minv = new byte[BIGNUMBER_SIZE];
-		final ECPoint mG = new ECPoint();
+		byte[] e = new byte[BIGNUMBER_SIZE];
+		byte[] kk = new byte[BIGNUMBER_SIZE];
+		byte[] m = new byte[BIGNUMBER_SIZE];
+		byte[] R = new byte[BIGNUMBER_SIZE];
+		byte[] S = new byte[BIGNUMBER_SIZE];
+		byte[] minv = new byte[BIGNUMBER_SIZE];
+		ECPoint mG = new ECPoint();
 
 		//e[0] = 0;R[0] = 0;S[0] = 0;
 		arraycopy(hash, hashoffset, e, 1, ELT_SIZE);
@@ -297,15 +297,15 @@ public class EC {
 	}
 
 	public static boolean check_ecdsa(ECPoint Q, byte[] inR, int inRoffset, byte[] inS, int inSoffset, byte[] hash, int hashoffset) {
-		final byte[] Sinv = new byte[BIGNUMBER_SIZE];
-		final byte[] e = new byte[BIGNUMBER_SIZE];
-		final byte[] R = new byte[BIGNUMBER_SIZE];
-		final byte[] S = new byte[BIGNUMBER_SIZE];
-		final byte[] w1 = new byte[BIGNUMBER_SIZE];
-		final byte[] w2 = new byte[BIGNUMBER_SIZE];
-		final byte[] rr = new byte[BIGNUMBER_SIZE];
-		final ECPoint r1 = new ECPoint();
-		final ECPoint r2 = new ECPoint();
+		byte[] Sinv = new byte[BIGNUMBER_SIZE];
+		byte[] e = new byte[BIGNUMBER_SIZE];
+		byte[] R = new byte[BIGNUMBER_SIZE];
+		byte[] S = new byte[BIGNUMBER_SIZE];
+		byte[] w1 = new byte[BIGNUMBER_SIZE];
+		byte[] w2 = new byte[BIGNUMBER_SIZE];
+		byte[] rr = new byte[BIGNUMBER_SIZE];
+		ECPoint r1 = new ECPoint();
+		ECPoint r2 = new ECPoint();
 
 		//e[0] = 0;
 		arraycopy(hash, hashoffset, e, 1, ELT_SIZE);
@@ -356,7 +356,7 @@ public class EC {
 	}
 
 	public static void ec_priv_to_pub(byte[] k, int koffset, ECDSA_POINT Q) {
-		final ECPoint ec_temp = new ECPoint();
+		ECPoint ec_temp = new ECPoint();
 		BN.bn_to_mon(k, koffset, ec_N, 0, BIGNUMBER_SIZE);
 		point_mul(ec_temp, k, koffset, ec_G);
 		point_from_mon(ec_temp);
@@ -374,7 +374,7 @@ public class EC {
 	}
 
 	public static void ec_pub_mult(byte[] k, int koffset, byte[] Q, int Qoffset) {
-		final ECPoint ec_temp = new ECPoint();
+		ECPoint ec_temp = new ECPoint();
 		//bn_to_mon(k, ec_N, 21);
 		point_mul(ec_temp, k, koffset, ec_Q);
 		point_from_mon(ec_temp);
@@ -424,7 +424,7 @@ public class EC {
 	}
 
 	public static void ecdsa_set_priv(byte[] ink, int inkoffset) {
-		final byte[] k = new byte[BIGNUMBER_SIZE];
+		byte[] k = new byte[BIGNUMBER_SIZE];
 		//k[0]=0;
 		arraycopy(ink, inkoffset, k, 1, ELT_SIZE);
 		BN.bn_reduce(k, ec_N, BIGNUMBER_SIZE);
@@ -449,11 +449,11 @@ public class EC {
 	}
 
 	public static boolean point_is_on_curve(byte[] p, int offset) {
-		final byte[] s = new byte[ELT_SIZE];
-		final byte[] t = new byte[ELT_SIZE];
+		byte[] s = new byte[ELT_SIZE];
+		byte[] t = new byte[ELT_SIZE];
 
-		final byte[] x = new byte[ELT_SIZE];
-		final byte[] y = new byte[ELT_SIZE];
+		byte[] x = new byte[ELT_SIZE];
+		byte[] y = new byte[ELT_SIZE];
 		arraycopy(p, offset, x, 0, ELT_SIZE);
 		arraycopy(p, offset + ELT_SIZE, y, 0, ELT_SIZE);
 

@@ -29,7 +29,7 @@ import java.util.List;
 
 public class FileBasedRepository {
     private static class FBRInput {
-        private InputStream is;
+        private final InputStream is;
 
         private int off;
 
@@ -98,7 +98,7 @@ public class FileBasedRepository {
     }
 
     private static class FBROutput {
-        private OutputStream os;
+        private final OutputStream os;
 
         private int off;
 
@@ -202,9 +202,7 @@ public class FileBasedRepository {
         FileOutputStream fos = new FileOutputStream(filename);
         FBROutput fbrOutput = new FBROutput(fos);
         fbrOutput.writeInt(FBREP_MAGIC);
-        Iterator<?> itr = list.iterator();
-        while (itr.hasNext()) {
-            Object entry = itr.next();
+        for (Object entry : list) {
             if (entry instanceof X509Certificate) {
                 fbrOutput.writeByte(X509CERT);
                 fbrOutput.writeX509Certificate((X509Certificate) entry);

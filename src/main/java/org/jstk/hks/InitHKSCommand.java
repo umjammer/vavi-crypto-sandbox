@@ -26,7 +26,7 @@ import org.jstk.JSTKResult;
 
 
 public class InitHKSCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("dbprops", "config/db.properties");
         defaults.put("username", "sa");

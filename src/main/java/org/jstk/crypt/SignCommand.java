@@ -25,7 +25,7 @@ import org.jstk.JSTKUtil;
 
 
 public class SignCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("algorithm", "SHAwithDSA");
         defaults.put("keystore", "my.keystore");
@@ -66,7 +66,7 @@ public class SignCommand extends JSTKCommandAdapter {
 
             String providerName = args.get("provider");
             String algorithm = args.get("algorithm");
-            boolean verify = Boolean.valueOf(args.get("verify")).booleanValue();
+            boolean verify = Boolean.valueOf(args.get("verify"));
             String sigString = args.get("sigbytes");
             String infile = args.get("infile");
             String sigfile = args.get("sigfile");

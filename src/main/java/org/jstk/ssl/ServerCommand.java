@@ -24,7 +24,7 @@ import org.jstk.JSTKResult;
 
 public class ServerCommand extends JSTKCommandAdapter {
 
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("inport", "9000");
         defaults.put("inproto", "TCP");
@@ -59,7 +59,7 @@ public class ServerCommand extends JSTKCommandAdapter {
         return sampleUses;
     }
 
-    private void ServerLoop(JSTKServerSocket jss, JSTKBuffer buf, boolean verbose, boolean bench, boolean echo, boolean invalidate) {
+    private static void ServerLoop(JSTKServerSocket jss, JSTKBuffer buf, boolean verbose, boolean bench, boolean echo, boolean invalidate) {
         int outIdx = 0;
         while (true) {
             JSTKSocket socket = null;
@@ -87,7 +87,7 @@ public class ServerCommand extends JSTKCommandAdapter {
         }
     }
 
-    private JSTKResult runRMIServer(JSTKArgs args, RMIServerImpl impl) throws Exception {
+    private static JSTKResult runRMIServer(JSTKArgs args, RMIServerImpl impl) throws Exception {
 //        int waitTime = Integer.parseInt(args.get("waittime"));
         int regPort = 1099;
         try {
@@ -110,7 +110,7 @@ public class ServerCommand extends JSTKCommandAdapter {
         return new JSTKResult(null, true, "DONE");
     }
 
-    private JSTKResult runRMIServer(JSTKArgs args) throws Exception {
+    private static JSTKResult runRMIServer(JSTKArgs args) throws Exception {
         int inport = Integer.parseInt(args.get("inport"));
         RMIServerImpl impl = new RMIServerImpl(inport, new RMITCPClientSocketFactory(), new RMITCPServerSocketFactory());
         return runRMIServer(args, impl);
@@ -122,12 +122,12 @@ public class ServerCommand extends JSTKCommandAdapter {
         return runRMIServer(args, impl);
     }
 
-    private JSTKResult runTCPServer(JSTKArgs args, JSTKServerSocket jss) throws Exception {
+    private static JSTKResult runTCPServer(JSTKArgs args, JSTKServerSocket jss) throws Exception {
         String mode = args.get("mode");
         String action = args.get("action");
         String inproto = args.get("inproto");
-        boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
-        boolean invalidate = Boolean.valueOf(args.get("invalidate")).booleanValue();
+        boolean verbose = Boolean.valueOf(args.get("verbose"));
+        boolean invalidate = Boolean.valueOf(args.get("invalidate"));
         int bufsize = Integer.parseInt(args.get("bufsize"));
 
         System.out.println("  I/O library  : " + JSTKSocketUtil.getIOLibrary(args, inproto));
@@ -153,14 +153,13 @@ public class ServerCommand extends JSTKCommandAdapter {
     }
 
     private JSTKResult runSSLServer(JSTKArgs args) throws Exception {
-        boolean needCAuth = Boolean.valueOf(args.get("needcauth")).booleanValue();
-        boolean wantCAuth = Boolean.valueOf(args.get("wantcauth")).booleanValue();
+        boolean needCAuth = Boolean.valueOf(args.get("needcauth"));
+        boolean wantCAuth = Boolean.valueOf(args.get("wantcauth"));
         System.out.println("  Client Auth  : " + (needCAuth ? "INSIST" : (wantCAuth ? "NEGOTIATE" : "DONT ASK")));
         String[] csarray = JSTKSocketUtil.getCSFileCipherSuites(args);
         if (csarray != null) {
             System.out.println("  Cipher Suites to be enabled   : ");
-            for (int i = 0; i < csarray.length; i++)
-                System.out.println("         " + csarray[i]);
+            for (String s : csarray) System.out.println("         " + s);
         }
 
         JSTKServerSocket jss = JSTKSocketUtil.createServerSocket(args);
@@ -172,11 +171,11 @@ public class ServerCommand extends JSTKCommandAdapter {
         return runTCPServer(args, jss);
     }
 
-    private JSTKResult runHTTPServer(JSTKArgs args) {
+    private static JSTKResult runHTTPServer(JSTKArgs args) {
         return null;
     }
 
-    private JSTKResult runHTTPSServer(JSTKArgs args) {
+    private static JSTKResult runHTTPSServer(JSTKArgs args) {
         return null;
     }
 

@@ -281,9 +281,9 @@ public class CertificateGenerator {
         ASN1Oid oid = new ASN1Oid();
         oid.setOid("2.5.29.37");
         ASN1Seq ids = new ASN1Seq();
-        for (int i = 0; i < extendedKeyUsage.size(); i++) {
+        for (String s : extendedKeyUsage) {
             ASN1Oid id = new ASN1Oid();
-            id.setOid(extendedKeyUsage.get(i));
+            id.setOid(s);
             ids.add(id);
         }
 

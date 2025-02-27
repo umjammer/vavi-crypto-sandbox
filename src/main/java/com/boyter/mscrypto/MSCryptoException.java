@@ -27,5 +27,3 @@ public class MSCryptoException extends GeneralSecurityException {
         super(message);
     }
 }
-
-/* */

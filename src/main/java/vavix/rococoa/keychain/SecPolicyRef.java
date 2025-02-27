@@ -23,7 +23,7 @@ public class SecPolicyRef extends CoreFoundation.CFTypeRef {
     public SecPolicyRef() {
     }
 
-    public SecPolicyRef(final Pointer p) {
+    public SecPolicyRef(Pointer p) {
         super(p);
     }
 }

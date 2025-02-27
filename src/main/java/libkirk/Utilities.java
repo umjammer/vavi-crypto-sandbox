@@ -25,7 +25,7 @@ import static java.lang.System.arraycopy;
 
 public class Utilities {
 
-	public static Logger log = Logger.getLogger(Utilities.class.getName());
+	public static final Logger log = Logger.getLogger(Utilities.class.getName());
 
 	public static int u8(int n) {
 		return n & 0xFF;

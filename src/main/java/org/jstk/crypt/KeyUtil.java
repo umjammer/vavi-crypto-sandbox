@@ -19,11 +19,10 @@ import org.jstk.JSTKArgs;
 
 public class KeyUtil {
     public static String format(Key key, String label) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(label + "::\n");
-        sb.append("alg = " + key.getAlgorithm() + ", fmt = " + key.getFormat() + ", encoded content = \n");
-        sb.append(JSTKUtil.hexStringFromBytes(key.getEncoded()) + "\n");
-        return sb.toString();
+        String sb = label + "::\n" +
+                "alg = " + key.getAlgorithm() + ", fmt = " + key.getFormat() + ", encoded content = \n" +
+                JSTKUtil.hexStringFromBytes(key.getEncoded()) + "\n";
+        return sb;
     }
 
     public static void printKey(Key key, String label) {
@@ -62,8 +61,7 @@ public class KeyUtil {
                 Key key = ks.getKey(alias, keypass.toCharArray());
                 if (key instanceof SecretKey) {
                     obj = key;
-                } else if (key instanceof PrivateKey) {
-                    PrivateKey prvKey = (PrivateKey) key;
+                } else if (key instanceof PrivateKey prvKey) {
                     java.security.cert.Certificate cert = ks.getCertificate(alias);
                     PublicKey pubKey = null;
                     if (cert != null) {

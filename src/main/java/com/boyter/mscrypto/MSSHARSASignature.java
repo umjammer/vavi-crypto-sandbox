@@ -26,5 +26,3 @@ public final class MSSHARSASignature extends MSRSASignFactoryImpl {
         super.setMessageDigestType("SHA1");
     }
 }
-
-/* */

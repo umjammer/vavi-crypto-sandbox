@@ -14,9 +14,9 @@ import java.security.Principal;
 
 
 public class JSTKRolePrincipal implements Principal {
-    String roleName;
+    final String roleName;
 
-    String roleDesc;
+    final String roleDesc;
 
     public JSTKRolePrincipal(String roleName, String roleDesc) {
         this.roleName = roleName;

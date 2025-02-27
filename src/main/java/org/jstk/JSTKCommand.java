@@ -11,23 +11,23 @@
 package org.jstk;
 
 public interface JSTKCommand {
-    public Object execute(JSTKArgs args) throws JSTKException;
+    Object execute(JSTKArgs args) throws JSTKException;
 
-    public String briefDescription();
+    String briefDescription();
 
-    public String optionsDescription();
+    String optionsDescription();
 
-    public String[] sampleUses();
+    String[] sampleUses();
 
-    public String[] useForms();
+    String[] useForms();
 
-    public String getResultDescription();
+    String getResultDescription();
 
-    public boolean succeeded();
+    boolean succeeded();
 
-    public boolean failed();
+    boolean failed();
 
-    public void setPerfData(JSTKPerfData pData);
+    void setPerfData(JSTKPerfData pData);
 
-    public JSTKPerfData getPerfData();
+    JSTKPerfData getPerfData();
 }

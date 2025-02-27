@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 
 
 public interface RMIServerInterface extends Remote {
-    public void writeOnly(byte[] buf) throws RemoteException;
+    void writeOnly(byte[] buf) throws RemoteException;
 
-    public byte[] writeRead(byte[] buf) throws RemoteException;
+    byte[] writeRead(byte[] buf) throws RemoteException;
 }

@@ -28,7 +28,12 @@ public class ListPCommand extends JSTKCommandAdapter {
     }
 
     public String optionsDescription() {
-        return "  -provider <provider>: limit to this provider name.\n" + "  -info               : print provider info.\n" + "  -props              : print provider properties.\n" + "  -csinfo             : print cryptographic services.\n";
+        return """
+                  -provider <provider>: limit to this provider name.
+                  -info               : print provider info.
+                  -props              : print provider properties.
+                  -csinfo             : print cryptographic services.
+                """;
     }
 
     public String[] useForms() {
@@ -45,16 +50,16 @@ public class ListPCommand extends JSTKCommandAdapter {
         return uses;
     }
 
-    private String formText(String left, String right, int maxLeftLen) {
-        StringBuffer sb = new StringBuffer();
+    private static String formText(String left, String right, int maxLeftLen) {
+        StringBuilder sb = new StringBuilder();
         sb.append(left);
         int blanksNeeded = maxLeftLen - left.length();
         while (blanksNeeded-- > 0)
             sb.append(" ");
-        if (left.length() > 0)
-            sb.append(" : " + right);
+        if (!left.isEmpty())
+            sb.append(" : ").append(right);
         else
-            sb.append("   " + right);
+            sb.append("   ").append(right);
         return sb.toString();
     }
 
@@ -118,9 +123,9 @@ public class ListPCommand extends JSTKCommandAdapter {
 
     public Object execute(JSTKArgs args) throws JSTKException {
         String providerName = args.get("provider");
-        boolean info = Boolean.valueOf(args.get("info")).booleanValue();
-        boolean props = Boolean.valueOf(args.get("props")).booleanValue();
-        boolean csinfo = Boolean.valueOf(args.get("csinfo")).booleanValue();
+        boolean info = Boolean.valueOf(args.get("info"));
+        boolean props = Boolean.valueOf(args.get("props"));
+        boolean csinfo = Boolean.valueOf(args.get("csinfo"));
 
         try {
             SecurityInfo si = new SecurityInfo();

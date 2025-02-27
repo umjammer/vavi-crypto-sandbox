@@ -28,7 +28,7 @@ public class CamelliaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected SecretKey engineGenerateSecret(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof CamelliaKeySpec) {
-            return new CamelliaKey(CamelliaKeySpec.class.cast(keySpec).key);
+            return new CamelliaKey(((CamelliaKeySpec) keySpec).key);
         }
         throw new InvalidKeySpecException("unable to process key spec: " + keySpec);
     }
@@ -36,7 +36,7 @@ public class CamelliaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected KeySpec engineGetKeySpec(SecretKey key, Class<?> keySpec) throws InvalidKeySpecException {
         if (key instanceof CamelliaKey) {
-            return new CamelliaKeySpec(CamelliaKey.class.cast(key).key);
+            return new CamelliaKeySpec(((CamelliaKey) key).key);
         }
         throw new InvalidKeySpecException("key is unsupported: " + key);
     }
@@ -49,5 +49,3 @@ public class CamelliaKeyFactory extends SecretKeyFactorySpi {
         throw new InvalidKeyException("to translate key is unsupported: " + key);
     }
 }
-
-/* */

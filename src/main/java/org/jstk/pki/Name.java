@@ -23,9 +23,9 @@ import org.jstk.asn1.ASN1Set;
 
 public class Name extends ASN1Seq {
     public static class OVPair extends ASN1Seq {
-        ASN1Oid oid = new ASN1Oid();
+        final ASN1Oid oid = new ASN1Oid();
 
-        ASN1Any val = new ASN1Any();
+        final ASN1Any val = new ASN1Any();
 
         OVPair() {
             super();
@@ -85,14 +85,14 @@ public class Name extends ASN1Seq {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size(); i++) {
             ASN1Set rdn = (ASN1Set) get(i);
             for (int j = 0; j < rdn.size(); j++) {
                 if (j > 0)
                     sb.append("; ");
                 OVPair ovp = (OVPair) rdn.elementAt(j);
-                sb.append(ovp.oid.toString() + "=" + ovp.val.toString());
+                sb.append(ovp.oid.toString()).append("=").append(ovp.val.toString());
             }
             if (i > 0)
                 sb.append("; ");

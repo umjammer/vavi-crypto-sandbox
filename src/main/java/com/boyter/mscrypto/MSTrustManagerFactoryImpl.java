@@ -48,5 +48,3 @@ public final class MSTrustManagerFactoryImpl extends TrustManagerFactorySpi {
     protected void engineInit(ManagerFactoryParameters spec) {
     }
 }
-
-/* */

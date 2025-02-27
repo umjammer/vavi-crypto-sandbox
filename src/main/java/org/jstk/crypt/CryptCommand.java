@@ -36,7 +36,7 @@ import org.jstk.JSTKResult;
 
 
 public class CryptCommand extends JSTKCommandAdapter {
-    protected static Map<String, String> defaults = new HashMap<>();
+    protected static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("keystore", "my.keystore");
         defaults.put("storepass", "changeit");
@@ -70,7 +70,7 @@ public class CryptCommand extends JSTKCommandAdapter {
         return uses;
     }
 
-    protected Cipher initCipher(JSTKArgs args, int cipherMode) throws Exception {
+    protected static Cipher initCipher(JSTKArgs args, int cipherMode) throws Exception {
         String password = args.get("password");
 //      String keyfile = args.get("keyfile");
         String providerName = args.get("provider");
@@ -118,7 +118,7 @@ public class CryptCommand extends JSTKCommandAdapter {
         try {
             args.setDefaults(defaults);
 
-            boolean stream = Boolean.valueOf(args.get("stream")).booleanValue();
+            boolean stream = Boolean.valueOf(args.get("stream"));
 
             int cipherMode;
             String cryptOp = args.get("op");

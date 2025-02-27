@@ -8,7 +8,7 @@ public class SecKeychainItemRef extends CoreFoundation.CFTypeRef {
     public SecKeychainItemRef() {
     }
 
-    public SecKeychainItemRef(final Pointer p) {
+    public SecKeychainItemRef(Pointer p) {
         super(p);
     }
 }

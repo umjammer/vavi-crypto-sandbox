@@ -8,10 +8,12 @@
 
 package com.boyter.mscrypto;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-import vavi.util.Debug;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -49,67 +51,69 @@ import vavi.util.Debug;
  */
 class CDPParser {
 
+    private static final Logger logger = getLogger(CDPParser.class.getName());
+
     /** */
     public static String[] parseCDP(byte[] cdpBlob) {
-//Debug.println(cdpBlob.length + " bytes:\n" + StringUtil.getDump(cdpBlob));
+//logger.log(Level.TRACE, cdpBlob.length + " bytes:\n" + StringUtil.getDump(cdpBlob));
         byte[] seq1 = null;
         byte[] seq2 = null;
         List<String> urlList = new ArrayList<>();
 
         // check to make sure this is a byte array
         if (cdpBlob[0] != 0x04) {
-Debug.println("parseCDP: ASN parse error: CDP is not an Octet String");
+logger.log(Level.DEBUG, "parseCDP: ASN parse error: CDP is not an Octet String");
             return null; // blob must be an octet string
         }
 
         // check to make sure we have all of the bytes we should have
         if (getAsnTagLength(cdpBlob, 0) != cdpBlob.length - getAsnTagSize(cdpBlob, 0)) {
-Debug.println("ASN parse error: CDP wrong size: " + (cdpBlob.length - 2) + ", " + getAsnTagLength(cdpBlob, 0));
+logger.log(Level.DEBUG, "ASN parse error: CDP wrong size: " + (cdpBlob.length - 2) + ", " + getAsnTagLength(cdpBlob, 0));
             return null; // blob has the wrong length
         }
-//Debug.println("asnTagLength: " + getAsnTagLength(cdpBlob, 0) + ", " + getAsnTagSize(cdpBlob, 0));
+//logger.log(Level.TRACE, "asnTagLength: " + getAsnTagLength(cdpBlob, 0) + ", " + getAsnTagSize(cdpBlob, 0));
 
         // skip over the first tag
         int index1 = getAsnTagSize(cdpBlob, 0);
-//Debug.println("index1: " + index1);
+//logger.log(Level.TRACE, "index1: " + index1);
 
         while ((seq1 = getAsnSequence(cdpBlob, index1)) != null) {
-//Debug.println("SEQ1:\n" + StringUtil.getDump(seq1));
+//logger.log(Level.TRACE, "SEQ1:\n" + StringUtil.getDump(seq1));
 
             // move pointer to next sequence
             index1 = getAsnTagSize(cdpBlob, index1) + seq1.length + index1;
-//Debug.println("index1(moved): " + index1);
+//logger.log(Level.TRACE, "index1(moved): " + index1);
 
             int index2 = 0;
             while ((seq2 = getAsnSequence(seq1, index2)) != null) {
-//Debug.println("SEQ2:\n" + StringUtil.getDump(seq2));
+//logger.log(Level.TRACE, "SEQ2:\n" + StringUtil.getDump(seq2));
 
                 // move pointer to next sequence
                 index2 = getAsnTagSize(seq1, index2) + seq2.length + index2;
-//Debug.println("index2(moved): " + index2);
+//logger.log(Level.TRACE, "index2(moved): " + index2);
 
                 // 1. there should be a context specific tag next
                 int tagType = seq2[0] & 0xe0;
                 if (tagType != 0x00a0) {
-Debug.println("parseCDP: parse error - context specific tag 1 missing - skip");
+logger.log(Level.DEBUG, "parseCDP: parse error - context specific tag 1 missing - skip");
                     continue;
                 }
-//Debug.println("tag1: " + StringUtil.toHex2(seq2[0]));
+//logger.log(Level.TRACE, "tag1: " + StringUtil.toHex2(seq2[0]));
 
                 // get the first context value (looking for 0 which is a distribution point)
                 int contextVal = getAsnContextValue(seq2, 0);
-//Debug.println("contextVal: " + contextVal + ", " + StringUtil.toHex2(seq2[0]));
+//logger.log(Level.TRACE, "contextVal: " + contextVal + ", " + StringUtil.toHex2(seq2[0]));
 
                 if (contextVal != 0) {
                     switch (contextVal) {
                     case 1: // reasonFlags
-Debug.println("parseCDP: reasonFlag found - skip");
+logger.log(Level.DEBUG, "parseCDP: reasonFlag found - skip");
                         continue;
                     case 2: // CRLissuer
-Debug.println("parseCDP: CRLissuer found - skip");
+logger.log(Level.DEBUG, "parseCDP: CRLissuer found - skip");
                         continue;
                     default: // unknown
-Debug.println("parseCDP: parse error - unknown DistributionPoint type - skip: " + contextVal);
+logger.log(Level.DEBUG, "parseCDP: parse error - unknown DistributionPoint type - skip: " + contextVal);
                         continue;
                     }
                 }
@@ -119,7 +123,7 @@ Debug.println("parseCDP: parse error - unknown DistributionPoint type - skip: " 
                 // 2. there should be a context specific tag next
                 tagType = seq2[2] & 0xe0;
                 if (tagType != 0x00a0) {
-Debug.println("parseCDP: parse error - context specific tag 2 missing - skip");
+logger.log(Level.DEBUG, "parseCDP: parse error - context specific tag 2 missing - skip");
                     continue;
                 }
 
@@ -130,28 +134,28 @@ Debug.println("parseCDP: parse error - context specific tag 2 missing - skip");
                 if (contextVal != 0)
                     switch (contextVal) {
                     case 1: // rfc822Name
-Debug.println("parseCDP: nameRelativeToCRLIssuer found - skip");
+logger.log(Level.DEBUG, "parseCDP: nameRelativeToCRLIssuer found - skip");
                         continue;
                     default: // unknown
-Debug.println("parseCDP: parse error - unknown DistributionPointName type - skip: " + contextVal);
+logger.log(Level.DEBUG, "parseCDP: parse error - unknown DistributionPointName type - skip: " + contextVal);
                         continue;
                     }
 
                 // there should be a context specific OID tag next
                 tagType = seq2[4];
                 if (tagType != -122) {
-Debug.println("parseCDP: parse error - context specific OID tag missing - skip: " + tagType);
+logger.log(Level.DEBUG, "parseCDP: parse error - context specific OID tag missing - skip: " + tagType);
                     continue;
                 }
 
                 // copy the CRL's URL into a new byte array
                 int urlSize = getAsnTagLength(seq2, 4);
 //if (urlSize > seq2.length) {
-// Debug.println("??? urlSize: " + urlSize + ", " + seq2.length);
+//logger.log(Level.TRACE, "??? urlSize: " + urlSize + ", " + seq2.length);
 // continue;
 //}
                 String URL = new String(seq2, getAsnTagSize(seq2, 4) + 4, urlSize);
-Debug.println("parseCDP: found CDP URL(" + urlSize + "): " + URL);
+logger.log(Level.DEBUG, "parseCDP: found CDP URL(" + urlSize + "): " + URL);
 
                 urlList.add(URL);
             }
@@ -173,7 +177,7 @@ Debug.println("parseCDP: found CDP URL(" + urlSize + "): " + URL);
 
         // get the size of this seq
         int size = getAsnTagLength(blob, index);
-//Debug.println("size: " + size + ", index[" + index + "]=" + StringUtil.toHex2(blob[index]));
+//logger.log(Level.TRACE, "size: " + size + ", index[" + index + "]=" + StringUtil.toHex2(blob[index]));
         // copy this seq into a new byte array
         byte[] out = new byte[size];
         System.arraycopy(blob, index + getAsnTagSize(blob, index), out, 0, size);
@@ -220,5 +224,3 @@ Debug.println("parseCDP: found CDP URL(" + urlSize + "): " + URL);
         }
     }
 }
-
-/* */

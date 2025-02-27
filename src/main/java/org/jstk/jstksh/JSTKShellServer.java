@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.security.auth.Subject;
@@ -47,7 +48,7 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
 
     private static int curId = -1;
 
-    private static Map<String, SessionInfo> sessionTable = new HashMap<>();
+    private static final Map<String, SessionInfo> sessionTable = new HashMap<>();
 
     static class SessionInfo {
         String homeDir = null;
@@ -62,9 +63,9 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
 
     static class EchoCommand extends JSTKCommandAdapter {
         public Object execute(JSTKArgs args) throws JSTKException {
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             for (int i = 0; i < args.getNum(); i++) {
-                msg.append(args.get(i) + " ");
+                msg.append(args.get(i)).append(" ");
             }
             return new JSTKResult(null, true, msg.toString());
         }
@@ -79,9 +80,7 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     static class PWDCommand extends JSTKCommandAdapter {
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
-            if (curDir == null)
-                return new JSTKResult(null, true, "Session Info. missing or invalid.");
-            return new JSTKResult(null, true, curDir);
+            return new JSTKResult(null, true, Objects.requireNonNullElse(curDir, "Session Info. missing or invalid."));
         }
     }
 
@@ -96,9 +95,9 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             if (!file.isDirectory())
                 return new JSTKResult(null, false, "Not a directory: " + targetDir);
             String[] fnames = file.list();
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < fnames.length; i++) {
-                sb.append(fnames[i] + "\n");
+            StringBuilder sb = new StringBuilder();
+            for (String fname : fnames) {
+                sb.append(fname + "\n");
             }
             return new JSTKResult(null, true, sb.toString());
         }
@@ -276,17 +275,17 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             Class<?> cls = ShowCommand.class;
             ProtectionDomain pDomain = cls.getProtectionDomain();
             if (target.equalsIgnoreCase("pdom")) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 CodeSource cs = pDomain.getCodeSource();
-                sb.append("CodeSource: " + cs.toString() + "\n");
+                sb.append("CodeSource: ").append(cs.toString()).append("\n");
                 Principal[] principals = pDomain.getPrincipals();
                 if (principals != null) {
                     for (int i = 0; i < principals.length; i++) {
-                        sb.append("Principal[" + i + "]: " + principals[i] + "\n");
+                        sb.append("Principal[").append(i).append("]: ").append(principals[i]).append("\n");
                     }
                 }
                 PermissionCollection permsColl = pDomain.getPermissions();
-                sb.append("Permissions: " + permsColl.toString());
+                sb.append("Permissions: ").append(permsColl.toString());
                 return new JSTKResult(null, true, sb.toString());
             } else if (target.equalsIgnoreCase("perms")) {
                 CodeSource cs = pDomain.getCodeSource();
@@ -296,11 +295,11 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
                 CodeSource cs = pDomain.getCodeSource();
                 return new JSTKResult(null, true, cs.toString());
             } else if (target.equalsIgnoreCase("classloaders")) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 ClassLoader cl = cls.getClassLoader();
                 int idx = 0;
                 while (cl != null) {
-                    sb.append("[" + idx + "]ClassLoader: " + cl + "\n");
+                    sb.append("[").append(idx).append("]ClassLoader: ").append(cl).append("\n");
                     cl = cl.getParent();
                     ++idx;
                 }
@@ -315,9 +314,9 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             AccessControlContext acc = AccessController.getContext();
             Subject sub = Subject.getSubject(acc);
             Object[] principals = sub.getPrincipals().toArray();
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < principals.length; i++)
-                sb.append("[" + i + "]" + principals[i].toString());
+                sb.append("[").append(i).append("]").append(principals[i].toString());
 
             return new JSTKResult(null, true, sb.toString());
         }
@@ -355,10 +354,9 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
                     cmd.execute(opts);
                 long te = System.currentTimeMillis();
 
-                StringBuffer sb = new StringBuffer();
-                sb.append(result.getText() + "\n");
-                sb.append("Elapsed Time for " + loopcount + " invocations: " + (te - ts) + " millisecs.");
-                return new JSTKResult(null, true, sb.toString());
+                String sb = result.getText() + "\n" +
+                        "Elapsed Time for " + loopcount + " invocations: " + (te - ts) + " millisecs.";
+                return new JSTKResult(null, true, sb);
             } catch (Exception e) {
                 return new JSTKResult(null, false, "time failed. Exception: " + e);
             }

@@ -11,9 +11,16 @@
 package org.jstk.asn1;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
+import static java.lang.System.getLogger;
 
 
 public class ASN1Explicit extends ASN1Type {
+
+    private static final Logger logger = getLogger(ASN1Explicit.class.getName());
+
     private ASN1Type instance = null;
 
     public ASN1Explicit() {
@@ -40,13 +47,13 @@ public class ASN1Explicit extends ASN1Type {
     }
 
     public byte[] encode() {
-        logger.entering(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         if (instance == null)
             setValue(null);
         else
             setValue(instance.encode());
         byte[] bytes = encode1();
-        logger.exiting(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         return bytes;
     }
 

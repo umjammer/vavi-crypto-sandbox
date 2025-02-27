@@ -22,7 +22,7 @@ import org.jstk.JSTKResult;
 
 
 public class ProxyCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("inport", "8995");
         defaults.put("host", "localhost");
@@ -65,7 +65,7 @@ public class ProxyCommand extends JSTKCommandAdapter {
             int port = Integer.parseInt(args.get("port"));
 //            String inetAddrVal = args.get("inetaddr");
 //            boolean showData = Boolean.valueOf(args.get("showdata")).booleanValue();
-            boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
+            boolean verbose = Boolean.valueOf(args.get("verbose"));
             int bufsize = Integer.parseInt(args.get("bufsize"));
             String inproto = args.get("inproto");
             String outproto = args.get("outproto");

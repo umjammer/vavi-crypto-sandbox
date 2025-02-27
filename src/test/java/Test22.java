@@ -49,5 +49,3 @@ System.err.println("decrypted\n" + StringUtil.getDump(decryptedData));
         assertArrayEquals(data, decryptedData);
     }
 }
-
-/* */

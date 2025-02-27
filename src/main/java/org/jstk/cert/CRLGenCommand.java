@@ -39,7 +39,7 @@ import org.jstk.pki.TBSCertList;
 
 
 public class CRLGenCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("crlfile", "my.crl");
         defaults.put("cadir", "cadir");
@@ -69,7 +69,7 @@ public class CRLGenCommand extends JSTKCommandAdapter {
         return sampleUses;
     }
 
-    private void signTBSCertList(CertificateList certList, String sigAlgorithm, PrivateKey prvKey) throws Exception {
+    private static void signTBSCertList(CertificateList certList, String sigAlgorithm, PrivateKey prvKey) throws Exception {
 
         AlgorithmIdentifier algorithm = certList.getAlgorithm();
         algorithm.setOid(OidMap.getId(sigAlgorithm));

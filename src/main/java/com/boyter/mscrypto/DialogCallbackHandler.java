@@ -78,7 +78,7 @@ public class DialogCallbackHandler implements CallbackHandler {
      * An interface for recording actions to carry out if the user
      * clicks OK for the dialog.
      */
-    private static interface Action {
+    private interface Action {
 
         void perform();
     }
@@ -122,7 +122,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
                 JLabel prompt = new JLabel(nc.getPrompt());
 
-                final JTextField name = new JTextField(JTextFieldLen);
+                JTextField name = new JTextField(JTextFieldLen);
                 String defaultName = nc.getDefaultName();
                 if (defaultName != null) {
                     name.setText(defaultName);
@@ -136,17 +136,13 @@ public class DialogCallbackHandler implements CallbackHandler {
                 messages.add(namePanel);
 
                 // Store the name back into the callback if OK
-                okActions.add(new Action() {
-                    public void perform() {
-                        nc.setName(name.getText());
-                    }
-                });
+                okActions.add(() -> nc.setName(name.getText()));
 
             } else if (callback instanceof PasswordCallback pc) {
 
                 JLabel prompt = new JLabel(pc.getPrompt());
 
-                final JPasswordField password =
+                JPasswordField password =
                         new JPasswordField(JPasswordFieldLen);
                 if (!pc.isEchoOn()) {
                     password.setEchoChar('*');
@@ -201,7 +197,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
         int optionType = JOptionPane.OK_CANCEL_OPTION;
         Object[] options = null;
-        Object initialValue = null;
+        final Object initialValue = null;
 
         int messageType = JOptionPane.QUESTION_MESSAGE;
 

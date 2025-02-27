@@ -42,11 +42,11 @@ public final class KeychainPasswordStore {
 
     private static final Object lock = new Object();
 
-    public String getPassword(final String scheme, final int port, final String serviceName, final String accountName) {
+    public String getPassword(String scheme, int port, String serviceName, String accountName) {
         synchronized(lock) {
-            final IntByReference passwordLength = new IntByReference();
-            final PointerByReference passwordRef = new PointerByReference();
-            final int err = SecurityFunctions.library.SecKeychainFindInternetPassword(null,
+            IntByReference passwordLength = new IntByReference();
+            PointerByReference passwordRef = new PointerByReference();
+            int err = SecurityFunctions.library.SecKeychainFindInternetPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                 0, null,
                 accountName.getBytes(StandardCharsets.UTF_8).length, accountName.getBytes(StandardCharsets.UTF_8),
@@ -63,7 +63,7 @@ public final class KeychainPasswordStore {
         }
     }
 
-    public void addPassword(final String scheme, final int port, final String serviceName, final String accountName, final String password) {
+    public void addPassword(String scheme, int port, String serviceName, String accountName, String password) {
         synchronized(lock) {
             int err = library.SecKeychainAddInternetPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
@@ -75,7 +75,7 @@ public final class KeychainPasswordStore {
                 password.getBytes(StandardCharsets.UTF_8), null);
             if(errSecDuplicateItem == err) {
                 // Found existing item
-                final PointerByReference itemRef = new PointerByReference();
+                PointerByReference itemRef = new PointerByReference();
                 err = SecurityFunctions.library.SecKeychainFindInternetPassword(null,
                     serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                     0, null,
@@ -100,10 +100,10 @@ public final class KeychainPasswordStore {
         }
     }
 
-    public void deletePassword(final String scheme, final int port, final String serviceName, final String accountName) {
+    public void deletePassword(String scheme, int port, String serviceName, String accountName) {
         synchronized(lock) {
-            final PointerByReference itemRef = new PointerByReference();
-            final int err = SecurityFunctions.library.SecKeychainFindInternetPassword(null,
+            PointerByReference itemRef = new PointerByReference();
+            int err = SecurityFunctions.library.SecKeychainFindInternetPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                 0, null,
                 accountName.getBytes(StandardCharsets.UTF_8).length, accountName.getBytes(StandardCharsets.UTF_8),
@@ -124,10 +124,10 @@ public final class KeychainPasswordStore {
         }
     }
 
-    public String getPassword(final String serviceName, final String accountName) {
+    public String getPassword(String serviceName, String accountName) {
         synchronized(lock) {
-            final IntByReference passwordLength = new IntByReference();
-            final PointerByReference passwordRef = new PointerByReference();
+            IntByReference passwordLength = new IntByReference();
+            PointerByReference passwordRef = new PointerByReference();
             int err = SecurityFunctions.library.SecKeychainFindGenericPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                 accountName.getBytes(StandardCharsets.UTF_8).length, accountName.getBytes(StandardCharsets.UTF_8),
@@ -142,7 +142,7 @@ public final class KeychainPasswordStore {
         }
     }
 
-    public void addPassword(final String serviceName, final String accountName, final String password) {
+    public void addPassword(String serviceName, String accountName, String password) {
         synchronized(lock) {
             int err = library.SecKeychainAddGenericPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
@@ -151,7 +151,7 @@ public final class KeychainPasswordStore {
                 password.getBytes(StandardCharsets.UTF_8), null);
             if(errSecDuplicateItem == err) {
                 // Found existing item
-                final PointerByReference itemRef = new PointerByReference();
+                PointerByReference itemRef = new PointerByReference();
                 err = SecurityFunctions.library.SecKeychainFindGenericPassword(null,
                     serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                     accountName.getBytes(StandardCharsets.UTF_8).length, accountName.getBytes(StandardCharsets.UTF_8),
@@ -173,10 +173,10 @@ public final class KeychainPasswordStore {
         }
     }
 
-    public void deletePassword(final String serviceName, final String accountName) {
+    public void deletePassword(String serviceName, String accountName) {
         synchronized(lock) {
-            final PointerByReference itemRef = new PointerByReference();
-            final int err = SecurityFunctions.library.SecKeychainFindGenericPassword(null,
+            PointerByReference itemRef = new PointerByReference();
+            int err = SecurityFunctions.library.SecKeychainFindGenericPassword(null,
                 serviceName.getBytes(StandardCharsets.UTF_8).length, serviceName.getBytes(StandardCharsets.UTF_8),
                 accountName.getBytes(StandardCharsets.UTF_8).length, accountName.getBytes(StandardCharsets.UTF_8),
                 null, null, itemRef);
@@ -193,20 +193,14 @@ public final class KeychainPasswordStore {
         }
     }
 
-    private static int toSecProtocolType(final String scheme) {
-        switch(scheme) {
-            case "ftp":
-                return kSecProtocolTypeFTP;
-            case "ftps":
-                return kSecProtocolTypeFTPS;
-            case "sftp":
-                return kSecProtocolTypeSSH;
-            case "http":
-                return kSecProtocolTypeHTTP;
-            case "https":
-                return kSecProtocolTypeHTTPS;
-            default:
-                return kSecProtocolTypeAny;
-        }
+    private static int toSecProtocolType(String scheme) {
+        return switch (scheme) {
+            case "ftp" -> kSecProtocolTypeFTP;
+            case "ftps" -> kSecProtocolTypeFTPS;
+            case "sftp" -> kSecProtocolTypeSSH;
+            case "http" -> kSecProtocolTypeHTTP;
+            case "https" -> kSecProtocolTypeHTTPS;
+            default -> kSecProtocolTypeAny;
+        };
     }
 }

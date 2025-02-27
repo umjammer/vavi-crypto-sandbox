@@ -16,7 +16,7 @@ import java.io.*;
 public class DefaultUAMPersistenceManager implements UAMPersistenceManagerIntf {
     private UserAccountManager uam;
 
-    private String filename;
+    private final String filename;
 
     public DefaultUAMPersistenceManager(String filename) {
         this.filename = filename;

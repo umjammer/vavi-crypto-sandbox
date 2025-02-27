@@ -73,11 +73,9 @@ public class t113_3 {
         //----
 
         // ホスト名を無視させる
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
+        HostnameVerifier hv = (hostname, session) -> {
 Debug.println(hostname + ", "+ session);
-                return true;
-            }
+            return true;
         };
         ((HttpsURLConnection) huc).setHostnameVerifier(hv);
 
@@ -85,7 +83,7 @@ Debug.println(hostname + ", "+ session);
         InputStream in = new BufferedInputStream(huc.getInputStream());
         OutputStream os = System.out;
         // OutputStreamに出力
-        byte bb[] = new byte[1024];
+        byte[] bb = new byte[1024];
         int length = 0;
         while ((length = in.read(bb, 0, bb.length)) != -1) {
             os.write(bb, 0, length);
@@ -93,5 +91,3 @@ Debug.println(hostname + ", "+ session);
         in.close();
     }
 }
-
-/* */

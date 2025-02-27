@@ -77,5 +77,3 @@ System.setProperty("mscrypto.debug", "true");
         sslSocket.close();
     }
 }
-
-/* */

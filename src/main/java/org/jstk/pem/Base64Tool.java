@@ -34,7 +34,11 @@ public class Base64Tool extends JSTKAbstractTool {
         }
 
         public String optionsDescription() {
-            String optionsDesc = "  -infile <infile>  : File to be base64 encoded.\n" + "  -intext <text>    : Text to be base64 encoded.\n" + "  -outfile <outfile>: Output file to store base64 encoded data.\n";
+            String optionsDesc = """
+                      -infile <infile>  : File to be base64 encoded.
+                      -intext <text>    : Text to be base64 encoded.
+                      -outfile <outfile>: Output file to store base64 encoded data.
+                    """;
             return optionsDesc;
         }
 
@@ -99,7 +103,11 @@ public class Base64Tool extends JSTKAbstractTool {
         }
 
         public String optionsDescription() {
-            String optionsDesc = "  -infile <infile>  : File hvaing base64 encoded data.\n" + "  -intext <text>    : Text in base64 format.\n" + "  -outfile <outfile>: Output file to store decoded data.\n";
+            String optionsDesc = """
+                      -infile <infile>  : File hvaing base64 encoded data.
+                      -intext <text>    : Text in base64 format.
+                      -outfile <outfile>: Output file to store decoded data.
+                    """;
             return optionsDesc;
         }
 

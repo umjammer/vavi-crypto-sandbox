@@ -47,6 +47,6 @@ public class ASN1Integer extends ASN1Type {
         };
         ASN1Integer ai = new ASN1Integer();
         ai.setValue(bytes);
-        System.out.println(ai.toString());
+        System.out.println(ai);
     }
 }

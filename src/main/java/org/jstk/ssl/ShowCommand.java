@@ -23,7 +23,7 @@ import org.jstk.JSTKResult;
 
 
 public class ShowCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
 
     }
@@ -55,8 +55,8 @@ public class ShowCommand extends JSTKCommandAdapter {
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
-            boolean cipherSuite = Boolean.valueOf(args.get("cs")).booleanValue();
-            StringBuffer sb = new StringBuffer();
+            boolean cipherSuite = Boolean.valueOf(args.get("cs"));
+            StringBuilder sb = new StringBuilder();
 
             if (cipherSuite) {
                 SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -65,11 +65,11 @@ public class ShowCommand extends JSTKCommandAdapter {
 
                 sb.append("  Supported Cipher Suites:\n");
                 for (int i = 0; i < supportedCSuites.length; i++) {
-                    sb.append("             [" + i + "] " + supportedCSuites[i] + "\n");
+                    sb.append("             [").append(i).append("] ").append(supportedCSuites[i]).append("\n");
                 }
                 sb.append("  Enabled Cipher Suites  :\n");
                 for (int i = 0; i < enabledCSuites.length; i++) {
-                    sb.append("             [" + i + "] " + enabledCSuites[i] + "\n");
+                    sb.append("             [").append(i).append("] ").append(enabledCSuites[i]).append("\n");
                 }
             }
             return new JSTKResult(null, true, sb.toString());

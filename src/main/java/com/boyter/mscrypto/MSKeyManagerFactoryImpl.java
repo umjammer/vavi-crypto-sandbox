@@ -45,5 +45,3 @@ public final class MSKeyManagerFactoryImpl extends KeyManagerFactorySpi {
     protected void engineInit(ManagerFactoryParameters spec) {
     }
 }
-
-/* */

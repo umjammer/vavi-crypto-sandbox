@@ -23,7 +23,7 @@ public class SecIdentityRef extends CoreFoundation.CFTypeRef {
     public SecIdentityRef() {
     }
 
-    public SecIdentityRef(final Pointer p) {
+    public SecIdentityRef(Pointer p) {
         super(p);
     }
 }

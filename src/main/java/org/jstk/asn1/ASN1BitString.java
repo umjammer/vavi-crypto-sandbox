@@ -23,7 +23,7 @@ public class ASN1BitString extends ASN1Type {
         if (value == null)
             return "ASN1BitString: null";
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int noUnusedBits = value[0];
         for (int i = 1; i < value.length; i++) {
             byte cbyte = value[i];
@@ -37,7 +37,7 @@ public class ASN1BitString extends ASN1Type {
                     break;
             }
         }
-        return "ASN1BitString: " + sb.toString();
+        return "ASN1BitString: " + sb;
     }
 
     public byte[] getValue() {
@@ -66,6 +66,6 @@ public class ASN1BitString extends ASN1Type {
         };
         ASN1BitString bs = new ASN1BitString();
         bs.setValue(bytes);
-        System.out.println(bs.toString());
+        System.out.println(bs);
     }
 }

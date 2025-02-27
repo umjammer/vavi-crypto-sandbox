@@ -24,5 +24,3 @@ public final class KeyChainKeyStoreProvider extends Provider {
         put("Key.KeyChain", "vavi.security.keychain.spi.KeyChainKeyStore.KeyChainKey");
     }
 }
-
-/* */

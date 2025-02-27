@@ -14,6 +14,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.security.cert.CertPath;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -28,9 +30,15 @@ import org.jstk.JSTKException;
 import org.jstk.JSTKOptions;
 import org.jstk.JSTKResult;
 
+import static java.lang.System.getLogger;
+
 
 public class CutCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+
+    private static final Logger logger = getLogger(CutCommand.class.getName());
+
+    private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         // defaults.put("infile", "my.cer");
     }
@@ -41,7 +49,10 @@ public class CutCommand extends JSTKCommandAdapter {
     }
 
     public String optionsDescription() {
-        String optionsDesc = "  -infile <infile>  : File having the certification path.\n" + "  -outfile <outfile>: File to store the component.\n";
+        String optionsDesc = """
+                  -infile <infile>  : File having the certification path.
+                  -outfile <outfile>: File to store the component.
+                """;
         return optionsDesc;
     }
 
@@ -78,7 +89,7 @@ public class CutCommand extends JSTKCommandAdapter {
 
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-//          StringBuffer sb = new StringBuffer();
+//            StringBuffer sb = new StringBuffer();
 
             File file = new File(infile);
             int bufsize = (int) file.length() + 1024; // Added 1024 for extra safety.
@@ -90,8 +101,8 @@ public class CutCommand extends JSTKCommandAdapter {
                 writeCert(cert, outfile);
                 return new JSTKResult(null, true, "Wrote certificate to file: " + outfile);
             } catch (CertificateException ce) {
-                CertTool.logger.fine("Cannot parse input as a Certificate");
-                CertTool.logger.log(java.util.logging.Level.FINER, "Not a Certificate", ce);
+                logger.log(Level.DEBUG, "Cannot parse input as a Certificate");
+                logger.log(Level.DEBUG, "Not a Certificate: " + ce);
             } // Fall through.
 
             bis.reset();
@@ -102,8 +113,8 @@ public class CutCommand extends JSTKCommandAdapter {
                 writeCert(cert, outfile);
                 return new JSTKResult(null, true, "Wrote certificate to file: " + outfile);
             } catch (CertificateException ce) {
-                CertTool.logger.fine("Cannot parse input as a PkiPath Cert Path");
-                CertTool.logger.log(java.util.logging.Level.FINER, "Not a PkiPath Cert Path", ce);
+                logger.log(Level.DEBUG, "Cannot parse input as a PkiPath Cert Path");
+                logger.log(Level.DEBUG, "Not a PkiPath Cert Path: " + ce);
             } // Fall through.
 
             bis.reset();
@@ -114,8 +125,8 @@ public class CutCommand extends JSTKCommandAdapter {
                 writeCert(cert, outfile);
                 return new JSTKResult(null, true, "Wrote certificate to file: " + outfile);
             } catch (CertificateException ce) {
-                CertTool.logger.fine("Cannot parse input as a PKCS7 Cert Path");
-                CertTool.logger.log(java.util.logging.Level.FINER, "Not a PKCS7 Cert Path", ce);
+                logger.log(Level.DEBUG, "Cannot parse input as a PKCS7 Cert Path");
+                logger.log(Level.DEBUG, "Not a PKCS7 Cert Path: " + ce);
             } // Fall through.
 
             return new JSTKResult(null, false, "Unknown format");

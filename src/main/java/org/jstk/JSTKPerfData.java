@@ -43,7 +43,6 @@ public class JSTKPerfData {
 
     public void reset() {
         collectPerfData = true;
-        ;
         noOfInvocations = 0;
         totalBytes = totalTime = 0;
         minBytes = minTime = 999999999;

@@ -29,7 +29,7 @@ import org.jstk.JSTKResult;
 
 
 public class ListKSCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("kstype", "JCEKS");
         defaults.put("keystore", "my.keystore");
@@ -48,7 +48,10 @@ public class ListKSCommand extends JSTKCommandAdapter {
 
     public String[] useForms() {
         String[] forms = {
-            "[-keystore <keystore>] [-kstype (JCEKS|JKS|PKCS12)]\n" + "\t[-storepass <storepass>] [-alias <alias>] [-keypass <keypass>]\n" + "\t[-provider <provider>]"
+                """
+[-keystore <keystore>] [-kstype (JCEKS|JKS|PKCS12)]
+\t[-storepass <storepass>] [-alias <alias>] [-keypass <keypass>]
+\t[-provider <provider>]"""
         };
         return forms;
     }
@@ -60,10 +63,10 @@ public class ListKSCommand extends JSTKCommandAdapter {
         return uses;
     }
 
-    private String formatEntry(KeyStore ks, String alias, String keypass) throws Exception {
-        StringBuffer sb = new StringBuffer();
+    private static String formatEntry(KeyStore ks, String alias, String keypass) throws Exception {
+        StringBuilder sb = new StringBuilder();
 
-        sb.append("KeyStore entry \"" + alias + "\": ");
+        sb.append("KeyStore entry \"").append(alias).append("\": ");
         if (ks.isKeyEntry(alias)) {
             try {
                 sb.append("Key entry.\n");
@@ -80,7 +83,7 @@ public class ListKSCommand extends JSTKCommandAdapter {
     }
 
     public Object execute(JSTKArgs args) throws JSTKException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         try {
             args.setDefaults(defaults);
             String keystore = args.get("keystore");
@@ -106,7 +109,7 @@ public class ListKSCommand extends JSTKCommandAdapter {
                 if (ks.containsAlias(alias)) {
                     sb.append(formatEntry(ks, alias, keypass));
                 } else {
-                    sb.append("No such Entry: " + alias + ".\n");
+                    sb.append("No such Entry: ").append(alias).append(".\n");
                 }
             } else {
                 Enumeration<String> enumeration = ks.aliases();

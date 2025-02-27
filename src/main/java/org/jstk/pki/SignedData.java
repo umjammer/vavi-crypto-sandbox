@@ -21,17 +21,17 @@ import org.jstk.asn1.ASN1Set;
  * signerInfos SignerInfos, }
  */
 public class SignedData extends ASN1Seq {
-    private ASN1Integer version = new ASN1Integer();
+    private final ASN1Integer version = new ASN1Integer();
 
-    private ASN1Set digestAlgorithms = new ASN1Set();
+    private final ASN1Set digestAlgorithms = new ASN1Set();
 
-    private ContentInfo contentInfo = new ContentInfo();
+    private final ContentInfo contentInfo = new ContentInfo();
 
-    private ASN1Set certificates = new ASN1Set(CONTEXT, IMPLICIT, 0);
+    private final ASN1Set certificates = new ASN1Set(CONTEXT, IMPLICIT, 0);
 
-    private ASN1Set crls = new ASN1Set(CONTEXT, IMPLICIT, 1);
+    private final ASN1Set crls = new ASN1Set(CONTEXT, IMPLICIT, 1);
 
-    private ASN1Set signerInfos = new ASN1Set();
+    private final ASN1Set signerInfos = new ASN1Set();
 
     public SignedData() {
         super();

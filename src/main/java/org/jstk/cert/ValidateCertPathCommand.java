@@ -37,7 +37,7 @@ import org.jstk.cert.rep.FileBasedRepository;
 
 
 public class ValidateCertPathCommand extends JSTKCommandAdapter {
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("cerfile", "my.cer");
         defaults.put("truststore", "my.ts");
@@ -81,7 +81,7 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
             CertPath cp;
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(cerfile));
             bis.mark(1024);
             try {
@@ -136,7 +136,7 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
                 /*PublicKey subjectPublicKey =*/ result.getPublicKey();
                 sb.append("Validation succeeded.");
             } catch (CertPathValidatorException cpve) {
-                sb.append("Validation failed. cert[" + cpve.getIndex() + "] :" + cpve.getMessage());
+                sb.append("Validation failed. cert[").append(cpve.getIndex()).append("] :").append(cpve.getMessage());
             }
 
             return new JSTKResult(null, true, sb.toString());

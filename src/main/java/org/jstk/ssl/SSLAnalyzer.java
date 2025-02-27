@@ -20,7 +20,7 @@ import org.jstk.JSTKUtil;
 
 public class SSLAnalyzer implements ProtocolAnalyzer {
     public static abstract class SSLProtocolMessage implements Cloneable {
-        protected static String[] isa = new String[] { // Indent String Array
+        protected static final String[] isa = new String[] { // Indent String Array
             "", " ", "  ", "   ", "    ", "     ", "      "
         };
 
@@ -45,8 +45,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
         public void printHexData(int indent, String label, byte[] buf) {
             System.out.println(isa[indent] + label + "[" + buf.length + "]:");
             String[] sa = JSTKUtil.hexStringArrayFromBytes(buf, 16);
-            for (int i = 0; i < sa.length; i++)
-                System.out.println(isa[indent] + "  " + sa[i]);
+            for (String s : sa) System.out.println(isa[indent] + "  " + s);
         }
 
         public boolean matchHeader(byte[] buf, int off, int n, byte type) {
@@ -60,11 +59,11 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLv2ClientHelloMessage extends SSLProtocolMessage {
-        private static String[] SSLv2CipherSuites = new String[] {
+        private static final String[] SSLv2CipherSuites = new String[] {
             "Unknown Cipher Suite", "SSL_RC4_128_WITH_MD5", "SSL_RC4_128_EXPORT40_WITH_MD5", "SSL_RC2_CBC_128_CBC_WITH_MD5", "SSL_RC2_CBC_128_CBC_EXPORT40_WITH_MD5", "SSL_IDEA_128_CBC_WITH_MD5", "SSL_DES_64_CBC_WITH_MD5", "SSL_DES_192_EDE3_CBC_WITH_MD5"
         };
 
-        private static String[] TLSv1CipherSuites = new String[] {
+        private static final String[] TLSv1CipherSuites = new String[] {
             "Unknown Cipher Suite", "TLS_RSA_WITH_NULL_MD5", "TLS_RSA_WITH_NULL_SHA", "TLS_RSA_EXPORT_WITH_RC4_40_MD5", "TLS_RSA_WITH_RC4_128_MD5", "TLS_RSA_WITH_RC4_128_SHA", "TLS_RSA_EXPORT_WITH_RC2_CBC_40_MD5", "TLS_RSA_WITH_IDEA_CBC_SHA", "TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_RSA_WITH_DES_CBC_SHA", "TLS_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_DSS_WITH_DES_CBC_SHA", "TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DH_RSA_EXPORT_WITH_DES40_CBC_SHA",
             "TLS_DH_RSA_WITH_DES_CBC_SHA", "TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_DSS_WITH_DES_CBC_SHA", "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_RSA_WITH_DES_CBC_SHA", "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_anon_EXPORT_WITH_RC4_40_MD5", "TLS_DH_anon_WITH_RC4_128_MD5", "TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_anon_WITH_DES_CBC_SHA", "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA"
         };
@@ -124,7 +123,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return false;
         }
 
-        private String cipherSuite(byte[] ba) {
+        private static String cipherSuite(byte[] ba) {
             if (ba[0] == 0x00 && ba[1] == 0x00) { // TLSv1 cipher suite
                 int cipherSuiteIndex = ba[2];
                 if (cipherSuiteIndex < TLSv1CipherSuites.length)
@@ -152,9 +151,9 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ProtocolVersion {
-        private int majorVersion;
+        private final int majorVersion;
 
-        private int minorVersion;
+        private final int minorVersion;
 
         public ProtocolVersion(byte[] buf, int offset) {
             majorVersion = buf[offset];
@@ -162,7 +161,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
         }
 
         public String toString() {
-            return "" + majorVersion + "." + minorVersion;
+            return majorVersion + "." + minorVersion;
         }
     }
 
@@ -202,17 +201,13 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
         }
 
         public String getContentTypeAsString() {
-            switch (contentType) {
-            case CHANGE_CIPHER_SPEC:
-                return "ChangeCipherSpec";
-            case ALERT:
-                return "Alert";
-            case HAND_SHAKE:
-                return "HandShake";
-            case APPLICATION_DATA:
-                return "ApplicationData";
-            }
-            return "UnRecognized";
+            return switch (contentType) {
+                case CHANGE_CIPHER_SPEC -> "ChangeCipherSpec";
+                case ALERT -> "Alert";
+                case HAND_SHAKE -> "HandShake";
+                case APPLICATION_DATA -> "ApplicationData";
+                default -> "UnRecognized";
+            };
         }
 
         public int getContentLength() {
@@ -225,13 +220,13 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ServerHello extends SSLProtocolMessage {
-        public static byte SERVER_HELLO = 2;
+        public static final byte SERVER_HELLO = 2;
 
         int length;
 
         ProtocolVersion version;
 
-        byte[] random = new byte[32];
+        final byte[] random = new byte[32];
 
         byte[] sessionId = null;
 
@@ -277,7 +272,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLCertificate extends SSLProtocolMessage {
-        public static byte CERTIFICATE = 11;
+        public static final byte CERTIFICATE = 11;
 
         byte[] cert = null;
 
@@ -329,7 +324,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ServerHelloDone extends SSLProtocolMessage {
-        public static byte SERVER_HELLO_DONE = 14;
+        public static final byte SERVER_HELLO_DONE = 14;
 
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, SERVER_HELLO_DONE))
@@ -344,7 +339,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ClientKeyExchange extends SSLProtocolMessage {
-        public static byte CLIENT_KEY_EXCHANGE = 16;
+        public static final byte CLIENT_KEY_EXCHANGE = 16;
 
         byte[] data = null;
 
@@ -366,7 +361,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ServerKeyExchange extends SSLProtocolMessage {
-        public static byte SERVER_KEY_EXCHANGE = 12;
+        public static final byte SERVER_KEY_EXCHANGE = 12;
 
         byte[] data = null;
 
@@ -388,7 +383,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class Finished extends SSLProtocolMessage {
-        public static byte FINISHED = 20;
+        public static final byte FINISHED = 20;
 
         byte[] verifyData = null;
 
@@ -415,14 +410,14 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLProtocolMessageFactory {
-        private static SSLProtocolMessage[] msgs = new SSLProtocolMessage[] {
+        private static final SSLProtocolMessage[] msgs = new SSLProtocolMessage[] {
             new ServerHello(), new SSLCertificate(), new ServerHelloDone(), new ServerKeyExchange(), new ClientKeyExchange(), new Finished(), new SSLRecordHeader()
         };
 
         public static SSLProtocolMessage createProtocolMessage(byte[] buf, int offset, int n) {
-            for (int i = 0; i < msgs.length; i++) {
-                if (msgs[i].parse(buf, offset, n))
-                    return msgs[i];
+            for (SSLProtocolMessage msg : msgs) {
+                if (msg.parse(buf, offset, n))
+                    return msg;
             }
             return null;
         }

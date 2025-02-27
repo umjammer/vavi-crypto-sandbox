@@ -25,5 +25,3 @@ public final class MSTrustManagerProvider extends Provider {
         put("TrustManagerFactory.MSTMF", "com.boyter.mscrypto.MSTrustManagerFactoryImpl");
     }
 }
-
-/* */

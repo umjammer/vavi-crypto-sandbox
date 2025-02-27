@@ -11,14 +11,21 @@
 package org.jstk.asn1;
 
 import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.getLogger;
 
 
 /** */
 public class ASN1Set extends ASN1Type {
+
+    private static final Logger logger = getLogger(ASN1Set.class.getName());
+
     /** */
-    protected List<ASN1Type> elems = new ArrayList<>();
+    protected final List<ASN1Type> elems = new ArrayList<>();
 
     /** */
     private boolean ignoreMembers = false;
@@ -41,12 +48,12 @@ public class ASN1Set extends ASN1Type {
 
     /** */
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
-        logger.entering(getClass().getName(), "decode");
+        logger.log(Level.TRACE,  getClass().getName() + ": decode");
         int event = parser.next();
         if (event != ASN1PullParser.START_SET) {
             throw new ASN1PullParserException("unexpected type");
         }
-        logger.fine("[ASN1Set.decode()] event = " + event + ", off = " + parser.getOffset() + ", len = " + parser.getLength());
+        logger.log(Level.DEBUG, "[ASN1Set.decode()] event = " + event + ", off = " + parser.getOffset() + ", len = " + parser.getLength());
         int expSize = elems.size();
         int idx = 0;
         while ((event = parser.next()) != ASN1PullParser.END_SET) {
@@ -61,17 +68,17 @@ public class ASN1Set extends ASN1Type {
             elem.decode(parser);
             ++idx;
         }
-        logger.fine("configured for: " + expSize + ", found: " + elems.size());
-        logger.exiting(getClass().getName(), "decode");
+        logger.log(Level.DEBUG, "configured for: " + expSize + ", found: " + elems.size());
+        logger.log(Level.TRACE,  getClass().getName() + ": decode");
     }
 
     /** */
     public byte[] encode() {
-        logger.entering(getClass().getName(), "encode");
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         if (ignoreMembers) {
-            logger.fine("Ignoring members. Perhaps the encoded value has been set ...");
+            logger.log(Level.DEBUG, "Ignoring members. Perhaps the encoded value has been set ...");
             byte[] bytes = encode1();
-            logger.exiting(getClass().getName(), "encode");
+            logger.log(Level.TRACE,  getClass().getName() + ": encode");
             return bytes;
         }
 
@@ -80,8 +87,7 @@ public class ASN1Set extends ASN1Type {
         }
         List<byte[]> elemEncodings = new ArrayList<>();
         int len = 0;
-        for (int i = 0; i < elems.size(); i++) {
-            ASN1Type elem = elems.get(i);
+        for (ASN1Type elem : elems) {
             byte[] encoded = elem.encode();
             if (encoded == null) {
                 return null;
@@ -94,17 +100,16 @@ public class ASN1Set extends ASN1Type {
         byte[] bytes = new byte[1 + lenEncoding.length + len];
         int idx = 0;
         bytes[idx++] = idOctet;
-        for (int i = 0; i < lenEncoding.length; i++) {
-            bytes[idx++] = lenEncoding[i];
+        for (byte b : lenEncoding) {
+            bytes[idx++] = b;
         }
-        for (int i = 0; i < elemEncodings.size(); i++) {
-            byte[] encoded = elemEncodings.get(i);
-            for (int j = 0; j < encoded.length; j++) {
-                bytes[idx++] = encoded[j];
+        for (byte[] encoded : elemEncodings) {
+            for (byte b : encoded) {
+                bytes[idx++] = b;
             }
         }
-        logger.fine("[ASN1Set.encode()] idOctet = " + Integer.toHexString(idOctet) + ", #lenOctets = " + lenEncoding.length + ", len = " + len);
-        logger.exiting(getClass().getName(), "encode");
+        logger.log(Level.DEBUG, "[ASN1Set.encode()] idOctet = " + Integer.toHexString(idOctet) + ", #lenOctets = " + lenEncoding.length + ", len = " + len);
+        logger.log(Level.TRACE,  getClass().getName() + ": encode");
         return bytes;
     }
 
@@ -125,7 +130,7 @@ public class ASN1Set extends ASN1Type {
 
     /** */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("SET(");
         for (int i = 0; i < elems.size(); i++) {
             if (i > 0) {
@@ -137,5 +142,3 @@ public class ASN1Set extends ASN1Type {
         return sb.toString();
     }
 }
-
-/* */

@@ -8,6 +8,7 @@
 
 package com.boyter.mscrypto;
 
+import java.lang.System.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -16,7 +17,8 @@ import java.security.Signature;
 import java.security.SignatureSpi;
 import java.security.spec.AlgorithmParameterSpec;
 
-import vavi.util.Debug;
+import static java.lang.System.Logger.Level.DEBUG;
+import static java.lang.System.getLogger;
 
 
 /**
@@ -26,6 +28,8 @@ import vavi.util.Debug;
  * @version 0.00 050604 nsano modified <br>
  */
 public class MSRSASignFactoryImpl extends SignatureSpi {
+
+    private static final Logger logger = getLogger(MSRSASignFactoryImpl.class.getName());
 
     /** */
     private static final MSCryptoManager msCryptoManager = MSCryptoManager.getInstance();
@@ -46,17 +50,18 @@ public class MSRSASignFactoryImpl extends SignatureSpi {
     private static String messageDigestType;
 
     /**
-     * @throws NoSuchAlgorithmException  */
-    protected void setMessageDigestType(String mdType) throws NoSuchAlgorithmException {
+     * @throws NoSuchAlgorithmException
+     */
+    protected static void setMessageDigestType(String mdType) throws NoSuchAlgorithmException {
         md = MessageDigest.getInstance(mdType);
         messageDigestType = mdType;
 
-Debug.println("MSRSASignFactoryImpl:setMessageDigestType " + mdType);
+logger.log(DEBUG, "MSRSASignFactoryImpl:setMessageDigestType " + mdType);
     }
 
     /** */
     protected Object engineGetParameter(String param) {
-Debug.println("MSSHARSASignFactoryImpl: engineGetParameter: not implemented");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineGetParameter: not implemented");
         return null;
     }
 
@@ -65,14 +70,14 @@ Debug.println("MSSHARSASignFactoryImpl: engineGetParameter: not implemented");
      * engine with the specified parameter set.
      */
     protected void engineSetParameter(AlgorithmParameterSpec params) {
-Debug.println("MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
     }
 
     /**
      * Deprecated. Replaced by engineSetParameter(AlgorithmParameterSpec params)
      */
     protected void engineSetParameter(String param, Object value) {
-Debug.println("MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
     }
 
     /**
@@ -81,7 +86,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
      */
     protected void engineInitSign(PrivateKey privateKey) {
 
-Debug.println("MSSHARSASignFactoryImpl: engineInitSign: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitSign: entered");
 
         signOpInProgress = true;
         verifyOpInProgress = false;
@@ -92,15 +97,15 @@ Debug.println("MSSHARSASignFactoryImpl: engineInitSign: entered");
      */
     protected byte[] engineSign() {
 
-Debug.println("MSSHARSASignFactoryImpl: engineSign: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSign: entered");
 
         if (!signOpInProgress) {
-Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
             return null;
         }
 
         byte[] hash = md.digest();
-        byte[] mssig = msCryptoManager.getRSASignHash(hash, (byte[]) null, messageDigestType);
+        byte[] mssig = msCryptoManager.getRSASignHash(hash, null, messageDigestType);
         signOpInProgress = false;
         return mssig;
     }
@@ -112,15 +117,15 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
      */
     protected int engineSign(byte[] outbuf, int offset, int len) {
 
-Debug.println("MSSHARSASignFactoryImpl: engineSign: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSign: entered");
 
         if (!signOpInProgress) {
-Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
             return 0;
         }
 
         byte[] hash = md.digest();
-        byte[] mssig = msCryptoManager.getRSASignHash(hash, (byte[]) null, messageDigestType);
+        byte[] mssig = msCryptoManager.getRSASignHash(hash, null, messageDigestType);
         System.arraycopy(mssig, 0, outbuf, offset, mssig.length);
         signOpInProgress = false;
         return mssig.length;
@@ -131,7 +136,7 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
      */
     protected void engineUpdate(byte b) {
 
-Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
 
         try {
             if (signOpInProgress) {
@@ -149,7 +154,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
      * of bytes, starting at the specified offset.
      */
     protected void engineUpdate(byte[] data, int off, int len) {
-Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
 
         try {
             if (signOpInProgress) {
@@ -168,7 +173,7 @@ Debug.println("MSSHARSASignFactoryImpl: engineUpdate: entered");
      */
     protected void engineInitVerify(PublicKey publicKey) {
 
-Debug.println("MSSHARSASignFactoryImpl: engineInitVerify: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitVerify: entered");
 
         try {
             String SignatureAlg = messageDigestType + "withRSA";
@@ -187,10 +192,10 @@ Debug.println("MSSHARSASignFactoryImpl: engineInitVerify: entered");
      */
     protected boolean engineVerify(byte[] sigBytes) {
         boolean verifyresult = false;
-Debug.println("MSSHARSASignFactoryImpl: engineVerify: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineVerify: entered");
 
         if (!verifyOpInProgress) {
-Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
             return false;
         }
 
@@ -209,10 +214,10 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
      */
     protected boolean engineVerify(byte[] sig, int off, int len) {
         boolean verifyresult = false;
-Debug.println("MSSHARSASignFactoryImpl: engineVerify: entered");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineVerify: entered");
 
         if (!verifyOpInProgress) {
-Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
+logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
             return false;
         }
 
@@ -225,5 +230,3 @@ Debug.println("MSSHARSASignFactoryImpl: error - throw exception");
         return verifyresult;
     }
 }
-
-/* */

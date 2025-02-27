@@ -32,10 +32,10 @@ import org.jstk.JSTKResult;
 
 
 public class ClientCommand extends JSTKCommandAdapter {
-    public class ReaderThread extends Thread {
-        private JSTKSocket socket;
+    public static class ReaderThread extends Thread {
+        private final JSTKSocket socket;
 
-        private JSTKBuffer buf;
+        private final JSTKBuffer buf;
 
         public ReaderThread(JSTKSocket socket, JSTKBuffer buf) {
             super("ReaderThread");
@@ -53,8 +53,8 @@ public class ClientCommand extends JSTKCommandAdapter {
         }
     }
 
-    public class CustomHostnameVerifier implements HostnameVerifier {
-        private String expectedHostname;
+    public static class CustomHostnameVerifier implements HostnameVerifier {
+        private final String expectedHostname;
 
         public CustomHostnameVerifier(String expectedHostname) {
             this.expectedHostname = expectedHostname;
@@ -87,7 +87,7 @@ public class ClientCommand extends JSTKCommandAdapter {
         outPort = port;
     }
 
-    private static Map<String, String> defaults = new HashMap<>();
+    private static final Map<String, String> defaults = new HashMap<>();
     static {
         defaults.put("host", "localhost");
         defaults.put("port", "9000");
@@ -124,13 +124,13 @@ public class ClientCommand extends JSTKCommandAdapter {
         return sampleUses;
     }
 
-    private JSTKResult runRMIClient(JSTKArgs args) throws Exception {
+    private static JSTKResult runRMIClient(JSTKArgs args) throws Exception {
         int bufsize = Integer.parseInt(args.get("bufsize"));
         int num = Integer.parseInt(args.get("num"));
         int port = Integer.parseInt(args.get("port"));
         String mode = args.get("mode");
         String action = args.get("action");
-        boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
+        boolean verbose = Boolean.valueOf(args.get("verbose"));
 //        String pattern = args.get("pattern");
         String host = args.get("host");
 
@@ -247,7 +247,7 @@ public class ClientCommand extends JSTKCommandAdapter {
         return new JSTKResult(null, true, "DONE");
     }
 
-    private JSTKResult runTCPClient(JSTKArgs args) throws Exception {
+    private static JSTKResult runTCPClient(JSTKArgs args) throws Exception {
         String host = args.get("host");
         int port = Integer.parseInt(args.get("port"));
         int bufsize = Integer.parseInt(args.get("bufsize"));
@@ -255,7 +255,7 @@ public class ClientCommand extends JSTKCommandAdapter {
 //        String inetAddrVal = args.get("inetaddr");
         String mode = args.get("mode");
         String action = args.get("action");
-        boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
+        boolean verbose = Boolean.valueOf(args.get("verbose"));
         String pattern = args.get("pattern");
         String outproto = args.get("outproto");
 
@@ -337,17 +337,16 @@ public class ClientCommand extends JSTKCommandAdapter {
                 System.out.println(" 2-way Xfer Rate: " + xferRate + " KB/sec.");
             } else if (action.equalsIgnoreCase("open-close")) {
                 socket.close(); // First connection not counted in the benchmark.
-                boolean invalidate = Boolean.valueOf(args.get("invalidate")).booleanValue();
+                boolean invalidate = Boolean.valueOf(args.get("invalidate"));
                 long st = System.currentTimeMillis();
                 for (int i = 0; i < num; i++) {
                     socket = JSTKSocketUtil.connect(args);
                     if (verbose)
                         System.out.println("[" + i + "]Opened Socket ...");
 
-                    if (invalidate && socket.getSocket() instanceof SSLSocket) {
+                    if (invalidate && socket.getSocket() instanceof SSLSocket sslSock) {
                         if (verbose)
                             System.out.println("[" + i + "]Invalidating the SSLSession ...");
-                        SSLSocket sslSock = (SSLSocket) socket.getSocket();
                         SSLSession sess = sslSock.getSession();
                         sess.invalidate();
                     }
@@ -360,7 +359,7 @@ public class ClientCommand extends JSTKCommandAdapter {
                 double connRate = (num * 1000.0) / (et - st);
                 double tt = (et - st) / 1000.0;
 
-                System.out.print("" + num + " connections in " + tt + " seconds.\n");
+                System.out.print(num + " connections in " + tt + " seconds.\n");
                 System.out.println(" Connection Rate: " + connRate + " connections/sec.");
             } else if (action.equalsIgnoreCase("read-url")) {
                 socket.close(); // First connection not counted in the benchmark.
@@ -373,7 +372,7 @@ public class ClientCommand extends JSTKCommandAdapter {
                 double connRate = (num * 1000.0) / (et - st);
                 double tt = (et - st) / 1000.0;
 
-                System.out.print("" + num + " connections in " + tt + " seconds.\n");
+                System.out.print(num + " connections in " + tt + " seconds.\n");
                 System.out.println(" Connection Rate: " + connRate + " connections/sec.");
             } else {
                 return new JSTKResult(null, false, "Unknown action: " + action);
@@ -384,12 +383,11 @@ public class ClientCommand extends JSTKCommandAdapter {
         return new JSTKResult(null, true, "DONE");
     }
 
-    private JSTKResult runSSLClient(JSTKArgs args) throws Exception {
+    private static JSTKResult runSSLClient(JSTKArgs args) throws Exception {
         String[] csarray = JSTKSocketUtil.getCSFileCipherSuites(args);
         if (csarray != null) {
             System.out.println("  Cipher Suites to be enabled   : ");
-            for (int i = 0; i < csarray.length; i++)
-                System.out.println("         " + csarray[i]);
+            for (String s : csarray) System.out.println("         " + s);
         }
         return runTCPClient(args);
     }
@@ -404,7 +402,7 @@ public class ClientCommand extends JSTKCommandAdapter {
 //            String inetAddrVal = args.get("inetaddr");
             String mode = args.get("mode");
             String action = args.get("action");
-            boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
+            boolean verbose = Boolean.valueOf(args.get("verbose"));
 //            String pattern = args.get("pattern");
             String outproto = args.get("outproto");
             String urlString = args.get("url");

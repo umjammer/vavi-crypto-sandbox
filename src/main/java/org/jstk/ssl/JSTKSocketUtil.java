@@ -44,7 +44,7 @@ public class JSTKSocketUtil {
             String inetAddrVal = args.get("inetaddr");
 //            boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
             String inproto = args.get("inproto");
-            boolean nio = Boolean.valueOf(args.get("nio")).booleanValue();
+            boolean nio = Boolean.valueOf(args.get("nio"));
 
             int lport = Integer.parseInt(inport);
             JSTKServerSocket jss = null;
@@ -161,16 +161,15 @@ public class JSTKSocketUtil {
 
     private static void printCertDNs(Certificate[] certs, String label) {
         System.out.println(label + "[0]" + ((X509Certificate) certs[0]).getSubjectDN());
-        StringBuffer indent = new StringBuffer();
-        for (int i = label.length(); i > 0; i--)
-            indent.append(" ");
+        StringBuilder indent = new StringBuilder();
+        indent.append(" ".repeat(label.length()));
         for (int i = 1; i < certs.length; i++) {
-            System.out.println(indent.toString() + "[" + i + "]" + ((X509Certificate) certs[i]).getSubjectDN());
+            System.out.println(indent + "[" + i + "]" + ((X509Certificate) certs[i]).getSubjectDN());
         }
     }
 
     public static String getIOLibrary(JSTKArgs args, String proto) {
-        boolean nio = Boolean.valueOf(args.get("nio")).booleanValue();
+        boolean nio = Boolean.valueOf(args.get("nio"));
         if (nio && !proto.equalsIgnoreCase("SSL"))
             return "NIO";
         else
@@ -186,7 +185,7 @@ public class JSTKSocketUtil {
                 String s;
                 while ((s = br.readLine()) != null) {
                     s = s.trim();
-                    if (s.length() > 0)
+                    if (!s.isEmpty())
                         v.add(s);
                 }
                 br.close();
