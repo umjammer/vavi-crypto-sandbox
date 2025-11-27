@@ -14,6 +14,8 @@ import com.beechwood.crypto.chipher.enigma.EnigmaParams;
 /**
  * EnigmaParameterSpec.
  *
+ * TODO maybe no needed
+ *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (nsano)
  * @version 0.00 2024-02-21 nsano initial version <br>
  */
