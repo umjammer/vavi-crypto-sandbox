@@ -18,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
@@ -32,7 +31,9 @@ import org.jstk.JSTKResult;
 
 
 public class ClientCommand extends JSTKCommandAdapter {
+
     public static class ReaderThread extends Thread {
+
         private final JSTKSocket socket;
 
         private final JSTKBuffer buf;
@@ -43,6 +44,7 @@ public class ClientCommand extends JSTKCommandAdapter {
             this.buf = buf;
         }
 
+        @Override
         public void run() {
             try {
 //                int n;
@@ -54,18 +56,20 @@ public class ClientCommand extends JSTKCommandAdapter {
     }
 
     public static class CustomHostnameVerifier implements HostnameVerifier {
+
         private final String expectedHostname;
 
         public CustomHostnameVerifier(String expectedHostname) {
             this.expectedHostname = expectedHostname;
         }
 
+        @Override
         public boolean verify(String hostname, SSLSession sess) {
             System.out.print("Expected: " + expectedHostname + ", Got: " + hostname + ". ");
             System.out.print("Proceed(yes/no)?");
             System.out.flush();
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String response = null;
+            String response;
             try {
                 response = br.readLine();
             } catch (IOException ioe) {
@@ -88,6 +92,7 @@ public class ClientCommand extends JSTKCommandAdapter {
     }
 
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("host", "localhost");
         defaults.put("port", "9000");
@@ -98,28 +103,32 @@ public class ClientCommand extends JSTKCommandAdapter {
         defaults.put("action", "write-only");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "simple client for TCP or SSL connections";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -host <host>    : Remote host machine name or IP address.[" + defaults.get("host") + "]\n" + "  -port <port>    : Destination port on remote host.[" + defaults.get("port") + "]\n" + "  -outproto <proto>: Outgoing connection protocol (TCP or SSL).[" + defaults.get("outproto") + "]\n" + "  -csfile <csfile>: File having cipher suits to be enabled.\n" + "  -mode <mode>    : Client operation mode(prompt|bench|read-url).[" + defaults.get("mode") + "]\n"
-                             + "  -action <action>: What action to take -- applicable for \"bench\" mode\n" + "                      (open-close|write-only|write-read|read-url).[" + defaults.get("action") + "]\n" + "  -bufsize <size> : len. of buf (for bench mode).[" + defaults.get("bufsize") + "]\n" + "  -num <num>      : no. of times buf is written/read(for bench mode).[" + defaults.get("num") + "]\n" + "  -url <httpurl>  : URL to be read (for bench/read-url or read-url).\n"
-                             + "  -pattern <pat>  : Fill buffer with this pattern(for bench mode).\n" + "  -verbose        : Verbose output.\n" + "  -conn close     : Close connection with every read-url action.\n" + "  -inetaddr <addr>: Network IP address (useful for multi-homed hosts).\n";
+                + "  -action <action>: What action to take -- applicable for \"bench\" mode\n" + "                      (open-close|write-only|write-read|read-url).[" + defaults.get("action") + "]\n" + "  -bufsize <size> : len. of buf (for bench mode).[" + defaults.get("bufsize") + "]\n" + "  -num <num>      : no. of times buf is written/read(for bench mode).[" + defaults.get("num") + "]\n" + "  -url <httpurl>  : URL to be read (for bench/read-url or read-url).\n"
+                + "  -pattern <pat>  : Fill buffer with this pattern(for bench mode).\n" + "  -verbose        : Verbose output.\n" + "  -conn close     : Close connection with every read-url action.\n" + "  -inetaddr <addr>: Network IP address (useful for multi-homed hosts).\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-host <host>] [-port <port>] [-ssl] [-inetaddr <addr>]"
+                "[-host <host>] [-port <port>] [-ssl] [-inetaddr <addr>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-host venus -port 2950", "-ssl"
+                "", "-host venus -port 2950", "-ssl"
         };
         return sampleUses;
     }
@@ -130,12 +139,12 @@ public class ClientCommand extends JSTKCommandAdapter {
         int port = Integer.parseInt(args.get("port"));
         String mode = args.get("mode");
         String action = args.get("action");
-        boolean verbose = Boolean.valueOf(args.get("verbose"));
+        boolean verbose = Boolean.parseBoolean(args.get("verbose"));
 //        String pattern = args.get("pattern");
         String host = args.get("host");
 
         setOutPort(port);
-        RMIServerInterface obj = null;
+        RMIServerInterface obj;
         String url = "//" + host + "/RMIServer";
         try {
             obj = (RMIServerInterface) java.rmi.Naming.lookup(url);
@@ -198,7 +207,7 @@ public class ClientCommand extends JSTKCommandAdapter {
         return new JSTKResult(null, true, "DONE");
     }
 
-    private JSTKResult processReadURL(JSTKArgs args, int num, int bufsize, String mode, boolean verbose) throws IOException {
+    private static JSTKResult processReadURL(JSTKArgs args, int num, int bufsize, String mode, boolean verbose) throws IOException {
         boolean connClose = false;
         String urlString = args.get("url");
         String connString = args.get("conn");
@@ -255,7 +264,7 @@ public class ClientCommand extends JSTKCommandAdapter {
 //        String inetAddrVal = args.get("inetaddr");
         String mode = args.get("mode");
         String action = args.get("action");
-        boolean verbose = Boolean.valueOf(args.get("verbose"));
+        boolean verbose = Boolean.parseBoolean(args.get("verbose"));
         String pattern = args.get("pattern");
         String outproto = args.get("outproto");
 
@@ -278,13 +287,15 @@ public class ClientCommand extends JSTKCommandAdapter {
                 buf.clear();
                 buf.putBytes(inp.getBytes());
                 socket.write(buf);
-                /*int n = */socket.read(buf);
+                /*int n = */
+                socket.read(buf);
                 System.out.println("Server Returned: " + new String(buf.getBytes()));
             }
             socket.close();
         } else if (mode.equalsIgnoreCase("bench")) {
             JSTKBuffer buf = JSTKBuffer.getInstance(bufsize, args);
-            /*JSTKBuffer buf1 =*/ JSTKBuffer.getInstance(bufsize, args);
+            /*JSTKBuffer buf1 =*/
+            JSTKBuffer.getInstance(bufsize, args);
             (new PatternUtil("00000000")).fillPattern(buf);
 
             PatternUtil pu = new PatternUtil(pattern);
@@ -337,7 +348,7 @@ public class ClientCommand extends JSTKCommandAdapter {
                 System.out.println(" 2-way Xfer Rate: " + xferRate + " KB/sec.");
             } else if (action.equalsIgnoreCase("open-close")) {
                 socket.close(); // First connection not counted in the benchmark.
-                boolean invalidate = Boolean.valueOf(args.get("invalidate"));
+                boolean invalidate = Boolean.parseBoolean(args.get("invalidate"));
                 long st = System.currentTimeMillis();
                 for (int i = 0; i < num; i++) {
                     socket = JSTKSocketUtil.connect(args);
@@ -392,6 +403,7 @@ public class ClientCommand extends JSTKCommandAdapter {
         return runTCPClient(args);
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -402,7 +414,7 @@ public class ClientCommand extends JSTKCommandAdapter {
 //            String inetAddrVal = args.get("inetaddr");
             String mode = args.get("mode");
             String action = args.get("action");
-            boolean verbose = Boolean.valueOf(args.get("verbose"));
+            boolean verbose = Boolean.parseBoolean(args.get("verbose"));
 //            String pattern = args.get("pattern");
             String outproto = args.get("outproto");
             String urlString = args.get("url");

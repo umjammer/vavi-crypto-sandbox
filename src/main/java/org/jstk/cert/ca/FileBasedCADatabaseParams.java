@@ -17,6 +17,7 @@ import java.security.cert.Certificate;
 
 // A Marker interface
 public class FileBasedCADatabaseParams implements CADatabaseParams {
+
     private final String caDirName;
 
     private final boolean createCA;

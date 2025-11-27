@@ -390,8 +390,7 @@ logger.log(Level.DEBUG, "  add to cert chain: " + subject);
             }
 
 logger.log(Level.DEBUG, certCollection.size() + " certs found");
-            issuerArray = new X509Certificate[certCollection.size()];
-            issuerArray = certCollection.toArray(issuerArray);
+            issuerArray = certCollection.toArray(X509Certificate[]::new);
 
             for (X509Certificate x509Certificate : issuerArray)
                 if (verifySignature(x509Certificate, cert)) {

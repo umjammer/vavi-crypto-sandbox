@@ -22,7 +22,9 @@ import java.util.Vector;
 
 
 public class SecurityInfo {
+
     public static class AlgInfo {
+
         final Set<String> aliases;
 
         Properties props;
@@ -73,6 +75,7 @@ public class SecurityInfo {
     }
 
     public static class ProviderInfo {
+
         final String name;
 
         final double version;

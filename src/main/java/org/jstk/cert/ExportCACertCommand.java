@@ -25,36 +25,43 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class ExportCACertCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("cadir", "cadir");
         defaults.put("cerfile", "ca.cer");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "exports the CA certificate or certpath";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cadir <cadir>      : CA directory.[" + defaults.get("cadir") + "]\n" + "  -cerfile <cerfile>  : File to write exported Certificate.[" + defaults.get("cerfile") + "]\n" + "  -password <passwd>  : Password for CA keystore.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-cadir <cadir>] [-cerfile <cerfile>]"
+                "[-cadir <cadir>] [-cerfile <cerfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-password <password>", "-cerfile test.cer -password <password>"
+                "-password <password>", "-cerfile test.cer -password <password>"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

@@ -10,20 +10,23 @@
 
 package org.jstk.ssl;
 
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 
 public abstract class JSTKSocket {
+
     private static class SocketWrapper extends JSTKSocket {
-        private Socket sock = null;
+
+        private Socket sock;
 
         private SocketWrapper(Socket sock) {
             this.sock = sock;
         }
 
+        @Override
         public int read(JSTKBuffer buf) throws IOException {
             byte[] ba = buf.getByteArray();
             int n = sock.getInputStream().read(ba, 0, ba.length);
@@ -31,15 +34,18 @@ public abstract class JSTKSocket {
             return n;
         }
 
+        @Override
         public void write(JSTKBuffer buf) throws IOException {
             byte[] ba = buf.getByteArray();
             sock.getOutputStream().write(ba, 0, buf.getNBytes());
         }
 
+        @Override
         public Socket getSocket() {
             return sock;
         }
 
+        @Override
         public void close() {
             try {
                 sock.close();
@@ -50,28 +56,33 @@ public abstract class JSTKSocket {
     }
 
     private static class SocketChannelWrapper extends JSTKSocket {
-        private SocketChannel sc = null;
+
+        private SocketChannel sc;
 
         private SocketChannelWrapper(SocketChannel sc) {
             this.sc = sc;
         }
 
+        @Override
         public int read(JSTKBuffer buf) throws IOException {
             ByteBuffer bb = buf.getByteBuffer();
             bb.clear();
             return sc.read(bb);
         }
 
+        @Override
         public void write(JSTKBuffer buf) throws IOException {
             ByteBuffer bb = buf.getByteBuffer();
             bb.flip();
             sc.write(bb);
         }
 
+        @Override
         public Socket getSocket() {
             return sc.socket();
         }
 
+        @Override
         public void close() {
             try {
                 sc.close();

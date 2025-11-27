@@ -10,7 +10,9 @@
 
 package org.jstk.asn1;
 
+
 public class ASN1Boolean extends ASN1Type {
+
     public ASN1Boolean() {
         super(UNIVERSAL, NONE, BOOLEAN, BOOLEAN);
     }

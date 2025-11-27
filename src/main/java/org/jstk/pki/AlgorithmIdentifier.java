@@ -20,6 +20,7 @@ import org.jstk.asn1.ASN1Type;
  * AlgorithmIdentifier ::= SEQUENCE { algorithm OBJECT IDENTIFIER, parameters ANY DEFINED BY algorithm OPTIONAL }
  */
 public class AlgorithmIdentifier extends ASN1Seq {
+
     private final ASN1Oid algorithm = new ASN1Oid();
 
     private final ASN1Any parameters = new ASN1Any();

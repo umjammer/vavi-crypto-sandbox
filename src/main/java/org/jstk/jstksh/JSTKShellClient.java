@@ -19,7 +19,6 @@ import java.rmi.ServerException;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -32,23 +31,23 @@ import org.jstk.JSTKQuitException;
 
 
 public class JSTKShellClient {
+
     public static class JSTKShellCallbackHandler implements CallbackHandler {
+
+        @Override
         public void handle(Callback[] cb) {
             try {
                 for (Callback callback : cb) {
-                    if (callback instanceof NameCallback) {
-                        NameCallback nc = (NameCallback) callback;
+                    if (callback instanceof NameCallback nc) {
                         System.out.print(nc.getPrompt() + " ");
                         System.out.flush();
                         String name = new BufferedReader(new InputStreamReader(System.in)).readLine();
                         nc.setName(name);
-                    } else if (callback instanceof PasswordCallback) {
-                        PasswordCallback pc = (PasswordCallback) callback;
+                    } else if (callback instanceof PasswordCallback pc) {
                         System.out.print(pc.getPrompt() + " ");
                         System.out.flush();
                         String pw = new BufferedReader(new InputStreamReader(System.in)).readLine();
                         pc.setPassword(pw.toCharArray());
-                        pw = null;
                     }
                 }
             } catch (IOException ioe) {
@@ -59,12 +58,14 @@ public class JSTKShellClient {
     }
 
     public static class JSTKShellClientAction implements PrivilegedAction<Object> {
+
         private String prompt = "jstksh> ";
 
         public void setPrompt(String prompt) {
             this.prompt = prompt;
         }
 
+        @Override
         public Object run() {
             try {
                 JSTKShell shell = new JSTKShellServer();
@@ -102,6 +103,7 @@ public class JSTKShellClient {
     }
 
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("proto", "local");
     }
@@ -118,14 +120,14 @@ public class JSTKShellClient {
 
     public String[] useForms() {
         String[] useForms = {
-            "[-proto <proto>] [-login [-user <username>] [-pass <password>]]"
+                "[-proto <proto>] [-login [-user <username>] [-pass <password>]]"
         };
         return useForms;
     }
 
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-proto rmi", "-login"
+                "", "-proto rmi", "-login"
         };
         return sampleUses;
     }
@@ -135,7 +137,7 @@ public class JSTKShellClient {
         opts.parse(args, 0);
         opts.setDefaults(defaults);
         String proto = opts.get("proto");
-        boolean login = Boolean.valueOf(opts.get("login"));
+        boolean login = Boolean.parseBoolean(opts.get("login"));
 
         if (proto.equalsIgnoreCase("local")) { // JSTKShell object within the same JVM.
             if (login) {

@@ -11,6 +11,7 @@
 package org.jstk.asn1;
 
 public class ASN1IA5String extends ASN1Type {
+
 //    private static final char[] hexChars = {
 //        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
 //    };
@@ -19,10 +20,12 @@ public class ASN1IA5String extends ASN1Type {
         super(UNIVERSAL, NONE, IA5String, IA5String);
     }
 
+    @Override
     public byte[] getValue() {
         return value;
     }
 
+    @Override
     public void setValue(byte[] value) {
         this.value = value;
     }
@@ -43,7 +46,7 @@ public class ASN1IA5String extends ASN1Type {
 
     public static void main(String[] args) {
         byte[] bytes = {
-            0x54, 0x65, 0x73, 0x74, 0x20, 0x55, 0x73, 0x65, 0x72, 0x20, 0x31
+                0x54, 0x65, 0x73, 0x74, 0x20, 0x55, 0x73, 0x65, 0x72, 0x20, 0x31
         };
         ASN1IA5String ps = new ASN1IA5String();
         ps.setValue(bytes);

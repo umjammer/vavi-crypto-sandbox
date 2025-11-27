@@ -59,7 +59,7 @@ public class MSRSASignFactoryImpl extends SignatureSpi {
 logger.log(DEBUG, "MSRSASignFactoryImpl:setMessageDigestType " + mdType);
     }
 
-    /** */
+    @Override
     protected Object engineGetParameter(String param) {
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineGetParameter: not implemented");
         return null;
@@ -69,6 +69,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineGetParameter: not implemented"
      * This method is overridden by providers to initialize this signature
      * engine with the specified parameter set.
      */
+    @Override
     protected void engineSetParameter(AlgorithmParameterSpec params) {
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
     }
@@ -76,6 +77,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented"
     /**
      * Deprecated. Replaced by engineSetParameter(AlgorithmParameterSpec params)
      */
+    @Override
     protected void engineSetParameter(String param, Object value) {
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented");
     }
@@ -84,6 +86,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSetParameter: not implemented"
      * Initializes this signature object with the specified private key for
      * signing operations.
      */
+    @Override
     protected void engineInitSign(PrivateKey privateKey) {
 
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitSign: entered");
@@ -95,6 +98,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitSign: entered");
     /**
      * Returns the signature bytes of all the data updated so far.
      */
+    @Override
     protected byte[] engineSign() {
 
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSign: entered");
@@ -115,6 +119,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
      * bytes in the provided buffer outbuf, starting at offset.
      * returns the number of bytes placed into outbuf
      */
+    @Override
     protected int engineSign(byte[] outbuf, int offset, int len) {
 
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineSign: entered");
@@ -134,6 +139,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
     /**
      * Updates the data to be signed or verified using the specified byte.
      */
+    @Override
     protected void engineUpdate(byte b) {
 
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
@@ -153,6 +159,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
      * Updates the data to be signed or verified, using the specified array
      * of bytes, starting at the specified offset.
      */
+    @Override
     protected void engineUpdate(byte[] data, int off, int len) {
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
 
@@ -171,6 +178,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineUpdate: entered");
      * Initializes this signature object with the specified public key for
      * verification operations.
      */
+    @Override
     protected void engineInitVerify(PublicKey publicKey) {
 
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitVerify: entered");
@@ -190,6 +198,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineInitVerify: entered");
     /**
      * Verifies the passed-in signature.
      */
+    @Override
     protected boolean engineVerify(byte[] sigBytes) {
         boolean verifyresult = false;
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineVerify: entered");
@@ -212,6 +221,7 @@ logger.log(DEBUG, "MSSHARSASignFactoryImpl: error - throw exception");
      * Verifies the passed-in signature in the specified array of bytes,
      * starting at the specified offset.
      */
+    @Override
     protected boolean engineVerify(byte[] sig, int off, int len) {
         boolean verifyresult = false;
 logger.log(DEBUG, "MSSHARSASignFactoryImpl: engineVerify: entered");

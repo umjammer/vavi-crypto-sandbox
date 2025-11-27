@@ -22,7 +22,9 @@ import org.jstk.asn1.ASN1UTCTime;
  * revocationDate Time, crlEntryExtensions Extensions OPTIONAL, } OPTIONAL, crlExtensions [0] EXPLICIT Extensions OPTIONAL }
  */
 public class TBSCertList extends ASN1Seq {
+
     public static class RevokedCert extends ASN1Seq {
+
         public final ASN1Integer userCertificate = new ASN1Integer();
 
         public final ASN1UTCTime revocationDate = new ASN1UTCTime();
@@ -52,6 +54,7 @@ public class TBSCertList extends ASN1Seq {
     }
 
     public static class RevokedCerts extends ASN1Seq {
+
         public RevokedCerts() {
             super();
         }

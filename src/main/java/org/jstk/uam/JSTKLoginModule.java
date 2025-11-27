@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -66,18 +65,16 @@ public class JSTKLoginModule implements LoginModule {
      *
      * <p>
      *
-     * @param subject the <code>Subject</code> to be authenticated.
-     *            <p>
-     *
+     * @param subject         the <code>Subject</code> to be authenticated.
+     *                        <p>
      * @param callbackHandler a <code>CallbackHandler</code> for communicating with the end user (prompting for user names and
-     *            passwords, for example).
-     *            <p>
-     *
-     * @param sharedState shared <code>LoginModule</code> state.
-     *            <p>
-     *
-     * @param options options specified in the login <code>Configuration</code> for this particular <code>LoginModule</code>.
+     *                        passwords, for example).
+     *                        <p>
+     * @param sharedState     shared <code>LoginModule</code> state.
+     *                        <p>
+     * @param options         options specified in the login <code>Configuration</code> for this particular <code>LoginModule</code>.
      */
+    @Override
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options) {
 
         this.subject = subject;
@@ -108,12 +105,11 @@ public class JSTKLoginModule implements LoginModule {
      * <p>
      *
      * @return true in all cases since this <code>LoginModule</code> should not be ignored.
-     *
-     * @exception FailedLoginException if the authentication fails.
-     *                <p>
-     *
-     * @exception LoginException if this <code>LoginModule</code> is unable to perform the authentication.
+     * @throws FailedLoginException if the authentication fails.
+     *                              <p>
+     * @throws LoginException       if this <code>LoginModule</code> is unable to perform the authentication.
      */
+    @Override
     public boolean login() throws LoginException {
 
         if (!initStatus)
@@ -196,10 +192,10 @@ public class JSTKLoginModule implements LoginModule {
      *
      * <p>
      *
-     * @exception LoginException if the commit fails.
-     *
      * @return true if this LoginModule's own login and commit attempts succeeded, or false otherwise.
+     * @throws LoginException if the commit fails.
      */
+    @Override
     public boolean commit() throws LoginException {
         if (succeeded == false) {
             return false;
@@ -253,14 +249,14 @@ public class JSTKLoginModule implements LoginModule {
      *
      * <p>
      *
-     * @exception LoginException if the abort fails.
-     *
      * @return false if this LoginModule's own login and/or commit attempts failed, and true otherwise.
+     * @throws LoginException if the abort fails.
      */
+    @Override
     public boolean abort() throws LoginException {
         if (succeeded == false) {
             return false;
-        } else if (succeeded == true && commitSucceeded == false) {
+        } else if (!commitSucceeded) {
             // login succeeded but overall authentication failed
             succeeded = false;
             username = null;
@@ -286,10 +282,10 @@ public class JSTKLoginModule implements LoginModule {
      *
      * <p>
      *
-     * @exception LoginException if the logout fails.
-     *
      * @return true in all cases since this <code>LoginModule</code> should not be ignored.
+     * @throws LoginException if the logout fails.
      */
+    @Override
     public boolean logout() throws LoginException {
 
         subject.getPrincipals().remove(userPrincipal);
@@ -297,7 +293,6 @@ public class JSTKLoginModule implements LoginModule {
             subject.getPrincipals().remove(rolePrincipal);
         }
 
-        succeeded = false;
         succeeded = commitSucceeded;
         username = null;
         if (password != null) {

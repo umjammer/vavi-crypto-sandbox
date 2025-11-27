@@ -10,7 +10,9 @@
 
 package org.jstk.asn1;
 
+
 public class ASN1BitString extends ASN1Type {
+
     public ASN1BitString() {
         super(UNIVERSAL, NONE, BIT_STRING, BIT_STRING);
     }
@@ -40,6 +42,7 @@ public class ASN1BitString extends ASN1Type {
         return "ASN1BitString: " + sb;
     }
 
+    @Override
     public byte[] getValue() {
         if (this.length < 1)
             return null;
@@ -48,6 +51,7 @@ public class ASN1BitString extends ASN1Type {
         return bytes;
     }
 
+    @Override
     public void setValue(byte[] value) {
         setValue(value, 0);
     }
@@ -62,7 +66,7 @@ public class ASN1BitString extends ASN1Type {
 
     public static void main(String[] args) {
         byte[] bytes = {
-            (byte) 0xf1, 0x01
+                (byte) 0xf1, 0x01
         };
         ASN1BitString bs = new ASN1BitString();
         bs.setValue(bytes);

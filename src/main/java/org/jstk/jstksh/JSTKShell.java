@@ -11,11 +11,11 @@
 package org.jstk.jstksh;
 
 import java.rmi.Remote;
-
 import javax.security.auth.Subject;
 
 
 public interface JSTKShell extends Remote {
+
     String execCommand(String[] cmdargs) throws Exception;
 
     String createSession() throws Exception;

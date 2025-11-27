@@ -11,6 +11,7 @@
 package org.jstk.asn1;
 
 public class ASN1PullParserException extends Exception {
+
     public ASN1PullParserException() {
         super();
     }

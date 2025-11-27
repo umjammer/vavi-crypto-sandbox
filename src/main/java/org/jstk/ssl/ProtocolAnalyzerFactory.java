@@ -11,6 +11,7 @@
 package org.jstk.ssl;
 
 public class ProtocolAnalyzerFactory {
+
     public static ProtocolAnalyzer getInstance(String patype, String label) {
         if (patype.equalsIgnoreCase("dd"))
             return new DataDisplayAnalyzer(label);

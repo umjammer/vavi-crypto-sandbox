@@ -13,7 +13,6 @@ package org.jstk.jstksh;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
-
 import javax.security.auth.Subject;
 
 
@@ -32,6 +31,7 @@ public class JSTKShellAuthRMIServerImpl extends JSTKShellRMIServerImpl {
         shell = new JSTKShellServer();
     }
 
+    @Override
     public String execCommand(String[] cmdargs) throws RemoteException {
         try {
             JSTKShellActions.ExecCommandAction action = new JSTKShellActions.ExecCommandAction(shell, cmdargs);
@@ -41,6 +41,7 @@ public class JSTKShellAuthRMIServerImpl extends JSTKShellRMIServerImpl {
         }
     }
 
+    @Override
     public String createSession() throws RemoteException {
         try {
             JSTKShellActions.CreateSessionAction action = new JSTKShellActions.CreateSessionAction(shell);
@@ -50,6 +51,7 @@ public class JSTKShellAuthRMIServerImpl extends JSTKShellRMIServerImpl {
         }
     }
 
+    @Override
     public void destroySession(String sessId) throws RemoteException {
         try {
             JSTKShellActions.DestroySessionAction action = new JSTKShellActions.DestroySessionAction(shell, sessId);

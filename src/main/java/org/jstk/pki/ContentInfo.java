@@ -19,6 +19,7 @@ import org.jstk.asn1.ASN1Seq;
  * From PKCS#7: ContentInfo ::= SEQUENCE { contentType ContentType, content [0] EXPLICIT ANY DEFINED BY contentType OPTIONAL, }
  */
 public class ContentInfo extends ASN1Seq {
+
     private final ASN1Oid contentType = new ASN1Oid();
 
     private final ASN1Explicit content = new ASN1Explicit(CONTEXT, EXPLICIT, 0);

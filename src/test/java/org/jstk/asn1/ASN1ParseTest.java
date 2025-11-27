@@ -61,13 +61,13 @@ public class ASN1ParseTest {
     @BeforeAll
     static void setUp() {
         for (String file : inputFiles) {
-            byte[] bytes = null;
+            byte[] bytes;
             try { // Try PEM format
                 BufferedReader reader = new BufferedReader(new InputStreamReader(ASN1ParseTest.class.getResourceAsStream("/" + file)));
                 PEMData x = new PEMData(reader);
                 bytes = x.decode();
             } catch (InvalidPEMFormatException exc) { // Assume DER format
-                ByteArrayOutputStream baos = null;
+                ByteArrayOutputStream baos;
                 try {
                     FileInputStream is = new FileInputStream(file);
                     baos = new ByteArrayOutputStream();

@@ -49,26 +49,30 @@ public class ShowCommand extends JSTKCommandAdapter {
         // defaults.put("infile", "my.cer");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "display contents of a PKI file";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -infile <infile>  : File having the PKI material ( cert, certpath, CRL, ...).\n" + defaults.get("infile") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-infile <infile>"
+                "-infile <infile>"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-infile test.cer"
+                "-infile test.cer"
         };
         return sampleUses;
     }
@@ -153,6 +157,7 @@ public class ShowCommand extends JSTKCommandAdapter {
         sb.append("    Revocation Date: ").append(crlEntry.getRevocationDate()).append("\n");
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

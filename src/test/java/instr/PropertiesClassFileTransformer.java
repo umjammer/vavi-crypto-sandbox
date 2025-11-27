@@ -25,7 +25,7 @@ import javassist.CtMethod;
  */
 class PropertiesClassFileTransformer implements ClassFileTransformer {
 
-    /** */
+    @Override
     public byte[] transform(ClassLoader loader,
                             String className,
                             Class<?> classBeingRedefined,

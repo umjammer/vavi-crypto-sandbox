@@ -26,37 +26,44 @@ import org.jstk.JSTKResult;
 
 
 public class InitHKSCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("dbprops", "config/db.properties");
         defaults.put("username", "sa");
         defaults.put("password", "sa");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "initializes database for Hosted Key Stores";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -dbprops <file> : Property file to read database parameters.[" + defaults.get("dbprops") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-dbprops <file>]"
+                "[-dbprops <file>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-dbprops test.props"
+                "", "-dbprops test.props"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

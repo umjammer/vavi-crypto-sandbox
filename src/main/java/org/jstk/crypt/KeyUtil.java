@@ -10,14 +10,21 @@
 
 package org.jstk.crypt;
 
-import java.security.*;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import javax.crypto.SecretKey;
-import java.io.*;
-import org.jstk.JSTKUtil;
+
 import org.jstk.JSTKArgs;
+import org.jstk.JSTKUtil;
 
 
 public class KeyUtil {
+
     public static String format(Key key, String label) {
         String sb = label + "::\n" +
                 "alg = " + key.getAlgorithm() + ", fmt = " + key.getFormat() + ", encoded content = \n" +
@@ -63,7 +70,7 @@ public class KeyUtil {
                     obj = key;
                 } else if (key instanceof PrivateKey prvKey) {
                     java.security.cert.Certificate cert = ks.getCertificate(alias);
-                    PublicKey pubKey = null;
+                    PublicKey pubKey;
                     if (cert != null) {
                         pubKey = cert.getPublicKey();
                         obj = new KeyPair(pubKey, prvKey);
@@ -125,7 +132,7 @@ public class KeyUtil {
 
     public static KeyPair getKeyPair(JSTKArgs args) throws Exception {
         String keyfile = args.get("keyfile");
-        Object obj = null;
+        Object obj;
         if (keyfile != null) { // Key file specified
             FileInputStream fis = new FileInputStream(keyfile);
             ObjectInputStream ois = new ObjectInputStream(fis);

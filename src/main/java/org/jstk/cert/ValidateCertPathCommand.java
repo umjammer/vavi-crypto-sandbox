@@ -37,7 +37,9 @@ import org.jstk.cert.rep.FileBasedRepository;
 
 
 public class ValidateCertPathCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("cerfile", "my.cer");
         defaults.put("truststore", "my.ts");
@@ -45,30 +47,35 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
         defaults.put("crlfile", "my.crl");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "display contents of a Certificate or Certificate Chain";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cerfile <cerfile>  : File having the certificate chain.[" + defaults.get("cerfile") + "]\n" + "  -truststore <file>  : keystore with trusted certificates.[" + defaults.get("truststore") + "]\n" + "  -storetype <type>   : keystore type (JKS or JCEKS).[" + defaults.get("storetype") + "]\n" + "  -repfile <repfile>  : repository file.\n" + "  -crlfile <crlfile>  : CRL file.[" + defaults.get("crlfile") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-cerfile <cerfile>]"
+                "[-cerfile <cerfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-cerfile test.cer"
+                "", "-cerfile test.cer"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -94,7 +101,8 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
                 bis.close();
             } catch (CertificateException ce) { // Not a certpath.
                 bis.reset();
-                /*Certificate cert =*/ cf.generateCertificate(bis);
+                /*Certificate cert =*/
+                cf.generateCertificate(bis);
                 bis.close();
                 throw new JSTKException("Validation of Certificate not supported.");
             }
@@ -132,8 +140,10 @@ public class ValidateCertPathCommand extends JSTKCommandAdapter {
 
             try {
                 PKIXCertPathValidatorResult result = (PKIXCertPathValidatorResult) cpv.validate(cp, pkixParams);
-                /*PolicyNode policyTree =*/ result.getPolicyTree();
-                /*PublicKey subjectPublicKey =*/ result.getPublicKey();
+                /*PolicyNode policyTree =*/
+                result.getPolicyTree();
+                /*PublicKey subjectPublicKey =*/
+                result.getPublicKey();
                 sb.append("Validation succeeded.");
             } catch (CertPathValidatorException cpve) {
                 sb.append("Validation failed. cert[").append(cpve.getIndex()).append("] :").append(cpve.getMessage());

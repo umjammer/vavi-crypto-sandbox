@@ -11,8 +11,8 @@
 package org.jstk.uam;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
@@ -20,22 +20,21 @@ import javax.security.auth.callback.PasswordCallback;
 
 
 public class DefaultCallbackHandler implements CallbackHandler {
+
+    @Override
     public void handle(Callback[] cb) {
         try {
             for (Callback callback : cb) {
-                if (callback instanceof NameCallback) {
-                    NameCallback nc = (NameCallback) callback;
+                if (callback instanceof NameCallback nc) {
                     System.out.print(nc.getPrompt() + " ");
                     System.out.flush();
                     String name = new BufferedReader(new InputStreamReader(System.in)).readLine();
                     nc.setName(name);
-                } else if (callback instanceof PasswordCallback) {
-                    PasswordCallback pc = (PasswordCallback) callback;
+                } else if (callback instanceof PasswordCallback pc) {
                     System.out.print(pc.getPrompt() + " ");
                     System.out.flush();
                     String pw = new BufferedReader(new InputStreamReader(System.in)).readLine();
                     pc.setPassword(pw.toCharArray());
-                    pw = null;
                 }
             }
         } catch (IOException ioe) {

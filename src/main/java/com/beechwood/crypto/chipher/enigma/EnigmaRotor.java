@@ -13,7 +13,7 @@ public class EnigmaRotor {
 
     private final int notchIndex;
 
-    private int currentIndex = 0;
+    private int currentIndex;
 
     private final int[] b = new int[256];
 

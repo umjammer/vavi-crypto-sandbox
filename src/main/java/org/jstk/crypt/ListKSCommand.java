@@ -18,7 +18,6 @@ import java.security.UnrecoverableKeyException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.crypto.SecretKey;
 
 import org.jstk.JSTKArgs;
@@ -29,23 +28,28 @@ import org.jstk.JSTKResult;
 
 
 public class ListKSCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("kstype", "JCEKS");
         defaults.put("keystore", "my.keystore");
         defaults.put("storepass", "changeit");
     }
 
+    @Override
     public String briefDescription() {
         return "lists keystore entries";
     }
 
+    @Override
     public String optionsDescription() {
         return "  -keystore <keystore>: the keystore.[" + defaults.get("keystore") + "]\n" + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <type>        : the keystore type.[" + defaults.get("type") + "]\n" + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.[" + defaults.get("keypass") + "]\n"
-               + "  -provider <provider>: provider name for KeyStore.\n";
+                + "  -provider <provider>: provider name for KeyStore.\n";
 
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
                 """
@@ -56,9 +60,10 @@ public class ListKSCommand extends JSTKCommandAdapter {
         return forms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-keystore test.ks -storepass testpass", "-alias test.key"
+                "", "-keystore test.ks -storepass testpass", "-alias test.key"
         };
         return uses;
     }
@@ -82,6 +87,7 @@ public class ListKSCommand extends JSTKCommandAdapter {
         return sb.toString();
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         StringBuilder sb = new StringBuilder();
         try {

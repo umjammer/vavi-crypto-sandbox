@@ -19,6 +19,7 @@ import org.jstk.asn1.ASN1Seq;
  * CSRInfo ::= SEQUENCE { version INTEGER, subject Name, publicKeyInfo SubjectPublicKeyInfo, attributes SET OF ... }
  */
 public class CSRInfo extends ASN1Seq {
+
     // A sequence of following elements.
     private final ASN1Integer version = new ASN1Integer();
 

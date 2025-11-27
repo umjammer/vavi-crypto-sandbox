@@ -38,7 +38,9 @@ import org.jstk.pki.SignedData;
 
 
 public class IssueCertCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("csrfile", "my.csr");
         defaults.put("cerfile", "my.cer");
@@ -50,32 +52,37 @@ public class IssueCertCommand extends JSTKCommandAdapter {
         defaults.put("sigalg", "SHA1WithRSA");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "issues certificate based on Certificate Signing Request (CSR)";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cadir <cadir>      : CA directory.[" + defaults.get("cadir") + "]\n" + "  -csrfile <csrfile>  : CSR file.[" + defaults.get("csrfile") + "]\n" + "  -cerfile <cerfile>  : File to write issued Certificate.[" + defaults.get("cerfile") + "]\n" + "  -ca                 : Allow generated cert. to be used as a CA cert.\n" + "  -capath <length>    : Certificate signing path length.[" + defaults.get("capath") + "]\n"
-                             + "  -keyalg <keyalg>    : Algorithm for Key Pair generation (RSA|DSA).[" + defaults.get("keyalg") + "]\n" + "  -keysize <keysize>  : Size of key (no. of bits).[" + defaults.get("keysize") + "]\n" + "  -sigalg <sigalg>    : Signature Algorithm. Should match Key Algorithm.[" + defaults.get("sigalg") + "]\n" + "  -password <passwd>  : Password for CA keystore.\n" + "  -extnconf <conffile>: Configuration file to indicate extensions.\n"
-                             + "  -cpfmt <cpfmt>      : Certificate Path format (pkcs7, pkipath or x509).[" + defaults.get("cpfmt") + "]\n";
+                + "  -keyalg <keyalg>    : Algorithm for Key Pair generation (RSA|DSA).[" + defaults.get("keyalg") + "]\n" + "  -keysize <keysize>  : Size of key (no. of bits).[" + defaults.get("keysize") + "]\n" + "  -sigalg <sigalg>    : Signature Algorithm. Should match Key Algorithm.[" + defaults.get("sigalg") + "]\n" + "  -password <passwd>  : Password for CA keystore.\n" + "  -extnconf <conffile>: Configuration file to indicate extensions.\n"
+                + "  -cpfmt <cpfmt>      : Certificate Path format (pkcs7, pkipath or x509).[" + defaults.get("cpfmt") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-csrfile <csrfile>] [-cerfile <cerfile>]"
+                "[-csrfile <csrfile>] [-cerfile <cerfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-csrfile test.csr -cerfile test.cer"
+                "", "-csrfile test.csr -cerfile test.cer"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -83,7 +90,7 @@ public class IssueCertCommand extends JSTKCommandAdapter {
             String cerfile = args.get("cerfile");
             String cadir = args.get("cadir");
             String cpfmt = args.get("cpfmt");
-            boolean caFlag = Boolean.valueOf(args.get("ca"));
+            boolean caFlag = Boolean.parseBoolean(args.get("ca"));
             int pathLen = Integer.parseInt(args.get("capath"));
 //            String keyAlg = args.get("keyalg");
             String sigAlg = args.get("sigalg");
@@ -122,7 +129,7 @@ public class IssueCertCommand extends JSTKCommandAdapter {
                 String kuFlag = props.getProperty("KeyUsage");
                 if (kuFlag != null && kuFlag.equalsIgnoreCase("true")) {
                     ku = new KeyUsage();
-                    String kuString = null;
+                    String kuString;
                     int index = 0;
                     while ((kuString = KeyUsage.getKeyUsageString(index)) != null) {
                         String kuStringFlag = props.getProperty("KeyUsage." + kuString);
@@ -137,7 +144,7 @@ public class IssueCertCommand extends JSTKCommandAdapter {
                 String ekuFlag = props.getProperty("ExtendedKeyUsage");
                 if (ekuFlag != null && ekuFlag.equalsIgnoreCase("true")) {
                     eku = new LinkedList<>();
-                    String ekuOId = null;
+                    String ekuOId;
                     int index = 0;
                     while ((ekuOId = props.getProperty("ExtendedKeyUsage.ObjectId." + index)) != null) {
                         eku.add(ekuOId);

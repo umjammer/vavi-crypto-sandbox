@@ -23,12 +23,13 @@ import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 
 public class FileBasedRepository {
+
     private static class FBRInput {
+
         private final InputStream is;
 
         private int off;
@@ -98,6 +99,7 @@ public class FileBasedRepository {
     }
 
     private static class FBROutput {
+
         private final OutputStream os;
 
         private int off;
@@ -151,7 +153,7 @@ public class FileBasedRepository {
 
     public static final byte FBREP_END = 0x00;
 
-    private String filename = null;
+    private String filename;
 
     private List<Object> list = new ArrayList<>();
 
@@ -180,19 +182,19 @@ public class FileBasedRepository {
         while (!scanComplete) {
             byte entryId = fbrInput.readByte();
             switch (entryId) {
-            case X509CERT:
-                X509Certificate cert = fbrInput.readX509Certificate();
-                list.add(cert);
-                break;
-            case X509CRL:
-                X509CRL crl = fbrInput.readX509CRL();
-                list.add(crl);
-                break;
-            case FBREP_END:
-                scanComplete = true;
-                break;
-            default:
-                throw new IOException("Unexpected Data at offset = " + fbrInput.getOffset());
+                case X509CERT:
+                    X509Certificate cert = fbrInput.readX509Certificate();
+                    list.add(cert);
+                    break;
+                case X509CRL:
+                    X509CRL crl = fbrInput.readX509CRL();
+                    list.add(crl);
+                    break;
+                case FBREP_END:
+                    scanComplete = true;
+                    break;
+                default:
+                    throw new IOException("Unexpected Data at offset = " + fbrInput.getOffset());
             }
         }
 
@@ -219,6 +221,7 @@ public class FileBasedRepository {
             System.out.println("Usage:: java FileBasedRepository <filename>");
             return;
         }
-        /*FileBasedRepository fbr =*/ new FileBasedRepository(args[0]);
+        /*FileBasedRepository fbr =*/
+        new FileBasedRepository(args[0]);
     }
 }

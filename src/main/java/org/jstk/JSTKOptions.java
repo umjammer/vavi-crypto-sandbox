@@ -16,13 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 
-/**
- * JSTKOptions.
- *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00 050318 nsano initial version <br>
- */
 public class JSTKOptions implements JSTKArgs {
+
     /** */
     private final Map<String, String> options = new HashMap<>();
 
@@ -51,17 +46,17 @@ public class JSTKOptions implements JSTKArgs {
         }
     }
 
-    /** */
+    @Override
     public int getNum() {
         return pArgs.size();
     }
 
-    /** */
+    @Override
     public void setDefaults(Map<String, String> defaults) {
         this.defaults = defaults;
     }
 
-    /** */
+    @Override
     public String get(String name) {
         String value = options.get(name);
         if (value == null && defaults != null) {
@@ -70,12 +65,12 @@ public class JSTKOptions implements JSTKArgs {
         return value;
     }
 
-    /** */
+    @Override
     public String get(int pos) {
         return pArgs.get(pos);
     }
 
-    /** */
+    @Override
     public void set(String name, String value) {
         options.put(name, value);
     }

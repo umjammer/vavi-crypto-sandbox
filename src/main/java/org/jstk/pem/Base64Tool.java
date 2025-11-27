@@ -26,13 +26,16 @@ import org.jstk.JSTKResult;
 
 
 public class Base64Tool extends JSTKAbstractTool {
+
     static class EncodeCommand extends JSTKCommandAdapter {
 
+        @Override
         public String briefDescription() {
             String briefDesc = "encodes input data to base64 format";
             return briefDesc;
         }
 
+        @Override
         public String optionsDescription() {
             String optionsDesc = """
                       -infile <infile>  : File to be base64 encoded.
@@ -42,25 +45,28 @@ public class Base64Tool extends JSTKAbstractTool {
             return optionsDesc;
         }
 
+        @Override
         public String[] useForms() {
             String[] useForms = {
-                "(-infile <infile> | -intext <text>) [-outfile <outfile>]"
+                    "(-infile <infile> | -intext <text>) [-outfile <outfile>]"
             };
             return useForms;
         }
 
+        @Override
         public String[] sampleUses() {
             String[] sampleUses = {
-                "-infile test.cer", "-infile test.cer -outfile test.pem", "-intext \"Hello, World!\""
+                    "-infile test.cer", "-infile test.cer -outfile test.pem", "-intext \"Hello, World!\""
             };
             return sampleUses;
         }
 
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
-                String intext = null;
-                PEMData pemData = null;
-                String msg = null;
+                String intext;
+                PEMData pemData;
+                String msg;
 
                 String infile = args.get("infile");
                 String outfile = args.get("outfile");
@@ -97,11 +103,14 @@ public class Base64Tool extends JSTKAbstractTool {
     }
 
     static class DecodeCommand extends JSTKCommandAdapter {
+
+        @Override
         public String briefDescription() {
             String briefDesc = "decodes base64 input data";
             return briefDesc;
         }
 
+        @Override
         public String optionsDescription() {
             String optionsDesc = """
                       -infile <infile>  : File hvaing base64 encoded data.
@@ -111,25 +120,28 @@ public class Base64Tool extends JSTKAbstractTool {
             return optionsDesc;
         }
 
+        @Override
         public String[] useForms() {
             String[] useForms = {
-                "(-infile <infile> | -intext <text>) [-outfile <outfile>]"
+                    "(-infile <infile> | -intext <text>) [-outfile <outfile>]"
             };
             return useForms;
         }
 
+        @Override
         public String[] sampleUses() {
             String[] sampleUses = {
-                "-infile test.pem", "-infile test.pem -outfile test.cer", "-intext SGVsbG8sIFdvcmxkIQ=="
+                    "-infile test.pem", "-infile test.pem -outfile test.cer", "-intext SGVsbG8sIFdvcmxkIQ=="
             };
             return sampleUses;
         }
 
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
-                String intext = null;
-                PEMData pemData = null;
-                String msg = null;
+                String intext;
+                PEMData pemData;
+                String msg;
 
                 String infile = args.get("infile");
                 String outfile = args.get("outfile");
@@ -159,11 +171,13 @@ public class Base64Tool extends JSTKAbstractTool {
     }
 
     public static final Logger logger = Logger.getLogger("org.jstk.pem");
+
     static {
         cmds.put("encode", new EncodeCommand());
         cmds.put("decode", new DecodeCommand());
     }
 
+    @Override
     public String progName() {
         String progName = System.getProperty("org.jstk.pem.progname");
         if (progName == null)
@@ -172,6 +186,7 @@ public class Base64Tool extends JSTKAbstractTool {
         return progName;
     }
 
+    @Override
     public String briefDescription() {
         return "A base64 conversion tool";
     }

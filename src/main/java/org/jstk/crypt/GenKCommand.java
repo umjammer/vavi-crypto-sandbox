@@ -18,7 +18,6 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
@@ -30,7 +29,9 @@ import org.jstk.JSTKResult;
 
 
 public class GenKCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("algorithm", "DES");
         defaults.put("keysize", "56");
@@ -42,13 +43,15 @@ public class GenKCommand extends JSTKCommandAdapter {
         defaults.put("alias", "mykey");
     }
 
+    @Override
     public String briefDescription() {
         return "generates a secret key ( for symmetric algorithms )";
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
-            "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]", """
+                "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]", """
 [-algorithm <alg> -keysize <keysize>] [-action store
 \t[-keystore <keystore>] [-kstype (JCEKS|JKS)] [-storepass <storepass>]
 \t[-alias <alias>] [-keypass <keypass>]] [-provider <provider>]"""
@@ -56,18 +59,21 @@ public class GenKCommand extends JSTKCommandAdapter {
         return forms;
     }
 
+    @Override
     public String optionsDescription() {
         return "  -action <action>    : what to do with the key?(print|store|save|discard).[" + defaults.get("action") + "]\n" + "  -file <filename>    : where to save the serialized key?[" + defaults.get("filename") + "]\n" + "  -keystore <keystore>: where to store the key?[" + defaults.get("keystore") + "]\n" + "  -kstype <kstype>    : keystore type.[" + defaults.get("kstype") + "]\n" + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n"
-               + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.[" + defaults.get("keypass") + "]\n" + "  -keysize <keysize>  : Key size (in bits).[" + defaults.get("keysize") + "]\n" + "  -algorithm <alg>    : Algorithm for secret key generator.[" + defaults.get("algorithm") + "]\n" + "  -provider <provider>: provider name for KeyGenerator.\n";
+                + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.[" + defaults.get("keypass") + "]\n" + "  -keysize <keysize>  : Key size (in bits).[" + defaults.get("keysize") + "]\n" + "  -algorithm <alg>    : Algorithm for secret key generator.[" + defaults.get("algorithm") + "]\n" + "  -provider <provider>: provider name for KeyGenerator.\n";
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-algorithm DESede -keysize 112 -action print", "-action store -keystore test.ks -storepass changeit -alias testkey1", "-action save -file test1.key"
+                "", "-algorithm DESede -keysize 112 -action print", "-action store -keystore test.ks -storepass changeit -alias testkey1", "-action save -file test1.key"
         };
         return uses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

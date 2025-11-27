@@ -24,34 +24,40 @@ import org.jstk.JSTKResult;
 
 
 public class ListCommand extends JSTKCommandAdapter {
+
     private int index = 0;
 
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("reptype", "JSTK");
         defaults.put("repfile", "my.rep");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "lists the contents of a repository";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -repfile <repfile>: Repository file.[" + defaults.get("repfile") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-repfile <repfile>]"
+                "[-repfile <repfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-repfile test.rep"
+                "-repfile test.rep"
         };
         return sampleUses;
     }
@@ -70,6 +76,7 @@ public class ListCommand extends JSTKCommandAdapter {
         sb.append(", Next Update: ").append(crl.getNextUpdate()).append("\n");
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

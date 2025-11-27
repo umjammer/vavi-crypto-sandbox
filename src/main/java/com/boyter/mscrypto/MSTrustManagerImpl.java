@@ -50,6 +50,7 @@ final class MSTrustManagerImpl implements X509TrustManager {
      * Reads Microsoft certificate store
      * Returns array of trusted root CA certificates
      */
+    @Override
     public X509Certificate[] getAcceptedIssuers() {
 
         // Object[] objarray = null;
@@ -66,8 +67,7 @@ logger.log(Level.DEBUG, "getAcceptedIssuers: entered");
             Collection<? extends Certificate> certcollection = caCerts.getCertificates(xcs);
 logger.log(Level.DEBUG, "getAcceptedIssuers: " + certcollection.size() + " certs found");
 
-            caArray = new X509Certificate[certcollection.size()];
-            caArray = certcollection.toArray(caArray);
+            caArray = certcollection.toArray(X509Certificate[]::new);
 
         } catch (Exception e) {
             throw new IllegalStateException(e);
@@ -84,6 +84,7 @@ logger.log(Level.DEBUG, "getAcceptedIssuers: " + certcollection.size() + " certs
      * Returns true if the client is authorized to access the server.
      * @throws CertificateException Client Certificate is not trusted
      */
+    @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
         Flag dontKnowFlag = Flag.AskTheUser;
@@ -104,6 +105,7 @@ logger.log(Level.DEBUG, e);
      * Returns true if the server is authorized to access the client.
      * @throws CertificateException Server Certificate is not trusted
      */
+    @Override
     public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
         Flag dontKnowFlag = Flag.AskTheUser;

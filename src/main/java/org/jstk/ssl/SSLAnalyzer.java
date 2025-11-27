@@ -19,9 +19,11 @@ import org.jstk.JSTKUtil;
 
 
 public class SSLAnalyzer implements ProtocolAnalyzer {
+
     public static abstract class SSLProtocolMessage implements Cloneable {
+
         protected static final String[] isa = new String[] { // Indent String Array
-            "", " ", "  ", "   ", "    ", "     ", "      "
+                "", " ", "  ", "   ", "    ", "     ", "      "
         };
 
         protected int consumed;
@@ -59,13 +61,14 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLv2ClientHelloMessage extends SSLProtocolMessage {
+
         private static final String[] SSLv2CipherSuites = new String[] {
-            "Unknown Cipher Suite", "SSL_RC4_128_WITH_MD5", "SSL_RC4_128_EXPORT40_WITH_MD5", "SSL_RC2_CBC_128_CBC_WITH_MD5", "SSL_RC2_CBC_128_CBC_EXPORT40_WITH_MD5", "SSL_IDEA_128_CBC_WITH_MD5", "SSL_DES_64_CBC_WITH_MD5", "SSL_DES_192_EDE3_CBC_WITH_MD5"
+                "Unknown Cipher Suite", "SSL_RC4_128_WITH_MD5", "SSL_RC4_128_EXPORT40_WITH_MD5", "SSL_RC2_CBC_128_CBC_WITH_MD5", "SSL_RC2_CBC_128_CBC_EXPORT40_WITH_MD5", "SSL_IDEA_128_CBC_WITH_MD5", "SSL_DES_64_CBC_WITH_MD5", "SSL_DES_192_EDE3_CBC_WITH_MD5"
         };
 
         private static final String[] TLSv1CipherSuites = new String[] {
-            "Unknown Cipher Suite", "TLS_RSA_WITH_NULL_MD5", "TLS_RSA_WITH_NULL_SHA", "TLS_RSA_EXPORT_WITH_RC4_40_MD5", "TLS_RSA_WITH_RC4_128_MD5", "TLS_RSA_WITH_RC4_128_SHA", "TLS_RSA_EXPORT_WITH_RC2_CBC_40_MD5", "TLS_RSA_WITH_IDEA_CBC_SHA", "TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_RSA_WITH_DES_CBC_SHA", "TLS_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_DSS_WITH_DES_CBC_SHA", "TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DH_RSA_EXPORT_WITH_DES40_CBC_SHA",
-            "TLS_DH_RSA_WITH_DES_CBC_SHA", "TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_DSS_WITH_DES_CBC_SHA", "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_RSA_WITH_DES_CBC_SHA", "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_anon_EXPORT_WITH_RC4_40_MD5", "TLS_DH_anon_WITH_RC4_128_MD5", "TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_anon_WITH_DES_CBC_SHA", "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA"
+                "Unknown Cipher Suite", "TLS_RSA_WITH_NULL_MD5", "TLS_RSA_WITH_NULL_SHA", "TLS_RSA_EXPORT_WITH_RC4_40_MD5", "TLS_RSA_WITH_RC4_128_MD5", "TLS_RSA_WITH_RC4_128_SHA", "TLS_RSA_EXPORT_WITH_RC2_CBC_40_MD5", "TLS_RSA_WITH_IDEA_CBC_SHA", "TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_RSA_WITH_DES_CBC_SHA", "TLS_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_DSS_WITH_DES_CBC_SHA", "TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DH_RSA_EXPORT_WITH_DES40_CBC_SHA",
+                "TLS_DH_RSA_WITH_DES_CBC_SHA", "TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_DSS_WITH_DES_CBC_SHA", "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA", "TLS_DHE_RSA_WITH_DES_CBC_SHA", "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DH_anon_EXPORT_WITH_RC4_40_MD5", "TLS_DH_anon_WITH_RC4_128_MD5", "TLS_DH_anon_EXPORT_WITH_DES40_CBC_SHA", "TLS_DH_anon_WITH_DES_CBC_SHA", "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA"
         };
 
         int majorVersion;
@@ -84,6 +87,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
 
         byte[] challengeData;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             int recordLength;
             consumed = 0;
@@ -136,6 +140,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return "Unknown Cipher Suite";
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "ClientHello (SSLv2 format mapped to TLSv1 fields)");
             System.out.println(isa[indent] + "  Version " + majorVersion + "." + minorVersion);
@@ -151,6 +156,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ProtocolVersion {
+
         private final int majorVersion;
 
         private final int minorVersion;
@@ -166,6 +172,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLRecordHeader extends SSLProtocolMessage {
+
         public static final byte CHANGE_CIPHER_SPEC = 0x14;
 
         public static final byte ALERT = 0x15;
@@ -180,6 +187,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
 
         int length;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             consumed = 0;
             contentType = buf[offset + consumed];
@@ -214,12 +222,14 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return length;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "Record Header. " + "(ContentType: " + getContentTypeAsString() + ", Version: " + version + ", Len: " + length + ")");
         }
     }
 
     public static class ServerHello extends SSLProtocolMessage {
+
         public static final byte SERVER_HELLO = 2;
 
         int length;
@@ -234,6 +244,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
 
         byte compMethod;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, SERVER_HELLO))
                 return false;
@@ -260,6 +271,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "ServerHello. (Version: " + version + ", Len: " + length + ")");
 
@@ -272,10 +284,12 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLCertificate extends SSLProtocolMessage {
+
         public static final byte CERTIFICATE = 11;
 
         byte[] cert = null;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, CERTIFICATE))
                 return false;
@@ -290,6 +304,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "Certificate. (Bytes: " + cert.length + ")");
             // printHexData(indent + 2, "Certificate", cert);
@@ -301,7 +316,8 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
                 while (bais.available() > 0) {
                     byte[] ba = new byte[3];
                     bais.read(ba, 0, 3); // Need to eat up these 3 bytes.
-                    /*int len =*/ int24(ba, 0);
+                    /*int len =*/
+                    int24(ba, 0);
                     X509Certificate c = (X509Certificate) cf.generateCertificate(bais);
                     System.out.println(isa[indent] + "Certificate[" + index + "]:");
                     System.out.println(isa[indent] + "  Data:");
@@ -324,8 +340,10 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ServerHelloDone extends SSLProtocolMessage {
+
         public static final byte SERVER_HELLO_DONE = 14;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, SERVER_HELLO_DONE))
                 return false;
@@ -333,16 +351,19 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "ServerHelloDone.");
         }
     }
 
     public static class ClientKeyExchange extends SSLProtocolMessage {
+
         public static final byte CLIENT_KEY_EXCHANGE = 16;
 
         byte[] data = null;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, CLIENT_KEY_EXCHANGE))
                 return false;
@@ -354,6 +375,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "ClientKeyExchange.");
             printHexData(indent + 2, "Client Key Exchange Data", data);
@@ -361,10 +383,12 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class ServerKeyExchange extends SSLProtocolMessage {
+
         public static final byte SERVER_KEY_EXCHANGE = 12;
 
         byte[] data = null;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, SERVER_KEY_EXCHANGE))
                 return false;
@@ -376,6 +400,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "ServerKeyExchange.");
             printHexData(indent + 2, "Server Key Excahnge Data", data);
@@ -383,6 +408,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class Finished extends SSLProtocolMessage {
+
         public static final byte FINISHED = 20;
 
         byte[] verifyData = null;
@@ -391,6 +417,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
 
         byte[] shaHash = null;
 
+        @Override
         public boolean parse(byte[] buf, int offset, int n) {
             if (!matchHeader(buf, offset, n, FINISHED))
                 return false;
@@ -403,6 +430,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
             return true;
         }
 
+        @Override
         public void print(int indent) {
             System.out.println(isa[indent] + "Finished.");
             printHexData(indent + 2, "Verify Data", verifyData);
@@ -410,8 +438,9 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
     }
 
     public static class SSLProtocolMessageFactory {
+
         private static final SSLProtocolMessage[] msgs = new SSLProtocolMessage[] {
-            new ServerHello(), new SSLCertificate(), new ServerHelloDone(), new ServerKeyExchange(), new ClientKeyExchange(), new Finished(), new SSLRecordHeader()
+                new ServerHello(), new SSLCertificate(), new ServerHelloDone(), new ServerKeyExchange(), new ClientKeyExchange(), new Finished(), new SSLRecordHeader()
         };
 
         public static SSLProtocolMessage createProtocolMessage(byte[] buf, int offset, int n) {
@@ -429,6 +458,7 @@ public class SSLAnalyzer implements ProtocolAnalyzer {
         this.label = label;
     }
 
+    @Override
     public void analyze(JSTKBuffer buf) {
         int n = buf.getNBytes();
         byte[] tbuf = buf.getByteArray();

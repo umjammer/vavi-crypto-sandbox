@@ -28,7 +28,9 @@ import org.jstk.JSTKResult;
 
 
 public class BenchCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("cmdfile", "bin/ctbench.cmds");
         defaults.put("runcount", "1");
@@ -37,10 +39,12 @@ public class BenchCommand extends JSTKCommandAdapter {
         defaults.put("minimize_et", "true");
     }
 
+    @Override
     public String briefDescription() {
         return "benchmarks crypttool commands";
     }
 
+    @Override
     public String optionsDescription() {
         return """
                   -cmdfile <file>     : read commands from this file.
@@ -51,16 +55,18 @@ public class BenchCommand extends JSTKCommandAdapter {
                 """;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-provider <provider>] [-info] [-props] [-csinfo]"
+                "[-provider <provider>] [-info] [-props] [-csinfo]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-cmdfile test.cmds", "-warmuptime 900 -minimize_et", "-runcount 5 -loopcount 5"
+                "", "-cmdfile test.cmds", "-warmuptime 900 -minimize_et", "-runcount 5 -loopcount 5"
         };
         return uses;
     }
@@ -104,6 +110,7 @@ public class BenchCommand extends JSTKCommandAdapter {
         return cmds;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -159,7 +166,8 @@ public class BenchCommand extends JSTKCommandAdapter {
             System.out.println("Caliberating ... ");
             for (int i = 0; i < cmds.length; i++) {
                 long st = System.currentTimeMillis();
-                /*JSTKResult res = (JSTKResult)*/ cmds[i].execute(optsArray[i]);
+                /*JSTKResult res = (JSTKResult)*/
+                cmds[i].execute(optsArray[i]);
                 cmdExecTimeArray[i] = System.currentTimeMillis() - st;
                 System.out.println("Execution Time[" + i + "]: " + cmdExecTimeArray[i] + " milli secs.");
             }

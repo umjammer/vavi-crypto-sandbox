@@ -23,42 +23,49 @@ import org.jstk.JSTKUtil;
 
 
 public class DigestCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("algorithm", "SHA");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "creates or verifies message digest";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -verify             : match the digest of the infile with given digest.\n" + "  -infile <infile>    : message file.\n" + "  -mdfile <mdfile>    : message digest file.\n" + "  -mdbytes <mdbytes>  : message digest bytes in hexadecimal.\n" + "  -algorithm <alg>    : algorithm for message digest computation.[" + defaults.get("algorithm") + "]\n" + "  -provider <provider>: provider name for MessageDigest.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-infile <infile> [-mdfile <mdfile>]\n" + "\t[-algorithm <alg>] [-provider <provider>]", "-verify -infile <infile> (-mdfile <dfile> | -mdbytes\n" + "\t<mdbytes>) [-algorithm <alg>] [-provider <provider>]"
+                "-infile <infile> [-mdfile <mdfile>]\n" + "\t[-algorithm <alg>] [-provider <provider>]", "-verify -infile <infile> (-mdfile <dfile> | -mdbytes\n" + "\t<mdbytes>) [-algorithm <alg>] [-provider <provider>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-infile test.txt", "-infile test.txt -mdfile test.md", "-verify -infile test.txt -mdfile test.md", "-verify -infile test.txt -mdbytes <...>"
+                "-infile test.txt", "-infile test.txt -mdfile test.md", "-verify -infile test.txt -mdfile test.md", "-verify -infile test.txt -mdbytes <...>"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
 
             String providerName = args.get("provider");
             String algorithm = args.get("algorithm");
-            boolean verify = Boolean.valueOf(args.get("verify"));
+            boolean verify = Boolean.parseBoolean(args.get("verify"));
 //            boolean stream = Boolean.valueOf(args.get("stream")).booleanValue();
             String mdString = args.get("mdbytes");
             String infile = args.get("infile");
@@ -83,7 +90,7 @@ public class DigestCommand extends JSTKCommandAdapter {
                 }
             }
 
-            MessageDigest md = null;
+            MessageDigest md;
             if (providerName != null)
                 md = MessageDigest.getInstance(algorithm, providerName);
             else

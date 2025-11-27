@@ -158,7 +158,7 @@ public abstract class ASN1Type {
     }
 
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
-        logger.log(Level.TRACE,  getClass().getName() + ": decode");
+        logger.log(Level.TRACE, getClass().getName() + ": decode");
         boolean processEvent = true;
         int event = parser.next();
         length = parser.getLength();
@@ -177,7 +177,7 @@ public abstract class ASN1Type {
         consMask = parser.getConsMask();
         if (processEvent)
             value = parser.getContent();
-        logger.log(Level.TRACE,  getClass().getName() + ": decode");
+        logger.log(Level.TRACE, getClass().getName() + ": decode");
     }
 
     protected byte[] encodeLen(int len) {
@@ -223,9 +223,9 @@ public abstract class ASN1Type {
     }
 
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         byte[] bytes = encode1();
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 }

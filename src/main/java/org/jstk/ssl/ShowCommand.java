@@ -12,7 +12,6 @@ package org.jstk.ssl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.SSLSocketFactory;
 
 import org.jstk.JSTKArgs;
@@ -23,39 +22,46 @@ import org.jstk.JSTKResult;
 
 
 public class ShowCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
 
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "displays the SSL related information";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cs            : Displays the supported and enabled cipher suites.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-cs"
+                "-cs"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-cs"
+                "-cs"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
-            boolean cipherSuite = Boolean.valueOf(args.get("cs"));
+            boolean cipherSuite = Boolean.parseBoolean(args.get("cs"));
             StringBuilder sb = new StringBuilder();
 
             if (cipherSuite) {

@@ -30,11 +30,13 @@ public final class MSKeyManagerFactoryImpl extends KeyManagerFactorySpi {
      * @param ks use windows key store, set null
      * @param passphrase use windows key, set null
      */
+    @Override
     protected void engineInit(KeyStore ks, char[] passphrase) throws KeyStoreException {
         keyManager = new MSKeyManagerImpl(null, null);
     }
 
     /** Returns one trust manager for each type of trust material. */
+    @Override
     protected KeyManager[] engineGetKeyManagers() {
         return new KeyManager[] {
             keyManager
@@ -42,6 +44,7 @@ public final class MSKeyManagerFactoryImpl extends KeyManagerFactorySpi {
     }
 
     /** Initializes this factory with a source of provider-specific key material. */
+    @Override
     protected void engineInit(ManagerFactoryParameters spec) {
     }
 }

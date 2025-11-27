@@ -32,6 +32,7 @@ public class ASN1Explicit extends ASN1Type {
         consMask = CONSTRUCTED;
     }
 
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
         int event = parser.next();
 
@@ -46,14 +47,15 @@ public class ASN1Explicit extends ASN1Type {
         }
     }
 
+    @Override
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         if (instance == null)
             setValue(null);
         else
             setValue(instance.encode());
         byte[] bytes = encode1();
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 

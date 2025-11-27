@@ -23,7 +23,9 @@ import org.jstk.JSTKUtil;
 
 
 public class GenSRCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("algorithm", "SHA1PRNG");
         defaults.put("size", "16");
@@ -31,10 +33,12 @@ public class GenSRCommand extends JSTKCommandAdapter {
         defaults.put("num", "1");
     }
 
+    @Override
     public String briefDescription() {
         return "generates a secret key ( for symmetric algorithms )";
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
                 """
@@ -45,17 +49,20 @@ public class GenSRCommand extends JSTKCommandAdapter {
         return forms;
     }
 
+    @Override
     public String optionsDescription() {
         return "  -algorithm <alg>    : Algorithm for secure random generator.[" + defaults.get("algorithm") + "]\n" + "  -size <size>        : no. of random bytes to be generated.[" + defaults.get("size") + "]\n" + "  -seed <seed>        : seed to the random no. generator ( a long ).[" + defaults.get("seed") + "]\n" + "  -num <num>          : how many random nos. to generate.[" + defaults.get("num") + "]\n" + "  -provider <provider>: provider name for SecureRandom.\n";
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-size 20", "-seed 9876543210", "-num 10"
+                "", "-size 20", "-seed 9876543210", "-num 10"
         };
         return uses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         StringBuilder sb = new StringBuilder();
         try {
@@ -69,7 +76,7 @@ public class GenSRCommand extends JSTKCommandAdapter {
             String numString = args.get("num");
             int num = Integer.parseInt(numString);
 
-            SecureRandom sr = null;
+            SecureRandom sr;
             if (providerName != null) {
                 sr = SecureRandom.getInstance(algorithm, providerName);
             } else {

@@ -11,7 +11,6 @@
 package org.jstk.crypt;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.jstk.JSTKCommand;
@@ -20,7 +19,9 @@ import org.jstk.JSTKResult;
 
 
 public class CryptTool {
+
     static final Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
+
     static {
         cmds.put("listp", new ListPCommand());
         cmds.put("genk", new GenKCommand());
@@ -120,7 +121,7 @@ public class CryptTool {
         }
 
         opts.parse(args, 1);
-        boolean showtime = Boolean.valueOf(opts.get("showtime"));
+        boolean showtime = Boolean.parseBoolean(opts.get("showtime"));
         long ts = 0, tt = 0;
         if (showtime)
             ts = System.currentTimeMillis();

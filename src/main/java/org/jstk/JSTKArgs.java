@@ -13,13 +13,8 @@ package org.jstk;
 import java.util.Map;
 
 
-/**
- * JSTKArgs.
- *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00 050318 nsano initial version <br>
- */
 public interface JSTKArgs {
+
     /** */
     void setDefaults(Map<String, String> defaults);
 

@@ -21,7 +21,6 @@ import java.security.cert.Certificate;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.crypto.SecretKey;
 
 import org.jstk.JSTKArgs;
@@ -32,9 +31,11 @@ import org.jstk.pem.PEMData;
 
 
 public class ExportCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
 
     private boolean pkcs12Output = false;
+
     static {
         defaults.put("kstype", "JKS");
         defaults.put("keystore", "my.keystore");
@@ -42,15 +43,18 @@ public class ExportCommand extends JSTKCommandAdapter {
         defaults.put("outform", "PEM");
     }
 
+    @Override
     public String briefDescription() {
         return "exports key or cert entries from keystore to files";
     }
 
+    @Override
     public String optionsDescription() {
         return "  -keystore <keystore>: the keystore.[" + defaults.get("keystore") + "]\n" + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <type>        : the keystore type.[" + defaults.get("type") + "]\n" + "  -alias <alias>       : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>   : Password for key in the keystore.[" + defaults.get("keypass") + "]\n"
-               + "  -outform <outform>   : Format of exported data(DER|PEM|PKCS12).[" + defaults.get("keypass") + "]\n" + "  -provider <provider> : provider name for KeyStore.\n";
+                + "  -outform <outform>   : Format of exported data(DER|PEM|PKCS12).[" + defaults.get("keypass") + "]\n" + "  -provider <provider> : provider name for KeyStore.\n";
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
                 """
@@ -61,9 +65,10 @@ public class ExportCommand extends JSTKCommandAdapter {
         return forms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-keystore test.ks -storepass testpass", "-alias test.key -outform PKCS12"
+                "", "-keystore test.ks -storepass testpass", "-alias test.key -outform PKCS12"
         };
         return uses;
     }
@@ -138,7 +143,7 @@ public class ExportCommand extends JSTKCommandAdapter {
     }
 
     // This function relies on openssl. Not pure Java.
-    private void pem2pkcs12(String pemfile, String p12file, String keypass, StringBuffer sb) {
+    private static void pem2pkcs12(String pemfile, String p12file, String keypass, StringBuffer sb) {
         // Check if openssl is present.
         if (!opensslPresent()) {
             sb.append("*** ERROR *** Couldn't find openssl. Cannot convert PEM to PKCS12.");
@@ -170,6 +175,7 @@ public class ExportCommand extends JSTKCommandAdapter {
         }
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         StringBuilder sb = new StringBuilder();
         try {

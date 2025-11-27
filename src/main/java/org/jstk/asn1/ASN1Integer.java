@@ -14,6 +14,7 @@ import java.math.BigInteger;
 
 
 public class ASN1Integer extends ASN1Type {
+
     public ASN1Integer() {
         super(UNIVERSAL, NONE, INTEGER, INTEGER);
     }
@@ -43,7 +44,7 @@ public class ASN1Integer extends ASN1Type {
 
     public static void main(String[] args) {
         byte[] bytes = {
-            (byte) 0x00, 0x01
+                (byte) 0x00, 0x01
         };
         ASN1Integer ai = new ASN1Integer();
         ai.setValue(bytes);

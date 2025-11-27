@@ -11,6 +11,7 @@
 package org.jstk.cert.ca;
 
 public class CADatabaseException extends Exception {
+
     public CADatabaseException() {
         super();
     }

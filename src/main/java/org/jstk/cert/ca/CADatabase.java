@@ -10,17 +10,18 @@
 
 package org.jstk.cert.ca;
 
-import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
-import java.security.cert.CertPath;
-import java.security.cert.CertificateFactory;
-import java.security.PrivateKey;
-import java.math.BigInteger;
-import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.math.BigInteger;
+import java.security.PrivateKey;
+import java.security.cert.CertPath;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 
 public class CADatabase {
+
     public final static String recordSeparator = "|";
 
     public final static String escapedRecordSeparator = "\\|";

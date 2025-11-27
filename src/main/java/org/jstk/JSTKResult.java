@@ -10,13 +10,9 @@
 
 package org.jstk;
 
-/**
- * JSTKResult.
- *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00 050318 nsano initial version <br>
- */
+
 public class JSTKResult {
+
     /** */
     protected Object retval;
 

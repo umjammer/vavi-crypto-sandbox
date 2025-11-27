@@ -17,12 +17,14 @@ import java.io.InputStreamReader;
 
 
 public class HttpAnalyzer implements ProtocolAnalyzer {
-    private String label = null;
+
+    private String label;
 
     public HttpAnalyzer(String label) {
         this.label = label;
     }
 
+    @Override
     public void analyze(JSTKBuffer buf) {
         System.out.println("[HTTP] C " + label + " S (" + buf.getNBytes() + " bytes)");
         try {

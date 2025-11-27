@@ -23,6 +23,7 @@ import org.jstk.asn1.ASN1Seq;
  * OPTIONAL }
  */
 public class TBSCertificate extends ASN1Seq {
+
     private final Version version = new Version(CONTEXT, EXPLICIT, 0);
 
     private final ASN1Integer serialNumber = new ASN1Integer();

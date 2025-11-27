@@ -10,11 +10,15 @@
 
 package org.jstk.pki;
 
+import java.io.IOException;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.math.BigInteger;
-import java.io.IOException;
-import org.jstk.asn1.*;
+
+import org.jstk.asn1.ASN1Integer;
+import org.jstk.asn1.ASN1PullParser;
+import org.jstk.asn1.ASN1PullParserException;
+import org.jstk.asn1.ASN1Type;
 
 import static java.lang.System.getLogger;
 
@@ -38,6 +42,7 @@ public class Version extends ASN1Type {
         return version;
     }
 
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
         int event = parser.next();
 
@@ -48,8 +53,9 @@ public class Version extends ASN1Type {
         version.decode(parser);
     }
 
+    @Override
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         byte[] bytes = version.encode();
         if (bytes != null) {
             value = bytes;
@@ -59,7 +65,7 @@ public class Version extends ASN1Type {
         } else {
             logger.log(Level.DEBUG, "default version NOT encoded");
         }
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 

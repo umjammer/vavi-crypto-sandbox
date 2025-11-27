@@ -90,6 +90,7 @@ public class DialogCallbackHandler implements CallbackHandler {
      * @throws UnsupportedCallbackException if the callback is not an
      *                                      instance  of NameCallback or PasswordCallback
      */
+    @Override
     public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
         // Collect messages to display in the dialog
         List<Object> messages = new ArrayList<>(3);

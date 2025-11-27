@@ -16,6 +16,7 @@ import java.util.Set;
 
 
 public class JSTKRole implements java.io.Serializable {
+
     String roleName;
 
     String roleDesc;

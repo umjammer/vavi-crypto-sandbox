@@ -12,62 +12,72 @@ package org.jstk;
 
 public abstract class JSTKCommandAdapter implements JSTKCommand {
 
-    protected final String briefDesc = "Unspecified";
+    protected static final String briefDesc = "Unspecified";
 
-    protected final String optionsDesc = "Unspecified";
+    protected static final String optionsDesc = "Unspecified";
 
     protected final String[] sampleUses = {
-        "Unspecified"
+            "Unspecified"
     };
 
     protected final String[] useForms = {
-        "Unspecified"
+            "Unspecified"
     };
 
     protected JSTKResult result;
 
     protected JSTKPerfData perfData = new JSTKPerfData();
 
-    protected final String resultDesc = "Failed";
+    protected static final String resultDesc = "Failed";
 
-    protected final boolean success = false;
+    protected static final boolean success = false;
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         return null;
     }
 
+    @Override
     public String briefDescription() {
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         return optionsDesc;
     }
 
+    @Override
     public String[] sampleUses() {
         return sampleUses;
     }
 
+    @Override
     public String[] useForms() {
         return useForms;
     }
 
+    @Override
     public String getResultDescription() {
         return resultDesc;
     }
 
+    @Override
     public boolean succeeded() {
         return success;
     }
 
+    @Override
     public boolean failed() {
         return !success;
     }
 
+    @Override
     public void setPerfData(JSTKPerfData pData) {
         perfData = pData;
     }
 
+    @Override
     public JSTKPerfData getPerfData() {
         return perfData;
     }
