@@ -22,6 +22,7 @@ import java.io.PrintStream;
  * @version 0.00 050317 nsano initial version <br>
  */
 public interface ASN1PullParser {
+
     /** */
     int ANY = 0;
 

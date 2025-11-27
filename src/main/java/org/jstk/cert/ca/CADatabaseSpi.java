@@ -10,13 +10,14 @@
 
 package org.jstk.cert.ca;
 
-import java.security.cert.Certificate;
-import java.security.cert.CertPath;
-import java.security.PrivateKey;
 import java.math.BigInteger;
+import java.security.PrivateKey;
+import java.security.cert.CertPath;
+import java.security.cert.Certificate;
 
 
 public interface CADatabaseSpi {
+
     IssuedCerts getIssuedCerts();
 
     RevokedCerts getRevokedCerts();

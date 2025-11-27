@@ -85,7 +85,7 @@ public class OidMap {
 
     /** */
     public static void main(String[] args) {
-        System.out.println("id2NameMap::" + id2NameMap.toString());
-        System.out.println("name2IdMap::" + name2IdMap.toString());
+        System.out.println("id2NameMap::" + id2NameMap);
+        System.out.println("name2IdMap::" + name2IdMap);
     }
 }

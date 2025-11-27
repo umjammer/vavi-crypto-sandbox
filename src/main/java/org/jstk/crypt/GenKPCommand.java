@@ -25,7 +25,9 @@ import org.jstk.JSTKResult;
 
 
 public class GenKPCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("algorithm", "DSA");
         defaults.put("keysize", "512");
@@ -33,28 +35,33 @@ public class GenKPCommand extends JSTKCommandAdapter {
         defaults.put("file", "my.keypair");
     }
 
+    @Override
     public String briefDescription() {
         return "generates a key-pair ( for asymmetric algorithms )";
     }
 
+    @Override
     public String optionsDescription() {
         return "  -algorithm <alg>    : Algorithm for secret key generator.[" + defaults.get("algorithm") + "]\n" + "  -keysize <keysize>  : Key size (in bits).[" + defaults.get("keysize") + "]\n" + "  -action <action>    : what to do with the key?(print|save|discard).[" + defaults.get("action") + "]\n" + "  -file <filename>    : where to save the serialized key-pair?[" + defaults.get("file") + "]\n" + "  -provider <provider>: provider name for KeyPairGenerator.\n";
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
-            "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]"
+                "[-algorithm <alg> -keysize <keysize>] [-action\n" + "\t(print|discard)] [-provider <provider>]", "[-algorithm <alg> -keysize <keysize>] [-action save\n" + "\t[-file <filename>]] [-provider <provider>]"
         };
         return forms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-algorithm DESede action -print", "-action save -file test1.key"
+                "", "-algorithm DESede action -print", "-action save -file test1.key"
         };
         return uses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

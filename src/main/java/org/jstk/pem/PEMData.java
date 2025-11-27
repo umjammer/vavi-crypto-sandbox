@@ -10,17 +10,18 @@
 
 package org.jstk.pem;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 
 public class PEMData {
+
     private String preEB = null;
 
     private String postEB = null;
@@ -42,7 +43,7 @@ public class PEMData {
     }
 
     public PEMData(BufferedReader reader) throws IOException,
-                                         InvalidPEMFormatException {
+            InvalidPEMFormatException {
         String curLine;
         int state = BEGIN;
         StringBuilder sb = new StringBuilder();

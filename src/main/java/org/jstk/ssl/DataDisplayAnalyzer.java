@@ -14,12 +14,14 @@ import org.jstk.JSTKUtil;
 
 
 public class DataDisplayAnalyzer implements ProtocolAnalyzer {
-    private String label = null;
+
+    private String label;
 
     public DataDisplayAnalyzer(String label) {
         this.label = label;
     }
 
+    @Override
     public void analyze(JSTKBuffer buf) {
         System.out.println("[TCP] C " + label + " S (" + buf.getNBytes() + " bytes)");
         System.out.print(JSTKUtil.readableFromBytes(buf.getByteArray(), 0, buf.getNBytes()));

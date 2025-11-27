@@ -14,7 +14,6 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherSpi;
@@ -192,12 +191,15 @@ public final class CamelliaCipher extends CipherSpi {
         public CamelliaKey(String key) {
             this.key = key;
         }
+        @Override
         public byte[] getEncoded() {
             return key.getBytes(StandardCharsets.UTF_8);
         }
+        @Override
         public String getAlgorithm() {
             return "Camellia";
         }
+        @Override
         public String getFormat() {
             return "B]";
         }
@@ -207,7 +209,7 @@ public final class CamelliaCipher extends CipherSpi {
     public static class CamelliaKeySpec extends SecretKeySpec {
         /** 16 bytes (128 bit) key */
         final String key;
-        /** @param key 16 bytes using UTF-8 encoding */
+        /** @param key camellia key */
         public CamelliaKeySpec(String key) {
             super(key.getBytes(StandardCharsets.UTF_8), "Camellia");
             this.key = key;

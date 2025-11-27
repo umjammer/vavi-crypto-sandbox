@@ -14,6 +14,7 @@ import java.security.Principal;
 
 
 public class JSTKUserPrincipal implements Principal {
+
     final String loginName;
 
     final String userName;
@@ -30,6 +31,7 @@ public class JSTKUserPrincipal implements Principal {
         return false;
     }
 
+    @Override
     public String getName() {
         return loginName;
     }

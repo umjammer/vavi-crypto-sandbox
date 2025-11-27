@@ -51,7 +51,7 @@ public class FileBasedCADatabase implements CADatabaseSpi {
     private Certificate caCert;
     private CertPath caCertPath;
     private File caDir;
-//    private boolean initialized = false;
+    //    private boolean initialized = false;
     private final String password;
     private String storeType;
 
@@ -176,30 +176,36 @@ public class FileBasedCADatabase implements CADatabaseSpi {
         }
     }
 
+    @Override
     public IssuedCerts getIssuedCerts() {
         String issuedCertsFileName = caDirName + File.separator + ISSUED_CERTS;
         String issuedCertsDirName = caDirName + File.separator + ISSUED_DIR;
         return new FileBasedIssuedCerts(issuedCertsFileName, issuedCertsDirName);
     }
 
+    @Override
     public RevokedCerts getRevokedCerts() {
         String revokedCertsFileName = caDirName + File.separator + REVOKED_CERTS;
         String revokedCertsDirName = caDirName + File.separator + REVOKED_DIR;
         return new FileBasedRevokedCerts(revokedCertsFileName, revokedCertsDirName);
     }
 
+    @Override
     public Certificate getCACert() {
         return caCert;
     }
 
+    @Override
     public CertPath getCACertPath() {
         return caCertPath;
     }
 
+    @Override
     public PrivateKey getCAPrivateKey() {
         return caPrivateKey;
     }
 
+    @Override
     public synchronized BigInteger nextSerialNumber() throws CADatabaseException {
         try {
             BufferedReader br = new BufferedReader(new FileReader(serialNoFileName));

@@ -10,10 +10,16 @@
 
 package org.jstk.uam;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 
 public class DefaultUAMPersistenceManager implements UAMPersistenceManagerIntf {
+
     private UserAccountManager uam;
 
     private final String filename;
@@ -34,6 +40,7 @@ public class DefaultUAMPersistenceManager implements UAMPersistenceManagerIntf {
         }
     }
 
+    @Override
     public UserAccountManager load() throws Exception {
         ObjectInputStream ois = null;
         uam = null;
@@ -49,30 +56,37 @@ public class DefaultUAMPersistenceManager implements UAMPersistenceManagerIntf {
         return uam;
     }
 
+    @Override
     public void addUser(String loginName, String userName, String passWord) {
         save();
     }
 
+    @Override
     public void changePassWord(String loginName, String passWord) {
         save();
     }
 
+    @Override
     public void remUser(String loginName) {
         save();
     }
 
+    @Override
     public void addRole(String roleName, String desc) {
         save();
     }
 
+    @Override
     public void remRole(String roleName) {
         save();
     }
 
+    @Override
     public void addRoleToUser(String roleName, String loginName) {
         save();
     }
 
+    @Override
     public void remRoleFromUser(String roleName, String loginName) {
         save();
     }

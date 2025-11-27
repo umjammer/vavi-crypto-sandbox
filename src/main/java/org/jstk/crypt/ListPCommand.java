@@ -23,10 +23,13 @@ import org.jstk.JSTKResult;
 
 
 public class ListPCommand extends JSTKCommandAdapter {
+
+    @Override
     public String briefDescription() {
         return "lists cryptographic providers and services offered";
     }
 
+    @Override
     public String optionsDescription() {
         return """
                   -provider <provider>: limit to this provider name.
@@ -36,16 +39,18 @@ public class ListPCommand extends JSTKCommandAdapter {
                 """;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-provider <provider>] [-info] [-props] [-csinfo]"
+                "[-provider <provider>] [-info] [-props] [-csinfo]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "", "-info", "-csinfo", "-props", "-info -props -csinfo", "-provider SunJCE -props", "-provider SunJCE -csinfo"
+                "", "-info", "-csinfo", "-props", "-info -props -csinfo", "-provider SunJCE -props", "-provider SunJCE -csinfo"
         };
         return uses;
     }
@@ -121,11 +126,12 @@ public class ListPCommand extends JSTKCommandAdapter {
         }
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         String providerName = args.get("provider");
-        boolean info = Boolean.valueOf(args.get("info"));
-        boolean props = Boolean.valueOf(args.get("props"));
-        boolean csinfo = Boolean.valueOf(args.get("csinfo"));
+        boolean info = Boolean.parseBoolean(args.get("info"));
+        boolean props = Boolean.parseBoolean(args.get("props"));
+        boolean csinfo = Boolean.parseBoolean(args.get("csinfo"));
 
         try {
             SecurityInfo si = new SecurityInfo();

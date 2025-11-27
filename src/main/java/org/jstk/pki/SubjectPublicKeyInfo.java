@@ -18,6 +18,7 @@ import org.jstk.asn1.ASN1Seq;
  * SubjectPublicKeyInfo ::= SEQUENCE { algorithm AlgorithmIdentifier, subjectPublicKey BIT STRING }
  */
 public class SubjectPublicKeyInfo extends ASN1Seq {
+
     private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
 
     private final ASN1BitString subjectPublicKey = new ASN1BitString();

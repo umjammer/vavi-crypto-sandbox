@@ -19,7 +19,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -34,7 +33,7 @@ import vavi.util.StringUtil;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 031205 nsano initial version <br>
  */
-public class t13 {
+public class SslTest {
 
     /**
      * The program entry.
@@ -119,17 +118,20 @@ Debug.println(chain);
         /**
          * 証明書を返す
          */
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             return null;
         }
 
         /** */
+        @Override
         public void checkClientTrusted(X509Certificate[] chain,
                                        String authType) {
 Debug.println(Arrays.toString(chain) + ", " + authType);
         }
 
         /** */
+        @Override
         public void checkServerTrusted(X509Certificate[] chain,
                                        String authType) {
 Debug.println(authType);

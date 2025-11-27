@@ -56,8 +56,8 @@ class CDPParser {
     /** */
     public static String[] parseCDP(byte[] cdpBlob) {
 //logger.log(Level.TRACE, cdpBlob.length + " bytes:\n" + StringUtil.getDump(cdpBlob));
-        byte[] seq1 = null;
-        byte[] seq2 = null;
+        byte[] seq1;
+        byte[] seq2;
         List<String> urlList = new ArrayList<>();
 
         // check to make sure this is a byte array

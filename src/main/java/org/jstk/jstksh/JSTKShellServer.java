@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
-
 import javax.security.auth.Subject;
 
 import org.jstk.JSTKAbstractTool;
@@ -51,9 +50,10 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     private static final Map<String, SessionInfo> sessionTable = new HashMap<>();
 
     static class SessionInfo {
-        String homeDir = null;
 
-        String curDir = null;
+        String homeDir;
+
+        String curDir;
 
         public SessionInfo() {
             homeDir = System.getProperty("user.dir");
@@ -62,6 +62,8 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class EchoCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             StringBuilder msg = new StringBuilder();
             for (int i = 0; i < args.getNum(); i++) {
@@ -72,12 +74,16 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class QuitCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             throw new JSTKQuitException();
         }
     }
 
     static class PWDCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             return new JSTKResult(null, true, Objects.requireNonNullElse(curDir, "Session Info. missing or invalid."));
@@ -85,6 +91,8 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class LSCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             if (curDir == null)
@@ -97,13 +105,15 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             String[] fnames = file.list();
             StringBuilder sb = new StringBuilder();
             for (String fname : fnames) {
-                sb.append(fname + "\n");
+                sb.append(fname).append("\n");
             }
             return new JSTKResult(null, true, sb.toString());
         }
     }
 
     static class CDCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             String homeDir = getCurDir(args);
@@ -130,12 +140,14 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class MkdirCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             if (curDir == null)
                 return new JSTKResult(null, true, "Session Info. missing or invalid.");
 
-            String targetDir = null;
+            String targetDir;
             if (args.getNum() > 1)
                 return new JSTKResult(null, false, "Specify only one directory name.");
             else if (args.getNum() == 1)
@@ -143,7 +155,7 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             else
                 return new JSTKResult(null, false, "No directory name specified.");
 
-            boolean result = false;
+            boolean result;
             try {
                 File file = createFile(targetDir, curDir);
                 if (file.exists())
@@ -162,12 +174,14 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class RMCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             if (curDir == null)
                 return new JSTKResult(null, true, "Session Info. missing or invalid.");
 
-            String targetFile = null;
+            String targetFile;
             if (args.getNum() > 1)
                 return new JSTKResult(null, false, "Specify only one target.");
             else if (args.getNum() == 1)
@@ -175,7 +189,7 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
             else
                 return new JSTKResult(null, false, "No target specified.");
 
-            boolean result = false;
+            boolean result;
             try {
                 File file = createFile(targetFile, curDir);
                 if (!file.exists())
@@ -194,12 +208,14 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class CatCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             if (curDir == null)
                 return new JSTKResult(null, true, "Session Info. missing or invalid.");
 
-            String targetFile = null;
+            String targetFile;
             if (args.getNum() > 1)
                 return new JSTKResult(null, false, "Specify only one target.");
             else if (args.getNum() == 1)
@@ -226,13 +242,15 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class CpCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String curDir = getCurDir(args);
             if (curDir == null)
                 return new JSTKResult(null, true, "Session Info. missing or invalid.");
 
-            String srcFile = null;
-            String dstFile = null;
+            String srcFile;
+            String dstFile;
             if (args.getNum() > 2)
                 return new JSTKResult(null, false, "Too many arguments.");
             else if (args.getNum() == 2) {
@@ -267,6 +285,8 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class ShowCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             String target = "pdomain";
             if (args.getNum() > 0)
@@ -310,6 +330,8 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class WhoAmICommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             AccessControlContext acc = AccessController.getContext();
             Subject sub = Subject.getSubject(acc);
@@ -323,6 +345,8 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     static class TimeCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
                 int loopcount = 1000;
@@ -401,6 +425,7 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
     }
 
     public static final Logger logger = Logger.getLogger("org.jstk.access");
+
     static {
         cmds.put("echo", new EchoCommand());
         cmds.put("pwd", new PWDCommand());
@@ -422,19 +447,23 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
 
     }
 
+    @Override
     public String progName() {
         String progName = "java org.jstk.access.JSTKShell";
         return progName;
     }
 
+    @Override
     public String briefDescription() {
         return "a minimal shell to demostrate Java Access Control features";
     }
 
+    @Override
     public void setSubject(Subject sub) {
         // Do nothing.
     }
 
+    @Override
     public String createSession() throws Exception {
         String sessId = "sess_" + (++curId);
         SessionInfo sessInfo = new SessionInfo();
@@ -442,10 +471,12 @@ public class JSTKShellServer extends JSTKAbstractTool implements JSTKShell {
         return sessId;
     }
 
+    @Override
     public void destroySession(String sessId) throws Exception {
         sessionTable.remove(sessId);
     }
 
+    @Override
     public String execCommand(String[] args) throws Exception {
         try {
             JSTKOptions opts = new JSTKOptions();

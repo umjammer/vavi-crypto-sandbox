@@ -189,13 +189,13 @@ logger.log(DEBUG, "D: in[%02d]=%08x, out[%02d]=%02x".formatted(inputOffset + i +
         public EnigmaKey(String key) {
             this.key = key;
         }
-        public byte[] getEncoded() {
+        @Override public byte[] getEncoded() {
             return key.getBytes(StandardCharsets.UTF_8);
         }
-        public String getAlgorithm() {
+        @Override public String getAlgorithm() {
             return "Enigma";
         }
-        public String getFormat() {
+        @Override public String getFormat() {
             return "B]";
         }
     }

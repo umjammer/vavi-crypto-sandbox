@@ -12,14 +12,13 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 
+import vavi.util.Debug;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import vavi.util.Debug;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CamelliaTest {
 
     static {
+        // this needs to bypass security check using instrumentation
         int r = Security.addProvider(new CamelliaCipherProvider());
 Debug.println("pos: " + r);
 Arrays.asList(Security.getProviders()).forEach(System.err::println);
@@ -125,7 +125,7 @@ System.err.println(new String(decrypted, StandardCharsets.UTF_8));
 
     @Test
     @DisplayName("jce")
-//    @Disabled("need to be certified by oracle")
+//    @Disabled("need to be certified by oracle") // bypass using instrumentation
     public void test02() throws Exception {
         Cipher cipher = Cipher.getInstance("Camellia", "Camellia");
         KeySpec keySpec = new CamelliaCipher.CamelliaKeySpec("sanonaohide01234");
@@ -149,7 +149,7 @@ System.err.println(new String(decrypted, StandardCharsets.UTF_8));
      * e.g.
      * -Djava.security.policy=target/test-classes/camellia.policy
      * </pre>
-     * <code>java.security.policy</code> MacOSX 1.8 Oracle: はじめからOK <- TODO 2022-02-25 what do you mean?
+     * <code>java.security.policy</code> MacOSX 1.8 Oracle: security policy is OK by default
      */
     public static void main(String[] args) throws Exception {
         Cipher cipher = Cipher.getInstance("Camellia", "Camellia");

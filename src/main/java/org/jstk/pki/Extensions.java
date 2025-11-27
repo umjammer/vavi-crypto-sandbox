@@ -34,6 +34,7 @@ public class Extensions extends ASN1Type {
     private final ASN1Seq extensions = new ASN1Seq();
 
     static class Extension extends ASN1Seq {
+
         final ASN1Oid extnID = new ASN1Oid();
 
         // ASN1Boolean critical = new ASN1Boolean();
@@ -56,6 +57,7 @@ public class Extensions extends ASN1Type {
         consMask = CONSTRUCTED;
     }
 
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
         int event = parser.next();
 
@@ -74,8 +76,9 @@ public class Extensions extends ASN1Type {
         }
     }
 
+    @Override
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         byte[] bytes = null;
         if (extensions.size() > 0) {
             bytes = extensions.encode();
@@ -86,7 +89,7 @@ public class Extensions extends ASN1Type {
         } else {
             logger.log(Level.DEBUG, "extensions NOT encoded");
         }
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 

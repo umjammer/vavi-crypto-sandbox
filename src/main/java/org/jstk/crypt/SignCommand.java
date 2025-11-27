@@ -25,7 +25,9 @@ import org.jstk.JSTKUtil;
 
 
 public class SignCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("algorithm", "SHAwithDSA");
         defaults.put("keystore", "my.keystore");
@@ -34,39 +36,44 @@ public class SignCommand extends JSTKCommandAdapter {
         defaults.put("alias", "mykey");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "creates or verifies digital signature";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -verify             : verify the signature.\n" + "  -infile <infile>    : message file.\n" + "  -sigfile <sigfile>  : signature file.\n" + "  -sigbytes <sigbytes>: signature bytes in hexadecimal.\n" + "  -algorithm <alg>    : algorithm for signature generation.[" + defaults.get("algorithm") + "]\n" + "  -keyfile <keyfile>  : File having the serialized key.\n" + "  -keystore <keystore>: the keystore.[" + defaults.get("keystore") + "]\n"
-                             + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <kstype>    : the keystore type.[" + defaults.get("kstype") + "]\n" + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.\n" + "  -provider <provider>: provider name for MessageDigest.\n" + "\n"
-                             + "  <<keyinfo>> := (-keyfile <keyfile>|[-keystore <keystore>] [-storepass\n" + "      <storepass>] [-kstype <kstype>] [-alias <alias>] [-keypass <keypass>])\n";
+                + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <kstype>    : the keystore type.[" + defaults.get("kstype") + "]\n" + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.\n" + "  -provider <provider>: provider name for MessageDigest.\n" + "\n"
+                + "  <<keyinfo>> := (-keyfile <keyfile>|[-keystore <keystore>] [-storepass\n" + "      <storepass>] [-kstype <kstype>] [-alias <alias>] [-keypass <keypass>])\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-infile <infile> [-sigfile <sigfile>] <<keyinfo>>\n" + "\t[-algorithm <alg>] [-provider <provider>]", "-verify -infile <infile> (-sigfile <sigfile> | -sigbytes\n" + "\t<sigbytes>) <<keyinfo>> [-algorithm <alg>] [-provider <provider>]"
+                "-infile <infile> [-sigfile <sigfile>] <<keyinfo>>\n" + "\t[-algorithm <alg>] [-provider <provider>]", "-verify -infile <infile> (-sigfile <sigfile> | -sigbytes\n" + "\t<sigbytes>) <<keyinfo>> [-algorithm <alg>] [-provider <provider>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-infile test.txt -keyfile prv.key", "-verify -infile test.txt -keyfile prv.key -sigbytes <...>", "-infile test.txt -sigfile test.sig", "-verify -infile test.txt -sigfile test.sig"
+                "-infile test.txt -keyfile prv.key", "-verify -infile test.txt -keyfile prv.key -sigbytes <...>", "-infile test.txt -sigfile test.sig", "-verify -infile test.txt -sigfile test.sig"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
 
             String providerName = args.get("provider");
             String algorithm = args.get("algorithm");
-            boolean verify = Boolean.valueOf(args.get("verify"));
+            boolean verify = Boolean.parseBoolean(args.get("verify"));
             String sigString = args.get("sigbytes");
             String infile = args.get("infile");
             String sigfile = args.get("sigfile");

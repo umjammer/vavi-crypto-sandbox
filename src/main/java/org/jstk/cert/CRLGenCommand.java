@@ -39,32 +39,38 @@ import org.jstk.pki.TBSCertList;
 
 
 public class CRLGenCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("crlfile", "my.crl");
         defaults.put("cadir", "cadir");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "generates CRL of all the revoked certificates";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -crlfile <crlfile>  : CRL file.[" + defaults.get("crlfile") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-crlfile <crlfile>]"
+                "[-crlfile <crlfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-crlfile test.crl"
+                "", "-crlfile test.crl"
         };
         return sampleUses;
     }
@@ -88,6 +94,7 @@ public class CRLGenCommand extends JSTKCommandAdapter {
         signatureBytes.setValue(sigbytes);
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

@@ -21,7 +21,6 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.security.auth.x500.X500Principal;
 
 import org.jstk.JSTKException;
@@ -44,6 +43,7 @@ import org.jstk.pki.Validity;
 
 
 public class CertificateGenerator {
+
     public final static int DEFAULT_VALIDITY_PERIOD = 365; // No. of days.
 
     public final static String DEFAULT_SIGNATURE_ALGORITHM = "dsaWithSHA1";

@@ -64,6 +64,7 @@ final class MSKeyManagerImpl implements X509KeyManager {
      * the public key type and the list of certificate issuer authorities
      * recognized by the peer (if any).
      */
+    @Override
     public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
         String alias = null;
 
@@ -95,6 +96,7 @@ logger.log(DEBUG, "<<<< chooseClientAlias: " + alias);
      * the public key type and the list of certificate issuer authorities
      * recognized by the peer (if any).
      */
+    @Override
     public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
         String alias = null;
 
@@ -119,6 +121,7 @@ logger.log(DEBUG, "<<<< chooseServerAlias: " + alias);
     /**
      * Returns the certificate chain to validate the given alias.
      */
+    @Override
     public X509Certificate[] getCertificateChain(String alias) {
 
 logger.log(DEBUG, ">>>> getCertificateChain: entered, alias:" + alias);
@@ -149,6 +152,7 @@ logger.log(DEBUG, "<<<< getCertificateChain: certChain:" + (certChain != null ? 
      * socket given the public key type and the list of certificate issuer
      * authorities recognized by the peer (if any).
      */
+    @Override
     public String[] getClientAliases(String keyType, Principal[] issuers) {
 logger.log(DEBUG, ">>>> getClientAliases: entered: " + keyType);
         String[] validAliases = null;
@@ -181,6 +185,7 @@ logger.log(DEBUG, "<<<< aliases found: " + validAliases.length);
      * socket given the public key type and the list of certificate issuer
      * authorities recognized by the peer (if any).
      */
+    @Override
     public String[] getServerAliases(String keyType, Principal[] issuers) {
 logger.log(DEBUG, "<<<< getServerAliases: return array of aliases ");
         String[] validAliases = null;
@@ -211,6 +216,7 @@ logger.log(DEBUG, ">>>> aliases found: " + validAliases.length);
     /**
      * returns the RSA private key for the given alias
      */
+    @Override
     public PrivateKey getPrivateKey(String alias) {
         RSAPrivateKey rsaprivkey = null;
         RSAPrivateCrtKey rsaprivcrtkey = null;

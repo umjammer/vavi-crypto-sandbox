@@ -10,21 +10,22 @@
 
 package org.jstk.cert.ca;
 
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.FileReader;
 import java.io.BufferedReader;
-import java.util.Calendar;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.cert.Certificate;
-import java.util.Iterator;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
+import java.util.Iterator;
 
 
 public class FileBasedIssuedCerts implements IssuedCerts {
+
     private final String indexFileName;
 
     private final String dir;
@@ -34,6 +35,7 @@ public class FileBasedIssuedCerts implements IssuedCerts {
         this.dir = dir;
     }
 
+    @Override
     public void add(Certificate cert) throws CADatabaseException {
         X509Certificate x509Cert;
         if (cert == null)
@@ -76,11 +78,12 @@ public class FileBasedIssuedCerts implements IssuedCerts {
         }
     }
 
+    @Override
     public boolean exists(Certificate cert) throws CADatabaseException {
         try (BufferedReader br = new BufferedReader(new FileReader(indexFileName))) {
             X509Certificate x509Cert = (X509Certificate) cert;
             String serialNo = x509Cert.getSerialNumber().toString();
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 String[] records = line.split(CADatabase.escapedRecordSeparator);
                 if (serialNo.equals(records[1]))
@@ -95,6 +98,7 @@ public class FileBasedIssuedCerts implements IssuedCerts {
     }
 
     // TODO
+    @Override
     public Iterator<?> iterator() {
         return null;
     }

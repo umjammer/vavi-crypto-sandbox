@@ -11,11 +11,11 @@
 package org.jstk;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
 public abstract class JSTKAbstractTool {
+
     protected static final Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
 
     public String progName() {
@@ -70,7 +70,7 @@ public abstract class JSTKAbstractTool {
         String[] forms = cmd.useForms();
         if (forms != null) {
             for (String form : forms) {
-                sb.append("  " + progName() + " " + cmdString + " " + form + "\n");
+                sb.append("  ").append(progName()).append(" ").append(cmdString).append(" ").append(form).append("\n");
             }
         }
 
@@ -80,7 +80,7 @@ public abstract class JSTKAbstractTool {
         if (uses != null) {
             sb.append("Sample Uses:: \n");
             for (String use : uses) {
-                sb.append("  " + progName() + " " + cmdString + " " + use + "\n");
+                sb.append("  ").append(progName()).append(" ").append(cmdString).append(" ").append(use).append("\n");
             }
         }
         return sb.toString();
@@ -111,7 +111,7 @@ public abstract class JSTKAbstractTool {
         }
 
         opts.parse(args, 1);
-        boolean showtime = Boolean.valueOf(opts.get("showtime"));
+        boolean showtime = Boolean.parseBoolean(opts.get("showtime"));
         long ts = 0, tt = 0;
         if (showtime) {
             ts = System.currentTimeMillis();

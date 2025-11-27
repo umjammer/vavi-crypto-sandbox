@@ -23,6 +23,6 @@ public final class MSMD5RSASignature extends MSRSASignFactoryImpl {
      * @throws NoSuchAlgorithmException
      */
     public MSMD5RSASignature() throws NoSuchAlgorithmException {
-        super.setMessageDigestType("MD5");
+        setMessageDigestType("MD5");
     }
 }

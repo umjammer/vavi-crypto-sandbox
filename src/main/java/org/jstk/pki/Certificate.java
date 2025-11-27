@@ -10,17 +10,26 @@
 
 package org.jstk.pki;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.InputStream;
 
-import org.jstk.asn1.*;
-import org.jstk.pem.*;
 import org.jstk.JSTKOptions;
+import org.jstk.asn1.ASN1BitString;
+import org.jstk.asn1.ASN1Seq;
+import org.jstk.asn1.DefASN1PullParser;
+import org.jstk.pem.InvalidPEMFormatException;
+import org.jstk.pem.PEMData;
 
 
 /*
  * Certificate ::= SEQUENCE { tbsCertificate TBSCertificate, algorithm AlgorithmIdentifier, signatureBytes BIT STRING }
  */
 public class Certificate extends ASN1Seq {
+
     private final TBSCertificate tbsCertificate = new TBSCertificate();
 
     private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();
@@ -58,7 +67,7 @@ public class Certificate extends ASN1Seq {
             return;
         }
         String file = args[0];
-        InputStream is = null;
+        InputStream is;
         try { // Try PEM format
             BufferedReader reader = new BufferedReader(new FileReader(file));
             PEMData x = new PEMData(reader);

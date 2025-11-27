@@ -35,7 +35,7 @@ public final class KeyChainKeyStore extends KeyStoreSpi {
     private final KeychainPasswordStore keychain = new KeychainPasswordStore();
 
     // TODO how to set, property?
-    private final String serviceName = "vavi.security.keychain.spi.KeyChainKeyStore";
+    private static final String serviceName = "vavi.security.keychain.spi.KeyChainKeyStore";
 
     /** */
     public static class KeyChainKey implements Key {

@@ -21,6 +21,7 @@ import org.jstk.asn1.ASN1Set;
  * signerInfos SignerInfos, }
  */
 public class SignedData extends ASN1Seq {
+
     private final ASN1Integer version = new ASN1Integer();
 
     private final ASN1Set digestAlgorithms = new ASN1Set();

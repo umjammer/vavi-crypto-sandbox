@@ -28,10 +28,12 @@ public class RMIServerImpl extends java.rmi.server.UnicastRemoteObject implement
         super(port, clientFactory, serverFactory);
     }
 
+    @Override
     public void writeOnly(byte[] buf) {
         // Do nothing.
     }
 
+    @Override
     public byte[] writeRead(byte[] buf) {
         return buf;
     }

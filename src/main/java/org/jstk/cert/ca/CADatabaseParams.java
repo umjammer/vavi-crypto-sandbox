@@ -12,4 +12,5 @@ package org.jstk.cert.ca;
 
 // A Marker interface
 public interface CADatabaseParams {
+
 }

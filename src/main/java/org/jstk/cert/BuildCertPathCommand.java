@@ -34,37 +34,44 @@ import org.jstk.cert.rep.FileBasedRepository;
 
 
 public class BuildCertPathCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("truststore", "my.ts");
         defaults.put("storetype", "JCEKS");
         defaults.put("outfile", "my.p7b");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "display contents of a Certificate or Certificate Chain";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -dn <dname>         : Distinguished name of the target subject.\n" + "  -truststore <file>  : keystore with trusted certificates.[" + defaults.get("truststore") + "]\n" + "  -storetype <type>   : keystore type (JKS or JCEKS).[" + defaults.get("storetype") + "]\n" + "  -outfile <outfile>  : file to write the certificate chain in PKCS#7 format.[" + defaults.get("outfile") + "]\n" + "  -repfile <repfile>  : repository file.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-cerfile <cerfile>]"
+                "[-cerfile <cerfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-cerfile test.cer"
+                "", "-cerfile test.cer"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

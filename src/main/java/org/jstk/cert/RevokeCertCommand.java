@@ -32,32 +32,38 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class RevokeCertCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("cerfile", "my.cer");
         defaults.put("cadir", "cadir");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "revokes a previously issued certificate";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cerfile <cerfile>  : File having the DER oe PEM encoded Certificate.[" + defaults.get("cerfile") + "]\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-cerfile <cerfile>]"
+                "[-cerfile <cerfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-cerfile test.cer"
+                "", "-cerfile test.cer"
         };
         return sampleUses;
     }
@@ -88,6 +94,7 @@ public class RevokeCertCommand extends JSTKCommandAdapter {
         return cert;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

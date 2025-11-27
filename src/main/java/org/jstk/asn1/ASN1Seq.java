@@ -52,7 +52,7 @@ public class ASN1Seq extends ASN1Type {
         ignoreMembers = flag;
     }
 
-    /** */
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
         logger.log(Level.TRACE, getClass().getName() + ": decode");
         int event = parser.next();
@@ -66,7 +66,7 @@ public class ASN1Seq extends ASN1Type {
         int expSize = elems.size();
         int idx = 0;
         while ((event = parser.next()) != ASN1PullParser.END_SEQ) {
-            ASN1Type elem = null;
+            ASN1Type elem;
 
             if (idx < elems.size()) {
                 elem = elems.get(idx);
@@ -79,16 +79,16 @@ public class ASN1Seq extends ASN1Type {
             ++idx;
         }
         logger.log(Level.DEBUG, "configured for: " + expSize + ", found: " + elems.size());
-        logger.log(Level.TRACE,  getClass().getName() + ": decode");
+        logger.log(Level.TRACE, getClass().getName() + ": decode");
     }
 
-    /** */
+    @Override
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         if (ignoreMembers) {
             logger.log(Level.DEBUG, "Ignoring members. Perhaps the encoded value has been set ...");
             byte[] bytes = value;
-            logger.log(Level.TRACE,  getClass().getName() + ": encode");
+            logger.log(Level.TRACE, getClass().getName() + ": encode");
             return bytes;
         }
 
@@ -120,7 +120,7 @@ public class ASN1Seq extends ASN1Type {
             }
         }
         logger.log(Level.DEBUG, "[ASN1Seq.encode()] idOctet = " + Integer.toHexString(idOctet) + ", #lenOctets = " + lenEncoding.length + ", len = " + len);
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 

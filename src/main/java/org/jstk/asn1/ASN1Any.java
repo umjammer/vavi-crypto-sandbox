@@ -17,12 +17,6 @@ import java.lang.System.Logger.Level;
 import static java.lang.System.getLogger;
 
 
-/**
- * ASN1Any.
- *
- * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00 2005/03/17 nsano initial version <br>
- */
 public class ASN1Any extends ASN1Type {
 
     private static final Logger logger = getLogger(ASN1Any.class.getName());
@@ -40,9 +34,9 @@ public class ASN1Any extends ASN1Type {
         super(tagClass, taggingMethod, tagNumber, ANY);
     }
 
-    /** */
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
-        logger.log(Level.TRACE,  getClass().getName() + ": decode");
+        logger.log(Level.TRACE, getClass().getName() + ": decode");
         int event = parser.next();
         logger.log(Level.DEBUG, "[ASN1Any.decode()] event = " + event + ", off = " + parser.getOffset() + ", len = " + parser.getLength());
         instance = createASN1Type(event, parser.getTagClass());
@@ -59,19 +53,19 @@ public class ASN1Any extends ASN1Type {
             instance.decode(parser);
             logger.log(Level.DEBUG, "known type: " + instance);
         }
-        logger.log(Level.TRACE,  getClass().getName() + ": decode");
+        logger.log(Level.TRACE, getClass().getName() + ": decode");
     }
 
-    /** */
+    @Override
     public byte[] encode() {
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         byte[] bytes;
         if (instance == null) {
             bytes = encode1();
         } else {
             bytes = instance.encode();
         }
-        logger.log(Level.TRACE,  getClass().getName() + ": encode");
+        logger.log(Level.TRACE, getClass().getName() + ": encode");
         return bytes;
     }
 

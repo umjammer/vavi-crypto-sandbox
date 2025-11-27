@@ -24,11 +24,13 @@ import java.util.Iterator;
 
 
 public class FileBasedRevokedCerts implements RevokedCerts {
+
     private final String indexFileName;
 
 //    private String dir;
 
     public class FileBasedRevokedCertsIterator implements Iterator<RevokedCert> {
+
         private String[] records = null;
 
         private BufferedReader br = null;
@@ -47,10 +49,12 @@ public class FileBasedRevokedCerts implements RevokedCerts {
             }
         }
 
+        @Override
         public boolean hasNext() {
             return (records != null);
         }
 
+        @Override
         public RevokedCert next() {
             RevokedCert rc = new RevokedCert(records[0], records[1]);
             try {
@@ -66,6 +70,7 @@ public class FileBasedRevokedCerts implements RevokedCerts {
             return rc;
         }
 
+        @Override
         public void remove() {
         }
     }
@@ -75,6 +80,7 @@ public class FileBasedRevokedCerts implements RevokedCerts {
 //        this.dir = dir;
     }
 
+    @Override
     public void add(Certificate cert) throws CADatabaseException {
         X509Certificate x509Cert;
         if (cert == null)
@@ -105,11 +111,12 @@ public class FileBasedRevokedCerts implements RevokedCerts {
         }
     }
 
+    @Override
     public boolean exists(Certificate cert) throws CADatabaseException {
         try (BufferedReader br = new BufferedReader(new FileReader(indexFileName))) {
             X509Certificate x509Cert = (X509Certificate) cert;
             String serialNo = x509Cert.getSerialNumber().toString();
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 String[] records = line.split(CADatabase.escapedRecordSeparator);
                 if (serialNo.equals(records[1]))
@@ -123,6 +130,7 @@ public class FileBasedRevokedCerts implements RevokedCerts {
         return false;
     }
 
+    @Override
     public Iterator<RevokedCert> iterator() {
         return new FileBasedRevokedCertsIterator();
     }

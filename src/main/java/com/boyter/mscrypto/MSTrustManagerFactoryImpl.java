@@ -29,6 +29,7 @@ public final class MSTrustManagerFactoryImpl extends TrustManagerFactorySpi {
     /**
      * @param ks this method use windows key store, so set null
      */
+    @Override
     protected void engineInit(KeyStore ks) throws KeyStoreException {
         trustManager = new MSTrustManagerImpl(null);
     }
@@ -36,6 +37,7 @@ public final class MSTrustManagerFactoryImpl extends TrustManagerFactorySpi {
     /**
      * Returns one trust manager for each type of trust material.
      */
+    @Override
     protected TrustManager[] engineGetTrustManagers() {
         return new TrustManager[] {
             trustManager
@@ -45,6 +47,7 @@ public final class MSTrustManagerFactoryImpl extends TrustManagerFactorySpi {
     /**
      * Initializes this factory with a source of provider-specific key material.
      */
+    @Override
     protected void engineInit(ManagerFactoryParameters spec) {
     }
 }

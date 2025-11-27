@@ -25,9 +25,12 @@ import org.jstk.JSTKResult;
 
 
 public class UAMShell extends JSTKAbstractTool {
+
     private static UserAccountManager uam;
 
     static class AddUserCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. AddUser failed.");
@@ -44,6 +47,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class RemUserCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. RemUser failed.");
@@ -58,6 +63,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class AddRoleCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Role Name. AddRole failed.");
@@ -71,6 +78,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class RemRoleCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. RemRole failed.");
@@ -89,6 +98,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class AssignRoleCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Role Name. assignrole failed.");
@@ -109,6 +120,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class UnassignRoleCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Role Name. unassignrole failed.");
@@ -129,6 +142,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class RolesCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
                 StringBuilder sb = new StringBuilder();
@@ -151,6 +166,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class UsersCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             try {
                 StringBuilder sb = new StringBuilder();
@@ -173,6 +190,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class UserRolesCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. userroles failed.");
@@ -193,6 +212,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class ValidateCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             if (args.getNum() < 1)
                 return new JSTKResult(null, false, "No Login Name. validate failed.");
@@ -212,6 +233,8 @@ public class UAMShell extends JSTKAbstractTool {
     }
 
     static class QuitCommand extends JSTKCommandAdapter {
+
+        @Override
         public Object execute(JSTKArgs args) throws JSTKException {
             System.exit(0);
             return null;
@@ -233,11 +256,13 @@ public class UAMShell extends JSTKAbstractTool {
         cmds.put("exit", new QuitCommand());
     }
 
+    @Override
     public String progName() {
         String progName = "java org.jstk.example.bank.BankClient";
         return progName;
     }
 
+    @Override
     public String briefDescription() {
         return "Client program for bank example";
     }

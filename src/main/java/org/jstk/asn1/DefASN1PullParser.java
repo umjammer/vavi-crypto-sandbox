@@ -28,6 +28,7 @@ import org.jstk.pem.PEMData;
  * @version 0.00 050317 nsano initial version <br>
  */
 public class DefASN1PullParser implements ASN1PullParser {
+
     /** */
     private InputStream inputStream;
 
@@ -66,6 +67,7 @@ public class DefASN1PullParser implements ASN1PullParser {
 
     /** */
     private static class STypeObj {
+
         int remainingLen;
 
         final int type;
@@ -79,7 +81,7 @@ public class DefASN1PullParser implements ASN1PullParser {
     /** */
     private final Stack<STypeObj> activeSTypes = new Stack<>();
 
-    /** */
+    @Override
     public int next() throws ASN1PullParserException, IOException {
         if (prevFlag) {
             prevFlag = false;
@@ -102,7 +104,7 @@ public class DefASN1PullParser implements ASN1PullParser {
         }
 
         if (inputStream.available() == 0) { // End of file reached.
-        // System.out.println("End of File");
+            // System.out.println("End of File");
             curEvent = EOF;
             return (curEvent);
         }
@@ -174,12 +176,12 @@ public class DefASN1PullParser implements ASN1PullParser {
         return curEvent;
     }
 
-    /** */
+    @Override
     public void prev() throws ASN1PullParserException {
         prevFlag = true;
     }
 
-    /** */
+    @Override
     public int getOffset() {
         return startOffset;
     }
@@ -194,7 +196,7 @@ public class DefASN1PullParser implements ASN1PullParser {
         return curHLength;
     }
 
-    /** */
+    @Override
     public int getLength() {
         return curLength;
     }
@@ -204,17 +206,17 @@ public class DefASN1PullParser implements ASN1PullParser {
         return curTagNumber;
     }
 
-    /** */
+    @Override
     public int getTagNumber() {
         return curTagNumber;
     }
 
-    /** */
+    @Override
     public byte getTagClass() {
         return curTagClass;
     }
 
-    /** */
+    @Override
     public byte getConsMask() {
         return consMask;
     }
@@ -241,17 +243,17 @@ public class DefASN1PullParser implements ASN1PullParser {
         };
     }
 
-    /** */
+    @Override
     public byte[] getContent() {
         return curContent;
     }
 
-    /** */
+    @Override
     public int getInteger() {
         return 0;
     }
 
-    /** */
+    @Override
     public void setInput(InputStream is) {
         this.inputStream = is;
         curOffset = 0;
@@ -307,7 +309,7 @@ public class DefASN1PullParser implements ASN1PullParser {
         parser.printParsed(System.out);
     }
 
-    /** */
+    @Override
     public void printParsed(PrintStream ps) throws IOException, ASN1PullParserException {
         int event;
         while ((event = next()) != EOF) {

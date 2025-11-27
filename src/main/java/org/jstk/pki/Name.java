@@ -22,7 +22,9 @@ import org.jstk.asn1.ASN1Set;
 
 
 public class Name extends ASN1Seq {
+
     public static class OVPair extends ASN1Seq {
+
         final ASN1Oid oid = new ASN1Oid();
 
         final ASN1Any val = new ASN1Any();
@@ -42,6 +44,7 @@ public class Name extends ASN1Seq {
         elems = name.elems; // Shallow copy. beware !!
     }
 
+    @Override
     public void decode(ASN1PullParser parser) throws ASN1PullParserException, IOException {
         int event;
         if (parser.next() != ASN1PullParser.START_SEQ)

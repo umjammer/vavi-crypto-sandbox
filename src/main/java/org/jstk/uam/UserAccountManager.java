@@ -18,16 +18,21 @@ import java.util.Vector;
 
 
 public class UserAccountManager implements java.io.Serializable {
+
     public static class NoSuchUserException extends Exception {
+
     }
 
     public static class NoSuchRoleException extends Exception {
+
     }
 
     public static class RoleNotFreeException extends Exception {
+
     }
 
     public static class InvalidPasswordException extends Exception {
+
     }
 
     private Map<String, JSTKUser> users = null;

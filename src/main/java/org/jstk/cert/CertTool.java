@@ -16,7 +16,9 @@ import org.jstk.JSTKAbstractTool;
 
 
 public class CertTool extends JSTKAbstractTool {
+
     public static final Logger logger = Logger.getLogger("org.jstk.cert");
+
     static {
         cmds.put("issue", new IssueCertCommand());
         cmds.put("revoke", new RevokeCertCommand());
@@ -29,6 +31,7 @@ public class CertTool extends JSTKAbstractTool {
         cmds.put("cut", new CutCommand());
     }
 
+    @Override
     public String progName() {
         String progName = System.getProperty("org.jstk.cert.progname");
         if (progName == null)
@@ -37,6 +40,7 @@ public class CertTool extends JSTKAbstractTool {
         return progName;
     }
 
+    @Override
     public String briefDescription() {
         return "a minimal CA tool";
     }

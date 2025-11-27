@@ -513,7 +513,7 @@ logger.log(Level.TRACE,  "fuseId: " + fuseId);
             return PSP_KIRK_DATA_SIZE_IS_ZERO;
         }
 
-        byte[] key = null;
+        byte[] key;
         if (header.keySeed == 0x100) {
             key = priv_iv;
         } else {
@@ -608,7 +608,7 @@ logger.log(Level.TRACE,  "fuseId: " + fuseId);
             return PSP_KIRK_DATA_SIZE_IS_ZERO;
         }
 
-        byte[] key = null;
+        byte[] key;
         if (header.keySeed == 0x100) {
             key = priv_iv;
         } else {

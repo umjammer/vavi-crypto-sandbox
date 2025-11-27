@@ -227,7 +227,7 @@ public class AES128 {
     private Object[] generateSubKey(byte[] key) {
         byte[] L = encryptCMAC(const_Zero, key);
 
-        byte[] K1 = null;
+        byte[] K1;
         if ((L[0] & 0x80) == 0) { /* If MSB(L) = 0, then K1 = L << 1 */
             K1 = doLeftShiftOneBit(L);
         } else {    /* Else K1 = ( L << 1 ) (+) Rb */
@@ -235,7 +235,7 @@ public class AES128 {
             K1 = xor128(tmp, const_Rb);
         }
 
-        byte[] K2 = null;
+        byte[] K2;
         if ((K1[0] & 0x80) == 0) {
             K2 = doLeftShiftOneBit(K1);
         } else {

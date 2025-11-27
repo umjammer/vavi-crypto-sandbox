@@ -11,12 +11,12 @@
 package org.jstk.ssl;
 
 import java.io.IOException;
-
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 
 
 public class ServerThread extends Thread {
+
     private JSTKSocket socket = null;
 
     private JSTKBuffer buf = null;
@@ -42,6 +42,7 @@ public class ServerThread extends Thread {
         this.invalidate = invalidate;
     }
 
+    @Override
     public void run() {
         int n;
         try {

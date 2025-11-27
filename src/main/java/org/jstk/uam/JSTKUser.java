@@ -16,6 +16,7 @@ import java.util.Set;
 
 
 public class JSTKUser implements java.io.Serializable {
+
     private String loginName;
 
     private String userName;

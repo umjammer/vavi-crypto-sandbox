@@ -14,6 +14,7 @@ import java.security.Principal;
 
 
 public class JSTKRolePrincipal implements Principal {
+
     final String roleName;
 
     final String roleDesc;
@@ -30,6 +31,7 @@ public class JSTKRolePrincipal implements Principal {
         return false;
     }
 
+    @Override
     public String getName() {
         return roleName;
     }

@@ -23,6 +23,6 @@ public final class MSSHARSASignature extends MSRSASignFactoryImpl {
      * @throws NoSuchAlgorithmException
      */
     public MSSHARSASignature() throws NoSuchAlgorithmException {
-        super.setMessageDigestType("SHA1");
+        setMessageDigestType("SHA1");
     }
 }

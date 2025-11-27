@@ -11,6 +11,7 @@
 package org.jstk;
 
 public class JSTKException extends Exception {
+
     public JSTKException() {
         super();
     }

@@ -18,6 +18,7 @@ import org.jstk.asn1.ASN1UTCTime;
  * Validity ::= SEQUENCE { notBefore UTCTime, notAfter UTCTime }
  */
 public class Validity extends ASN1Seq {
+
     private final ASN1UTCTime notBefore = new ASN1UTCTime();
 
     private final ASN1UTCTime notAfter = new ASN1UTCTime();

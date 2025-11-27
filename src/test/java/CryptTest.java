@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:hattori-f@klab.org">Fumitada Hattori</a>
  * @version 0.00 2005/02/07 hattori initial version <br>
  */
-public class Test19 {
+public class CryptTest {
 
     /** */
     private static final byte[] key = "k3lmX0M9dmwAMvwOLm31NevEnreo7m32NeqiudR".getBytes();
@@ -126,11 +126,11 @@ public class Test19 {
 
 System.out.println("account : " + account + ", password : " + password);
 
-        String encodedStr = Test19.encode(account, password);
+        String encodedStr = CryptTest.encode(account, password);
 
 System.out.println("Encrypted String : " + encodedStr + "length : " + encodedStr.length());
 
-        String[] decodedStrs = Test19.decode(encodedStr);
+        String[] decodedStrs = CryptTest.decode(encodedStr);
 
         System.out.println("account : " + decodedStrs[0] + ", password : " + decodedStrs[1]);
 

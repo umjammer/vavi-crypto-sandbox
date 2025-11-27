@@ -43,11 +43,13 @@ public class CutCommand extends JSTKCommandAdapter {
         // defaults.put("infile", "my.cer");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "take out a component of a certification path";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = """
                   -infile <infile>  : File having the certification path.
@@ -56,16 +58,18 @@ public class CutCommand extends JSTKCommandAdapter {
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-infile <infile> -outfile <outfile>"
+                "-infile <infile> -outfile <outfile>"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-infile test.cer -outfile test1.cer"
+                "-infile test.cer -outfile test1.cer"
         };
         return sampleUses;
     }
@@ -76,6 +80,7 @@ public class CutCommand extends JSTKCommandAdapter {
         fos.close();
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

@@ -11,6 +11,7 @@
 package org.jstk.pem;
 
 public class InvalidPEMFormatException extends Exception {
+
     public InvalidPEMFormatException() {
         super("reason not specified");
     }

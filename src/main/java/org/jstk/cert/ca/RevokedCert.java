@@ -17,6 +17,7 @@ import java.util.Date;
 
 
 public class RevokedCert {
+
     private Date revocationDate;
 
     private BigInteger serialNumber;

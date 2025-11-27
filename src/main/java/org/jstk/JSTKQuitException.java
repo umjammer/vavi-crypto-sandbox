@@ -11,6 +11,7 @@
 package org.jstk;
 
 public class JSTKQuitException extends JSTKException {
+
     public JSTKQuitException() {
         super();
     }

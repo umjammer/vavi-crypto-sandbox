@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 070414 vavi initial version <br>
  */
-public class Test22 {
+public class CipherTest {
 
     @Test
     void test() throws Exception {

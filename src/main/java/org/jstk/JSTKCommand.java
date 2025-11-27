@@ -11,6 +11,7 @@
 package org.jstk;
 
 public interface JSTKCommand {
+
     Object execute(JSTKArgs args) throws JSTKException;
 
     String briefDescription();

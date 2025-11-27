@@ -29,36 +29,43 @@ import org.jstk.JSTKResult;
 
 
 public class AddKSCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("dbprops", "lib/db.properties");
         defaults.put("type", "KS");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "initializes database for Hosted Key Stores";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -dbprops <file> : Property file to read database parameters.[" + defaults.get("dbprops") + "]\n" + "  -username <user>: User name.\n" + "  -password <pass>: Password to authenticate the user.\n" + "  -type <type>    : (KS|TS).[" + defaults.get("type") + "]\n" + "  -file <filename>: KeyStore or TrustStore file.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-dbprops <file>] -username <user> -password <pass> -file <filename> [-type <type>]"
+                "[-dbprops <file>] -username <user> -password <pass> -file <filename> [-type <type>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-username u1 -password p1 -file test.ks", "-username u1 -password p1 -file test.ks -dbprops test.props -type TS"
+                "-username u1 -password p1 -file test.ks", "-username u1 -password p1 -file test.ks -dbprops test.props -type TS"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

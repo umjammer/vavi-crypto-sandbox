@@ -16,17 +16,18 @@ import java.io.ByteArrayOutputStream;
 /**
  * From: A Layman's Guide to a Subset of ASN.1, BER, and DER Encoding of object identifier. BER encoding. Primitive. Contents
  * octets are as follows, where value1, ..., valuen denote the integer values of the components in the complete object identifier:
- *
+ * <p>
  * 1. The first octet has value 40 * value1 + value2. (This is unambiguous, since value1 is limited to values 0, 1, and 2; value2
  * is limited to the range 0 to 39 when value1 is 0 or 1; and, according to X.208, n is always at least 2.) 2. The following
  * octets, if any, encode value3, ..., valuen. Each value is encoded base 128, most significant digit first, with as few digits as
  * possible, and the most significant bit of each octet except the last in the value's encoding set to "1."
- *
+ * <p>
  * Example: The first octet of the BER encoding of RSA Data Security, Inc.'s object identifier is 40 * 1 + 2 = 42 = 2a16. The
  * encoding of 840 = 6 * 128 + 4816 is 86 48 and the encoding of 113549 = 6 * 1282 + 7716 * 128 + d16 is 86 f7 0d. This leads to
  * the following BER encoding: 06 06 2a 86 48 86 f7 0d
  */
 public class ASN1Oid extends ASN1Type {
+
     /** */
     public ASN1Oid() {
         super(UNIVERSAL, NONE, OID, OID);
@@ -82,23 +83,5 @@ public class ASN1Oid extends ASN1Type {
             sb.append('.').append(valuei);
         }
         return sb.toString();
-    }
-
-    /** */
-    public static void main(String[] args) {
-        byte[] bytes = {
-            (byte) 0x2a, (byte) 0x86, 0x48, (byte) 0x86, (byte) 0xf7, 0x0d
-        };
-        ASN1Oid oid = new ASN1Oid();
-        oid.setValue(bytes);
-        System.out.println(oid);
-        oid.setOid("1.5.8");
-        System.out.println(oid);
-        oid.setOid("1.2.840.113549.1");
-        System.out.println(oid);
-        oid.setOid("2.5.4.6");
-        System.out.println(oid);
-        oid.setOid("2.5.4.3");
-        System.out.println(oid);
     }
 }

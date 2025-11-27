@@ -11,6 +11,7 @@
 package org.jstk.cert;
 
 public class KeyUsage {
+
     public static final int MAX_KEYUSAGE_INDEX = 8;
 
     public static final int DIGITAL_SIGNATURE = 0;
@@ -32,7 +33,7 @@ public class KeyUsage {
     public static final int DECIPHER_ONLY = 8;
 
     public static final String[] keyUsageString = new String[] {
-        "digitalSignature", "nonRepudiation", "keyEncipherment", "dataEncipherment", "keyAgreement", "keyCertSign", "cRLSign", "encipherOnly", "decipherOnly"
+            "digitalSignature", "nonRepudiation", "keyEncipherment", "dataEncipherment", "keyAgreement", "keyCertSign", "cRLSign", "encipherOnly", "decipherOnly"
     };
 
     private final boolean[] keyUsage = new boolean[MAX_KEYUSAGE_INDEX + 1];

@@ -11,6 +11,7 @@
 package org.jstk.asn1;
 
 public class ASN1Null extends ASN1Type {
+
     public ASN1Null() {
         super(UNIVERSAL, NONE, NULL, NULL);
     }

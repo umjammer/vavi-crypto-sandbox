@@ -14,12 +14,12 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
-
 import javax.security.auth.Subject;
 
 
 public class JSTKShellRMIServerImpl extends java.rmi.server.UnicastRemoteObject implements JSTKShell {
-    protected JSTKShell shell = null;
+
+    protected JSTKShell shell;
 
     protected Subject sub = null;
 
@@ -38,10 +38,12 @@ public class JSTKShellRMIServerImpl extends java.rmi.server.UnicastRemoteObject 
         shell = new JSTKShellServer();
     }
 
+    @Override
     public void setSubject(Subject sub) {
         this.sub = sub;
     }
 
+    @Override
     public String execCommand(String[] cmdargs) throws RemoteException {
         try {
             return shell.execCommand(cmdargs);
@@ -50,6 +52,7 @@ public class JSTKShellRMIServerImpl extends java.rmi.server.UnicastRemoteObject 
         }
     }
 
+    @Override
     public String createSession() throws RemoteException {
         try {
             return shell.createSession();
@@ -58,6 +61,7 @@ public class JSTKShellRMIServerImpl extends java.rmi.server.UnicastRemoteObject 
         }
     }
 
+    @Override
     public void destroySession(String sessId) throws RemoteException {
         try {
             shell.destroySession(sessId);

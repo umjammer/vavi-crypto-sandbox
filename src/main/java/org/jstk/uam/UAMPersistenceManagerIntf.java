@@ -11,6 +11,7 @@
 package org.jstk.uam;
 
 public interface UAMPersistenceManagerIntf {
+
     UserAccountManager load() throws Exception;
 
     void addUser(String loginName, String userName, String passWord);

@@ -17,7 +17,9 @@ import org.jstk.JSTKArgs;
 
 
 public class ProxyThread extends Thread {
+
     public static class Forwarder extends Thread {
+
         private final JSTKSocket inSock;
 
         private final JSTKSocket outSock;
@@ -40,6 +42,7 @@ public class ProxyThread extends Thread {
             this.paVec.add(pa);
         }
 
+        @Override
         public void run() {
             try {
 //                int n;
@@ -85,13 +88,14 @@ public class ProxyThread extends Thread {
         this.socket1 = socket;
         this.thdIndex = thdIndex;
 //        showdata = Boolean.valueOf(args.get("showdata")).booleanValue();
-        verbose = Boolean.valueOf(args.get("verbose"));
+        verbose = Boolean.parseBoolean(args.get("verbose"));
         bufsize = Integer.parseInt(args.get("bufsize"));
         this.args = args;
 
         this.socket1.getSocket().setTcpNoDelay(true);
     }
 
+    @Override
     public void run() {
 //        threadId = Thread.currentThread().toString();
         JSTKSocket socket2 = null;

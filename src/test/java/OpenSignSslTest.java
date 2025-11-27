@@ -17,7 +17,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -29,26 +28,23 @@ import vavi.util.Debug;
 
 
 /**
- * MS SSL.
+ * opensign SSL.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
- * @version 0.00 031205 nsano initial version <br>
+ * @version 0.00 031217 nsano initial version <br>
  */
 @EnabledOnOs(OS.WINDOWS)
-public class t113_2 {
+public class OpenSignSslTest {
 
     /**
      * The program entry.
      */
     public static void main(String[] args) throws Exception {
-//      Security.addProvider(new com.boyter.mscrypto.MSKeyManagerProvider());
-//      Security.addProvider(new com.boyter.mscrypto.MSTrustManagerProvider());
-
-        new t113_2(args);
+        new OpenSignSslTest(args);
     }
 
     /** */
-    public t113_2(String[] args) throws Exception {
+    public OpenSignSslTest(String[] args) throws Exception {
         URL url = new URL(args[0]);
 
         HttpURLConnection huc = (HttpURLConnection) url.openConnection();

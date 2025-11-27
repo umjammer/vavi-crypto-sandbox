@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 
 public interface RevokedCerts {
+
     void add(Certificate cert) throws CADatabaseException;
 
     boolean exists(Certificate cert) throws CADatabaseException;

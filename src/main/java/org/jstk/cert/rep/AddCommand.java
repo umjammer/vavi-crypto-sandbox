@@ -43,30 +43,35 @@ public class AddCommand extends JSTKCommandAdapter {
         defaults.put("repfile", "my.rep");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "adds a Certificate or CRL to repository";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -repfile <repfile>: Repository file.[" + defaults.get("repfile") + "]\n" + "  -infile <infile>  : File having the Certificate or CRL.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "-infile <infile> [-repfile <repfile>]"
+                "-infile <infile> [-repfile <repfile>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "-infile test.cer"
+                "-infile test.cer"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

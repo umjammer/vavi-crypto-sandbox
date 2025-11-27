@@ -26,16 +26,16 @@ import vavi.util.Debug;
  * EchoClient.
  *
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (nsano)
- * @version 0.00    050314  nsano   initial version <br>
+ * @version 0.00 050314 nsano initial version <br>
  */
 public class EchoClient {
 
-    /**  */
+    /** */
     public static void main(String[] arstring) throws Exception {
-// System.setProperty("javax.net.debug","ssl");
+//System.setProperty("javax.net.debug","ssl");
 System.setProperty("mscrypto.debug", "true");
-        SSLSocketFactory factory = null;
-        SSLContext ctx = null;
+        SSLSocketFactory factory;
+        SSLContext ctx;
         KeyManagerFactory kmf;
         TrustManagerFactory tmf;
 
@@ -46,7 +46,7 @@ System.setProperty("mscrypto.debug", "true");
         kmf.init(null, null);
 
         tmf = TrustManagerFactory.getInstance("MSTMF");
-        Debug.println("TrustManagerProvider name: " + tmf.getProvider().getInfo());
+Debug.println("TrustManagerProvider name: " + tmf.getProvider().getInfo());
         tmf.init((KeyStore) null);
 
         ctx = SSLContext.getInstance("TLS");

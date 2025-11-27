@@ -29,7 +29,9 @@ import org.jstk.cert.ca.FileBasedCADatabaseParams;
 
 
 public class SetupCACommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("cadir", "cadir");
         defaults.put("capath", "2");
@@ -42,31 +44,36 @@ public class SetupCACommand extends JSTKCommandAdapter {
         defaults.put("dn", "CN=JSTK Test Root CA, OU=JSTK Operations, O=JSTK Inc, C=US");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "setup a filebased CA";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -cadir <cadir>      : Directory to store CA information.[" + defaults.get("cadir") + "]\n" + "  -dn <dn>            : CA distinguished name.[" + defaults.get("dn") + "]\n" + "  -capath <pathlen>   : path length.[" + defaults.get("capath") + "]\n" + "  -days <days>        : Validity period from the time of setup.[" + defaults.get("days") + "]\n" + "  -serial <serial>    : Serial no. of the CA certificate.[" + defaults.get("serial") + "]\n"
-                             + "  -keyalg <keyalg>    : Algorithm for Key Pair generation (RSA|DSA).[" + defaults.get("keyalg") + "]\n" + "  -keysize <keysize>  : Size of key (no. of bits).[" + defaults.get("keysize") + "]\n" + "  -sigalg <sigalg>    : Signature Algorithm. Should match Key Algorithm.[" + defaults.get("sigalg") + "]\n" + "  -storetype <kstype> : KeyStore Type (JKS|JCEKS).[" + defaults.get("storetype") + "]\n" + "  -password <passwd>  : Password for CA keystore.\n";
+                + "  -keyalg <keyalg>    : Algorithm for Key Pair generation (RSA|DSA).[" + defaults.get("keyalg") + "]\n" + "  -keysize <keysize>  : Size of key (no. of bits).[" + defaults.get("keysize") + "]\n" + "  -sigalg <sigalg>    : Signature Algorithm. Should match Key Algorithm.[" + defaults.get("sigalg") + "]\n" + "  -storetype <kstype> : KeyStore Type (JKS|JCEKS).[" + defaults.get("storetype") + "]\n" + "  -password <passwd>  : Password for CA keystore.\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[<options>] -password <passwd>"
+                "[<options>] -password <passwd>"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-cadir testca -days 3650 -password changeit"
+                "", "-cadir testca -days 3650 -password changeit"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -102,7 +109,8 @@ public class SetupCACommand extends JSTKCommandAdapter {
             fbParams.setPassword(password);
             fbParams.setStoreType(storeType);
 
-            /*CADatabase cadb =*/ CADatabase.getInstance("file", fbParams);
+            /*CADatabase cadb =*/
+            CADatabase.getInstance("file", fbParams);
 
             return new JSTKResult(null, true, "CA setup successful: " + cadir);
         } catch (Exception exc) {

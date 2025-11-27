@@ -10,30 +10,35 @@
 
 package org.jstk.ssl;
 
-import java.nio.channels.ServerSocketChannel;
-import java.net.ServerSocket;
-import javax.net.ssl.SSLServerSocket;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.nio.channels.ServerSocketChannel;
+import javax.net.ssl.SSLServerSocket;
 
 
 public abstract class JSTKServerSocket {
+
     private static class ServerSocketWrapper extends JSTKServerSocket {
-        private ServerSocket ss = null;
+
+        private ServerSocket ss;
 
         private ServerSocketWrapper(ServerSocket ss) {
             this.ss = ss;
         }
 
+        @Override
         public JSTKSocket accept() throws IOException {
             return JSTKSocket.getInstance(ss.accept());
         }
 
+        @Override
         public void setNeedClientAuth(boolean flag) {
             if (ss instanceof SSLServerSocket) {
                 ((SSLServerSocket) ss).setNeedClientAuth(flag);
             }
         }
 
+        @Override
         public void setWantClientAuth(boolean flag) {
             if (ss instanceof SSLServerSocket) {
                 ((SSLServerSocket) ss).setWantClientAuth(flag);
@@ -42,20 +47,24 @@ public abstract class JSTKServerSocket {
     }
 
     private static class ServerSocketChannelWrapper extends JSTKServerSocket {
-        private ServerSocketChannel ssc = null;
+
+        private ServerSocketChannel ssc;
 
         private ServerSocketChannelWrapper(ServerSocketChannel ssc) {
             this.ssc = ssc;
         }
 
+        @Override
         public JSTKSocket accept() throws IOException {
             return JSTKSocket.getInstance(ssc.accept());
         }
 
+        @Override
         public void setNeedClientAuth(boolean flag) {
             // Underlying socket can't be SSLServerSocket. Do nothing.
         }
 
+        @Override
         public void setWantClientAuth(boolean flag) {
             // Underlying socket can't be SSLServerSocket. Do nothing.
         }

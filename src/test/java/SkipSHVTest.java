@@ -11,7 +11,6 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -23,17 +22,20 @@ import javax.net.ssl.X509TrustManager;
  * @author <a href="mailto:vavivavi@yahoo.co.jp">Naohide Sano</a> (vavi)
  * @version 0.00 051215 nsano initial version <br>
  */
-public class t113_1 {
+public class SkipSHVTest {
 
     /** */
     public static void exec(URLConnection connection) throws Exception {
         SSLContext sslContext = SSLContext.getInstance("SSL");
         TrustManager[] tm = { new X509TrustManager() {
+            @Override
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+            @Override
             public void checkClientTrusted(X509Certificate[] chain, String authType) {
             }
+            @Override
             public void checkServerTrusted(X509Certificate[] chain, String authType) {
             }
         }};

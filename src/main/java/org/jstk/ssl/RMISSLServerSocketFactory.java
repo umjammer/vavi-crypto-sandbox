@@ -12,13 +12,15 @@ package org.jstk.ssl;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.rmi.server.RMIServerSocketFactory;
 import java.net.ServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
+import java.rmi.server.RMIServerSocketFactory;
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocketFactory;
 
 
 public class RMISSLServerSocketFactory implements RMIServerSocketFactory, Serializable {
+
+    @Override
     public ServerSocket createServerSocket(int port) throws IOException {
         ServerSocketFactory factory = SSLServerSocketFactory.getDefault();
         ServerSocket socket = factory.createServerSocket(port);

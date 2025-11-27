@@ -10,17 +10,22 @@
 
 package org.jstk.pki;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
-import org.jstk.asn1.*;
-import org.jstk.pem.*;
 import org.jstk.JSTKOptions;
+import org.jstk.asn1.ASN1BitString;
+import org.jstk.asn1.ASN1PullParser;
+import org.jstk.asn1.ASN1Seq;
+import org.jstk.asn1.DefASN1PullParser;
+import org.jstk.pem.PEMData;
 
 
 /*
  * CertificateList ::= SEQUENCE { tbsCertList TBSCertList, algorithm AlgorithmIdentifier, signatureBytes BIT STRING }
  */
 public class CertificateList extends ASN1Seq {
+
     private final TBSCertList tbsCertList = new TBSCertList();
 
     private final AlgorithmIdentifier algorithm = new AlgorithmIdentifier();

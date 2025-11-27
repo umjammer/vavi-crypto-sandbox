@@ -22,7 +22,9 @@ import org.jstk.JSTKResult;
 
 
 public class ProxyCommand extends JSTKCommandAdapter {
+
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("inport", "8995");
         defaults.put("host", "localhost");
@@ -32,31 +34,36 @@ public class ProxyCommand extends JSTKCommandAdapter {
         defaults.put("bufsize", "8192");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "simple proxy for TCP or SSL connections";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -inport <inport>: Port No. to accept incoming connection.[" + defaults.get("inport") + "]\n" + "  -host <host>    : Remote host machine name or IP address.[" + defaults.get("host") + "]\n" + "  -port <port>    : Destination port on remote host.[" + defaults.get("port") + "]\n" + "  -patype <type>  : Protocol Analyzed Type (dd, http or ssl).\n" + "  -bufsize <bufsz>: Receiving Buffer Size (in bytes).[" + defaults.get("bufsize") + "]\n"
-                             + "  -inproto <proto>: Incoming connection protocol(TCP or SSL).[" + defaults.get("inproto") + "]\n" + "  -outproto <proto>: Outgoing connection protocol(TCP or SSL).[" + defaults.get("outproto") + "]\n" + "  -verbose        : Print a message on receiving data.\n" + "  -showdata       : Show the received data on stdout.\n" + "  -inetaddr <addr>: Use this IP address (useful for multi-homed hosts).\n";
+                + "  -inproto <proto>: Incoming connection protocol(TCP or SSL).[" + defaults.get("inproto") + "]\n" + "  -outproto <proto>: Outgoing connection protocol(TCP or SSL).[" + defaults.get("outproto") + "]\n" + "  -verbose        : Print a message on receiving data.\n" + "  -showdata       : Show the received data on stdout.\n" + "  -inetaddr <addr>: Use this IP address (useful for multi-homed hosts).\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-inport <inport>] [-port <port>] [-patype <type>]"
+                "[-inport <inport>] [-port <port>] [-patype <type>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-inport 2950", "-ssl -cauth"
+                "", "-inport 2950", "-ssl -cauth"
         };
         return sampleUses;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
@@ -65,7 +72,7 @@ public class ProxyCommand extends JSTKCommandAdapter {
             int port = Integer.parseInt(args.get("port"));
 //            String inetAddrVal = args.get("inetaddr");
 //            boolean showData = Boolean.valueOf(args.get("showdata")).booleanValue();
-            boolean verbose = Boolean.valueOf(args.get("verbose"));
+            boolean verbose = Boolean.parseBoolean(args.get("verbose"));
             int bufsize = Integer.parseInt(args.get("bufsize"));
             String inproto = args.get("inproto");
             String outproto = args.get("outproto");

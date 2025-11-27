@@ -25,6 +25,7 @@ import org.jstk.JSTKResult;
 public class ServerCommand extends JSTKCommandAdapter {
 
     private static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("inport", "9000");
         defaults.put("inproto", "TCP");
@@ -34,27 +35,31 @@ public class ServerCommand extends JSTKCommandAdapter {
         defaults.put("waittime", "5");
     }
 
+    @Override
     public String briefDescription() {
         String briefDesc = "simple echo server for TCP or SSL connections";
         return briefDesc;
     }
 
+    @Override
     public String optionsDescription() {
         String optionsDesc = "  -inport <inport>: Port No. to accept incoming connection.[" + defaults.get("inport") + "]\n" + "  -inproto <proto>: Incoming connection protocol (TCP|SSL|RMI|SRMI).[" + defaults.get("inproto") + "]\n" + "  -mode <mode>    : Receiving mode (echo|bench).[" + defaults.get("mode") + "]\n" + "  -action <action>: What action to take -- applicable for \"bench\" mode\n" + "            (accept-wait|read-only|read-write|serve-url).[" + defaults.get("action") + "]\n"
-                             + "  -bufsize <bufsz>: Receiving Buffer Size (in bytes).[" + defaults.get("bufsize") + "]\n" + "  -needcauth      : Must authenticate client.\n" + "  -wantcauth      : Negotiate to authenticate client.\n" + "  -verbose        : Print a message on receiving data.\n" + "  -showdata       : Show the received data on stdout.\n" + "  -inetaddr <addr>: Use this IP address (useful for multi-homed hosts).\n";
+                + "  -bufsize <bufsz>: Receiving Buffer Size (in bytes).[" + defaults.get("bufsize") + "]\n" + "  -needcauth      : Must authenticate client.\n" + "  -wantcauth      : Negotiate to authenticate client.\n" + "  -verbose        : Print a message on receiving data.\n" + "  -showdata       : Show the received data on stdout.\n" + "  -inetaddr <addr>: Use this IP address (useful for multi-homed hosts).\n";
         return optionsDesc;
     }
 
+    @Override
     public String[] useForms() {
         String[] useForms = {
-            "[-inport <inport>] [-ssl [-cauth]] [-inetaddr <addr>]"
+                "[-inport <inport>] [-ssl [-cauth]] [-inetaddr <addr>]"
         };
         return useForms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] sampleUses = {
-            "", "-inport 2950", "-ssl -cauth"
+                "", "-inport 2950", "-ssl -cauth"
         };
         return sampleUses;
     }
@@ -116,7 +121,7 @@ public class ServerCommand extends JSTKCommandAdapter {
         return runRMIServer(args, impl);
     }
 
-    private JSTKResult runSRMIServer(JSTKArgs args) throws Exception {
+    private static JSTKResult runSRMIServer(JSTKArgs args) throws Exception {
         int inport = Integer.parseInt(args.get("inport"));
         RMIServerImpl impl = new RMIServerImpl(inport, new RMISSLClientSocketFactory(), new RMISSLServerSocketFactory());
         return runRMIServer(args, impl);
@@ -126,8 +131,8 @@ public class ServerCommand extends JSTKCommandAdapter {
         String mode = args.get("mode");
         String action = args.get("action");
         String inproto = args.get("inproto");
-        boolean verbose = Boolean.valueOf(args.get("verbose"));
-        boolean invalidate = Boolean.valueOf(args.get("invalidate"));
+        boolean verbose = Boolean.parseBoolean(args.get("verbose"));
+        boolean invalidate = Boolean.parseBoolean(args.get("invalidate"));
         int bufsize = Integer.parseInt(args.get("bufsize"));
 
         System.out.println("  I/O library  : " + JSTKSocketUtil.getIOLibrary(args, inproto));
@@ -152,9 +157,9 @@ public class ServerCommand extends JSTKCommandAdapter {
         return new JSTKResult(null, true, "DONE");
     }
 
-    private JSTKResult runSSLServer(JSTKArgs args) throws Exception {
-        boolean needCAuth = Boolean.valueOf(args.get("needcauth"));
-        boolean wantCAuth = Boolean.valueOf(args.get("wantcauth"));
+    private static JSTKResult runSSLServer(JSTKArgs args) throws Exception {
+        boolean needCAuth = Boolean.parseBoolean(args.get("needcauth"));
+        boolean wantCAuth = Boolean.parseBoolean(args.get("wantcauth"));
         System.out.println("  Client Auth  : " + (needCAuth ? "INSIST" : (wantCAuth ? "NEGOTIATE" : "DONT ASK")));
         String[] csarray = JSTKSocketUtil.getCSFileCipherSuites(args);
         if (csarray != null) {
@@ -179,6 +184,7 @@ public class ServerCommand extends JSTKCommandAdapter {
         return null;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);

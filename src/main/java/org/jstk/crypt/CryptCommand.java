@@ -20,7 +20,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -36,7 +35,9 @@ import org.jstk.JSTKResult;
 
 
 public class CryptCommand extends JSTKCommandAdapter {
+
     protected static final Map<String, String> defaults = new HashMap<>();
+
     static {
         defaults.put("keystore", "my.keystore");
         defaults.put("storepass", "changeit");
@@ -46,26 +47,30 @@ public class CryptCommand extends JSTKCommandAdapter {
         defaults.put("algorithm", "PBEWithMD5AndDES");
     }
 
+    @Override
     public String briefDescription() {
         return "encrypt/decrypt using password or key from file or keystore";
     }
 
+    @Override
     public String optionsDescription() {
         return "  -op (enc|dec)       : Cryptographic operation: encryption or decryption.\n" + "  -infile <infile>    : Input data file.\n" + "  -outfile <outfile>  : Output data file.\n" + "  -password <password>: Password for Password Based Encryption(PBE).\n" + "  -transform <transform>: Cipher transform(<alg>/<mode>/<padding>).[" + defaults.get("transform") + "]\n" + "  -algorithm <algo>   : Algo. for password based encryption.[" + defaults.get("algorithm") + "]\n"
-               + "  -stream             : use CipherInputStream or CipherOutputStream.\n" + "  -iv <ivbytes>       : initialization vector bytes.\n" + "  -keyfile <keyfile>  : File having the serialized key.\n" + "  -keystore <keystore>: the keystore.[" + defaults.get("keystore") + "]\n" + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <kstype>    : the keystore type.[" + defaults.get("kstype") + "]\n"
-               + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.\n" + "  -provider <provider>: provider name for KeyStore and Cipher.\n" + "\n" + "  <<keyinfo>> := (-keyfile <keyfile>|[-keystore <keystore>] [-storepass\n" + "      <storepass>] [-kstype <kstype>] [-alias <alias>] [-keypass <keypass>])\n";
+                + "  -stream             : use CipherInputStream or CipherOutputStream.\n" + "  -iv <ivbytes>       : initialization vector bytes.\n" + "  -keyfile <keyfile>  : File having the serialized key.\n" + "  -keystore <keystore>: the keystore.[" + defaults.get("keystore") + "]\n" + "  -storepass <storepass>: Password for keystore.[" + defaults.get("storepass") + "]\n" + "  -kstype <kstype>    : the keystore type.[" + defaults.get("kstype") + "]\n"
+                + "  -alias <alias>      : alias to access the key in the keystore.[" + defaults.get("alias") + "]\n" + "  -keypass <keypass>  : Password for key in the keystore.\n" + "  -provider <provider>: provider name for KeyStore and Cipher.\n" + "\n" + "  <<keyinfo>> := (-keyfile <keyfile>|[-keystore <keystore>] [-storepass\n" + "      <storepass>] [-kstype <kstype>] [-alias <alias>] [-keypass <keypass>])\n";
     }
 
+    @Override
     public String[] useForms() {
         String[] forms = {
-            "-op (enc|dec) -infile <infile> -outfile <outfile> -password\n" + "\t<password> [-algorithm <algorithm>] [-stream]", "-op (enc|dec) -infile <infile> -outfile <outfile> <<keyinfo>>\n" + "\t[-stream] [-iv <ivbytes>] [-transform <transform>] [-provider <provider>]"
+                "-op (enc|dec) -infile <infile> -outfile <outfile> -password\n" + "\t<password> [-algorithm <algorithm>] [-stream]", "-op (enc|dec) -infile <infile> -outfile <outfile> <<keyinfo>>\n" + "\t[-stream] [-iv <ivbytes>] [-transform <transform>] [-provider <provider>]"
         };
         return forms;
     }
 
+    @Override
     public String[] sampleUses() {
         String[] uses = {
-            "-op enc -infile clear.data -outfile enc.data -password changeit", "-op enc -infile clear.data -outfile enc.data -password changeit -stream", "-op dec -infile enc.data -outfile dec.data -keyfile my.secretkey -iv 88888888", "-op enc -infile clear.data -outfile enc.data -transform RSA/ECB/PKCS#1",
+                "-op enc -infile clear.data -outfile enc.data -password changeit", "-op enc -infile clear.data -outfile enc.data -password changeit -stream", "-op dec -infile enc.data -outfile dec.data -keyfile my.secretkey -iv 88888888", "-op enc -infile clear.data -outfile enc.data -transform RSA/ECB/PKCS#1",
         };
         return uses;
     }
@@ -74,10 +79,10 @@ public class CryptCommand extends JSTKCommandAdapter {
         String password = args.get("password");
 //      String keyfile = args.get("keyfile");
         String providerName = args.get("provider");
-        Key key = null;
+        Key key;
         if (password != null) {
             byte[] salt = {
-                (byte) 0xc7, (byte) 0x73, (byte) 0x21, (byte) 0x8c, (byte) 0x7e, (byte) 0xc8, (byte) 0xee, (byte) 0x99
+                    (byte) 0xc7, (byte) 0x73, (byte) 0x21, (byte) 0x8c, (byte) 0x7e, (byte) 0xc8, (byte) 0xee, (byte) 0x99
             };
             int count = 20;
             String algorithm = args.get("algorithm");
@@ -114,11 +119,12 @@ public class CryptCommand extends JSTKCommandAdapter {
         return cipher;
     }
 
+    @Override
     public Object execute(JSTKArgs args) throws JSTKException {
         try {
             args.setDefaults(defaults);
 
-            boolean stream = Boolean.valueOf(args.get("stream"));
+            boolean stream = Boolean.parseBoolean(args.get("stream"));
 
             int cipherMode;
             String cryptOp = args.get("op");
@@ -140,7 +146,7 @@ public class CryptCommand extends JSTKCommandAdapter {
             if (outfileName == null)
                 return new JSTKResult(null, false, "no output file specified");
 
-            Cipher cipher = null;
+            Cipher cipher;
             try {
                 cipher = initCipher(args, cipherMode);
             } catch (Exception e) {
@@ -151,8 +157,8 @@ public class CryptCommand extends JSTKCommandAdapter {
             FileOutputStream fos = new FileOutputStream(outfileName);
 
             if (stream) { // Use CipherStream APIs
-                InputStream is = null;
-                OutputStream os = null;
+                InputStream is;
+                OutputStream os;
 
                 if (cipherMode == Cipher.DECRYPT_MODE) {
                     is = new CipherInputStream(fis, cipher);

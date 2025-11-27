@@ -10,12 +10,14 @@
 
 package org.jstk.ssl;
 
-import org.jstk.JSTKOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jstk.JSTKOptions;
+
 
 public class PatternUtil {
+
     private String pattern = null;
 
     private byte[] patbuf = null;

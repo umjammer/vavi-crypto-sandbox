@@ -11,7 +11,6 @@
 package org.jstk.ssl;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -21,9 +20,11 @@ import org.jstk.JSTKResult;
 
 
 public class SSLTool {
+
     public static final Logger logger = Logger.getLogger("org.jstk.ssl");
 
     static final Map<String, JSTKCommand> cmds = new HashMap<>(); // Keep it accessible by BenchCommand.
+
     static {
         cmds.put("server", new ServerCommand());
         cmds.put("client", new ClientCommand());
@@ -116,7 +117,7 @@ public class SSLTool {
         }
 
         opts.parse(args, 1);
-        boolean showtime = Boolean.valueOf(opts.get("showtime"));
+        boolean showtime = Boolean.parseBoolean(opts.get("showtime"));
         long ts = 0, tt = 0;
         if (showtime)
             ts = System.currentTimeMillis();

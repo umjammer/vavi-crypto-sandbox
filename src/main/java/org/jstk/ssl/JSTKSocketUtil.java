@@ -22,7 +22,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Vector;
-
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -44,10 +43,10 @@ public class JSTKSocketUtil {
             String inetAddrVal = args.get("inetaddr");
 //            boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
             String inproto = args.get("inproto");
-            boolean nio = Boolean.valueOf(args.get("nio"));
+            boolean nio = Boolean.parseBoolean(args.get("nio"));
 
             int lport = Integer.parseInt(inport);
-            JSTKServerSocket jss = null;
+            JSTKServerSocket jss;
 
             if (nio && !inproto.equalsIgnoreCase("SSL")) {
                 InetSocketAddress isa = new InetSocketAddress(InetAddress.getLocalHost(), lport);
@@ -55,8 +54,8 @@ public class JSTKSocketUtil {
                 ssc.socket().bind(isa);
                 jss = JSTKServerSocket.getInstance(ssc);
             } else {
-                ServerSocketFactory ssf = null;
-                ServerSocket serverSocket = null;
+                ServerSocketFactory ssf;
+                ServerSocket serverSocket;
                 if (inproto.equalsIgnoreCase("SSL")) {
                     ssf = SSLServerSocketFactory.getDefault();
                 } else {
@@ -90,7 +89,7 @@ public class JSTKSocketUtil {
             String inetAddrVal = args.get("inetaddr");
 //            boolean verbose = Boolean.valueOf(args.get("verbose")).booleanValue();
             String outproto = args.get("outproto");
-            Socket socket = null;
+            Socket socket;
 
             if (getIOLibrary(args, outproto).equalsIgnoreCase("NIO")) {
                 InetSocketAddress isa = new InetSocketAddress(InetAddress.getByName(host), port);
@@ -99,7 +98,7 @@ public class JSTKSocketUtil {
                 sc.socket().setTcpNoDelay(true);
                 return JSTKSocket.getInstance(sc);
             } else {
-                SocketFactory sf = null;
+                SocketFactory sf;
                 if (outproto.equalsIgnoreCase("SSL")) {
                     sf = SSLSocketFactory.getDefault();
                 } else {
@@ -144,7 +143,7 @@ public class JSTKSocketUtil {
                 if (localCerts != null && localCerts.length > 0)
                     printCertDNs(localCerts, "  Local Certs : ");
 
-                Certificate[] remoteCerts = null;
+                Certificate[] remoteCerts;
                 try {
                     remoteCerts = sess.getPeerCertificates();
                     printCertDNs(remoteCerts, "  Remote Certs: ");
@@ -169,7 +168,7 @@ public class JSTKSocketUtil {
     }
 
     public static String getIOLibrary(JSTKArgs args, String proto) {
-        boolean nio = Boolean.valueOf(args.get("nio"));
+        boolean nio = Boolean.parseBoolean(args.get("nio"));
         if (nio && !proto.equalsIgnoreCase("SSL"))
             return "NIO";
         else
