@@ -41,7 +41,7 @@ For inquires regarding of Camellia, please access here.
 
 ## TODO
 
- * enigma (doesn't work)
+ * ~~enigma (doesn't work)~~ nice gemini3!
  * rococoa
    * notification
    * keychain (cyberduck/core/dylib)
