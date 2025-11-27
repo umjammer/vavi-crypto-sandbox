@@ -15,6 +15,8 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 
+import vavi.crypto.camellia.CamelliaCipher.CamelliaKey;
+import vavi.crypto.camellia.CamelliaCipher.CamelliaKeySpec;
 import vavi.util.Debug;
 
 import org.junit.jupiter.api.DisplayName;
@@ -111,7 +113,7 @@ System.err.println(new String(decryptedBytes, StandardCharsets.UTF_8));
     @DisplayName("raw jce method")
     public void test01() throws Exception {
         CamelliaCipher cipher = new CamelliaCipher();
-        Key key = new CamelliaCipher.CamelliaKey("sanonaohide01234");
+        Key key = new CamelliaKey(new CamelliaKeySpec("sanonaohide01234"));
         cipher.engineInit(Cipher.ENCRYPT_MODE, key, null);
         String plain = "本日は晴天なり。";
         byte[] input = plain.getBytes(StandardCharsets.UTF_8);
@@ -128,7 +130,7 @@ System.err.println(new String(decrypted, StandardCharsets.UTF_8));
 //    @Disabled("need to be certified by oracle") // bypass using instrumentation
     public void test02() throws Exception {
         Cipher cipher = Cipher.getInstance("Camellia", "Camellia");
-        KeySpec keySpec = new CamelliaCipher.CamelliaKeySpec("sanonaohide01234");
+        KeySpec keySpec = new CamelliaKeySpec("sanonaohide01234");
         Key key = SecretKeyFactory.getInstance("Camellia").generateSecret(keySpec);
         cipher.init(Cipher.ENCRYPT_MODE, key);
         String plain = "本日は晴天なり。";
@@ -154,7 +156,7 @@ System.err.println(new String(decrypted, StandardCharsets.UTF_8));
     public static void main(String[] args) throws Exception {
         Cipher cipher = Cipher.getInstance("Camellia", "Camellia");
         SecureRandom random = new SecureRandom();
-        Key key = new CamelliaCipher.CamelliaKey("sanonaohide01234");
+        Key key = new CamelliaKey(new CamelliaKeySpec("sanonaohide01234"));
         cipher.init(Cipher.ENCRYPT_MODE, key, random);
         String plain = "本日は晴天なり。";
         byte[] input = plain.getBytes(StandardCharsets.UTF_8);

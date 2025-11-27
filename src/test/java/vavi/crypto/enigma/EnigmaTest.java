@@ -116,7 +116,7 @@ Debug.println("pos: " + r);
     @DisplayName("jce raw")
     public void test02() throws Exception {
         // shared secret key
-        Key key = new EnigmaKey(new EnigmaKeySpec(123456789L, 3, new int[] {50, 100, 150}, new int[] {10, 20, 30}).getEncoded());
+        Key key = new EnigmaKey(new EnigmaKeySpec(123456789L, 3, new int[] {50, 100, 150}, new int[] {10, 20, 30}));
         String plain = "本日は晴天なり。";
         byte[] input = plain.getBytes(StandardCharsets.UTF_8);
 

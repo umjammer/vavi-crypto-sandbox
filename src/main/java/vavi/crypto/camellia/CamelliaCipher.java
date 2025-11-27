@@ -14,6 +14,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.CipherSpi;
@@ -21,7 +22,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
-import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -85,6 +85,8 @@ public final class CamelliaCipher extends CipherSpi {
 
     @Override
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
+        if (!(key instanceof CamelliaKey)) throw new InvalidKeyException();
+
         this.opmode = opmode;
 
         int[] keyInts = new int[16];
@@ -183,17 +185,20 @@ public final class CamelliaCipher extends CipherSpi {
         return engineGetOutputSize(inputLen);
     }
 
-    /** */
+    /**
+     * @see "https://chatgpt.com/c/692820c4-30b8-832d-8973-3b8acc8965f2"
+     */
     public static class CamelliaKey implements SecretKey {
-        /** 16 bytes (128 bit) key */
-        final String key;
-        /** @param key 16 bytes using UTF-8 encoding */
-        public CamelliaKey(String key) {
-            this.key = key;
+        /** keySpec */
+        final CamelliaKeySpec keySpec;
+        /** */
+        public CamelliaKey(CamelliaKeySpec keySpec) {
+            this.keySpec = keySpec;
         }
+        /** @return bytes using UTF-8 encoding */
         @Override
         public byte[] getEncoded() {
-            return key.getBytes(StandardCharsets.UTF_8);
+            return keySpec.key.getBytes(StandardCharsets.UTF_8);
         }
         @Override
         public String getAlgorithm() {
@@ -201,17 +206,16 @@ public final class CamelliaCipher extends CipherSpi {
         }
         @Override
         public String getFormat() {
-            return "B]";
+            return "RAW";
         }
     }
 
     /** */
-    public static class CamelliaKeySpec extends SecretKeySpec {
+    public static class CamelliaKeySpec implements KeySpec {
         /** 16 bytes (128 bit) key */
         final String key;
         /** @param key camellia key */
         public CamelliaKeySpec(String key) {
-            super(key.getBytes(StandardCharsets.UTF_8), "Camellia");
             this.key = key;
         }
     }
