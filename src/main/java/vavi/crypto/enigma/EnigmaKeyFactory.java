@@ -9,7 +9,6 @@ package vavi.crypto.enigma;
 import java.security.InvalidKeyException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactorySpi;
 
@@ -28,7 +27,7 @@ public class EnigmaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected SecretKey engineGenerateSecret(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof EnigmaKeySpec enigmaKeySpec) {
-            return enigmaKeySpec.key;
+            return new EnigmaKey(enigmaKeySpec);
         }
         throw new InvalidKeySpecException("unable to process key spec: " + keySpec);
     }
@@ -36,7 +35,7 @@ public class EnigmaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected KeySpec engineGetKeySpec(SecretKey key, Class<?> keySpec) throws InvalidKeySpecException {
         if (key instanceof EnigmaKey enigmaKey) {
-            return new EnigmaKeySpec(enigmaKey.sharedKeySeed, enigmaKey.rotorCount, enigmaKey.notchPositions, enigmaKey.startPositions);
+            return new EnigmaKeySpec(enigmaKey.keySpec.sharedKeySeed, enigmaKey.keySpec.rotorCount, enigmaKey.keySpec.notchPositions, enigmaKey.keySpec.startPositions);
         }
         throw new InvalidKeySpecException("key is unsupported: " + key);
     }

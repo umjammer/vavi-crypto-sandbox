@@ -6,9 +6,7 @@
 
 package vavi.crypto.enigma;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.System.Logger;
@@ -19,13 +17,13 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.CipherSpi;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
-import javax.crypto.spec.SecretKeySpec;
 
 import com.beechwood.crypto.chipher.enigma.EnigmaMachine;
 import com.beechwood.crypto.chipher.enigma.EnigmaReflector;
@@ -85,9 +83,9 @@ public final class EnigmaCipher extends CipherSpi {
     @Override
     protected void engineInit(int opmode, Key key, SecureRandom random) throws InvalidKeyException {
         if (key instanceof EnigmaKey enigmaKey) {
-            enigma = createMachine(random, enigmaKey.sharedKeySeed, enigmaKey.rotorCount, enigmaKey.notchPositions, enigmaKey.startPositions);
+            enigma = createMachine(random, enigmaKey.keySpec.sharedKeySeed, enigmaKey.keySpec.rotorCount, enigmaKey.keySpec.notchPositions, enigmaKey.keySpec.startPositions);
         } else {
-            throw new IllegalArgumentException("key must be enigma key");
+            throw new InvalidKeyException("key must be enigma key");
         }
 
         finalized = false;
@@ -157,43 +155,36 @@ public final class EnigmaCipher extends CipherSpi {
         return engineGetOutputSize(inputLen);
     }
 
-    /** */
+    /**
+     * @see "https://chatgpt.com/c/692820c4-30b8-832d-8973-3b8acc8965f2"
+     */
     public static class EnigmaKey implements SecretKey {
-        /** Used to generate identical wiring */
-        long sharedKeySeed;
-        int rotorCount;
-        /** Where the rotors trigger the next one */
-        int[] notchPositions = new int[3];
-        /** Initial rotor offsets */
-        int[] startPositions = new int[3];
 
-        private final byte[] encoded;
+        final EnigmaKeySpec keySpec;
 
         /** */
-        public EnigmaKey(byte[] encoded) {
-            this.encoded = encoded;
-
-            // TODO use known encoding method
-            try {
-                ByteArrayInputStream bais = new ByteArrayInputStream(encoded);
-                DataInputStream dis = new DataInputStream(bais);
-
-                this.sharedKeySeed = dis.readLong();
-                this.rotorCount = dis.readInt();
-                for (int i = 0; i < notchPositions.length; i++) {
-                    notchPositions[i] = dis.readInt();
-                }
-                for (int i = 0; i < startPositions.length; i++) {
-                    startPositions[i] = dis.readInt();
-                }
-            } catch (IOException e) {
-                throw new AssertionError(e);
-            }
+        public EnigmaKey(EnigmaKeySpec keySpec) {
+            this.keySpec = keySpec;
         }
 
         @Override
         public byte[] getEncoded() {
-            return encoded;
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(baos);
+                dos.writeLong(keySpec.sharedKeySeed);
+                dos.writeInt(keySpec.rotorCount);
+                for (int notchPosition : keySpec.notchPositions) {
+                    dos.writeInt(notchPosition);
+                }
+                for (int startPosition : keySpec.startPositions) {
+                    dos.writeInt(startPosition);
+                }
+
+                return baos.toByteArray();
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
         }
 
         @Override
@@ -203,37 +194,26 @@ public final class EnigmaCipher extends CipherSpi {
 
         @Override
         public String getFormat() {
-            return "B]";
+            return "RAW";
         }
     }
 
     /** */
-    public static class EnigmaKeySpec extends SecretKeySpec {
-        /** */
-        final EnigmaKey key;
+    public static class EnigmaKeySpec implements KeySpec {
+        /** Used to generate identical wiring */
+        long sharedKeySeed;
+        int rotorCount;
+        /** Where the rotors trigger the next one */
+        int[] notchPositions;
+        /** Initial rotor offsets */
+        int[] startPositions;
+
         /** */
         public EnigmaKeySpec(long sharedKeySeed, int rotorCount, int[] notchPositions, int[] startPositions) {
-            super(encode(sharedKeySeed, rotorCount, notchPositions, startPositions), "Enigma");
-            this.key = new EnigmaKey(getEncoded());
-        }
-
-        // TODO use known encoding method
-        static byte[] encode(long sharedKeySeed, int rotorCount, int[] notchPositions, int[] startPositions) {
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(baos);
-                dos.writeLong(sharedKeySeed);
-                dos.writeInt(rotorCount);
-                for (int notchPosition : notchPositions) {
-                    dos.writeInt(notchPosition);
-                }
-                for (int startPosition : startPositions) {
-                    dos.writeInt(startPosition);
-                }
-                return baos.toByteArray();
-            } catch (IOException e) {
-                throw new AssertionError(e);
-            }
+            this.sharedKeySeed = sharedKeySeed;
+            this.rotorCount = rotorCount;
+            this.notchPositions = notchPositions;
+            this.startPositions = startPositions;
         }
     }
 }

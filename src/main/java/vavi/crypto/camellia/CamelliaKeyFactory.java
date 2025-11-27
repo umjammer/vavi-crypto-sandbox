@@ -28,7 +28,7 @@ public class CamelliaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected SecretKey engineGenerateSecret(KeySpec keySpec) throws InvalidKeySpecException {
         if (keySpec instanceof CamelliaKeySpec camelliaKeySpec) {
-            return new CamelliaKey(camelliaKeySpec.key);
+            return new CamelliaKey(camelliaKeySpec);
         }
         throw new InvalidKeySpecException("unable to process key spec: " + keySpec);
     }
@@ -36,7 +36,7 @@ public class CamelliaKeyFactory extends SecretKeyFactorySpi {
     @Override
     protected KeySpec engineGetKeySpec(SecretKey key, Class<?> keySpec) throws InvalidKeySpecException {
         if (key instanceof CamelliaKey camelliaKey) {
-            return new CamelliaKeySpec(camelliaKey.key);
+            return new CamelliaKeySpec(camelliaKey.keySpec.key);
         }
         throw new InvalidKeySpecException("key is unsupported: " + key);
     }
