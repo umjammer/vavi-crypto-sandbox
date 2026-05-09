@@ -45,7 +45,7 @@ public class SslTest {
 
         URLConnection connection = url.openConnection();
 
-        // ******************************************************************
+        // ----
         String algorithm = "sunx509";
         String keyStore = System.getProperty("javax.net.ssl.keyStore");
         String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword");
@@ -59,32 +59,32 @@ public class SslTest {
         kmf.init(ks, keyStorePassword.toCharArray());
         KeyManager[] km = kmf.getKeyManagers();
 
-        // 証明書の信頼性を決定するためのインターフェース
+        // Interface for determining the trustworthiness of a certificate
         //
         TrustManager[] tm = { new RelaxedX509TrustManager() };
 //        TrustManagerFactory tmf = TrustManagerFactory.getInstance(algorithm);
 //        tmf.init(ks);
 //        TrustManager[] tm = tmf.getTrustManagers();
 
-        // ソケットプロトコルを実装するSSLContextを作成
+        // Create an SSLContext that implements the socket protocol.
         SSLContext sslContext = SSLContext.getInstance("SSL");
-        // SSLContextを初期化
+        // Initialize SSLContext
         sslContext.init(km, tm, new SecureRandom());
-        // SSLContextのSocketFactoryを取得
+        // Get the SocketFactory of the SSLContext
         SSLSocketFactory sslsf = sslContext.getSocketFactory();
-        // URLConnectionにSocketFactoryをセット
+        // Set SocketFactory in URLConnection
         ((HttpsURLConnection) connection).setSSLSocketFactory(sslsf);
-        // ******************************************************************
+        // ----
 
-        // ******************************************************************
-        // ホスト名を無視させる
+        // ----
+        // Ignore the hostname
         HostnameVerifier hv = (hostname, session) -> {
 Debug.println(hostname + ", " + session);
             return true;
         };
         ((HttpsURLConnection) connection).setHostnameVerifier(hv);
 
-        // HTMLファイルをStreamで取得
+        // Retrieve HTML files using Stream
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "JISAutoDetect"));
         String line;
         while ((line = in.readLine()) != null) {
@@ -94,13 +94,13 @@ Debug.println(hostname + ", " + session);
     }
 
     /**
-     * 証明書の信頼性をチェックするインターフェースを実装
-     * (信頼されない証明書でも強制的に認証する)
+     * Implement an interface to check the trustworthiness of certificates.
+     * (Enforce authentication even with untrusted certificates)
      */
     static class RelaxedX509TrustManager implements X509TrustManager {
 
         /**
-         * 信頼されない証明書でも強制的に認証する (クライアント認証)
+         * Forcing authentication even with untrusted certificates (client authentication)
          */
         public boolean isClientTrusted(X509Certificate[] chain) {
 Debug.println(chain);
@@ -108,7 +108,7 @@ Debug.println(chain);
         }
 
         /**
-         * 信頼されない証明書でも強制的に認証する
+         * Enforce authentication even with untrusted certificates.
          */
         public boolean isServerTrusted(X509Certificate[] chain) {
 Debug.println(chain);
@@ -116,7 +116,7 @@ Debug.println(chain);
         }
 
         /**
-         * 証明書を返す
+         * Return the certificate
          */
         @Override
         public X509Certificate[] getAcceptedIssuers() {
