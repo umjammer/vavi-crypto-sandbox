@@ -29,10 +29,10 @@ $ keytool -import -trustcacerts -file ca.cer -alias ca
 
 ## References
 
-* src/test/java/t13.java - JSSE
+* [JSSE](../../../../../../src/test/java/SslTest.java)
 * [Integrate Java Cryptography with Windows](http://www.ftponline.com/javapro/2002_07/magazine/features/bboyter/default_pf.aspx)
 
-### Lisence
+### License
 
 * [mscrypto](http://www.ftponline.com/javapro/2002_07/magazine/features/bboyter/default_pf.aspx)
 ```
@@ -47,6 +47,6 @@ $ keytool -import -trustcacerts -file ca.cer -alias ca
 
 ## TODO
 
-* Make it possible to export private keys or it will be useless.
+* Make it possible to export private keys, or it will be useless.
     * ↑Is that really true? Let's do an experiment!
 * When does `-Ddeployment.security.browser.keystore.use=true` work?

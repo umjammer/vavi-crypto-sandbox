@@ -52,39 +52,39 @@ public class MsSslTest {
 
         HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 
-        //----
+        // ----
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance("MSKMF");
         kmf.init(null, null);
         KeyManager[] km = kmf.getKeyManagers();
 
-        // 証明書の信頼性を決定するためのインターフェース
+        // Interface for determining the trustworthiness of a certificate
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("MSTMF");
         tmf.init((KeyStore) null);
         TrustManager[] tm = tmf.getTrustManagers();
 
-        // ソケットプロトコルを実装するSSLContextを作成
+        // Create an SSLContext that implements the socket protocol.
         SSLContext sslContext = SSLContext.getInstance("SSL");
-        // SSLContextを初期化
+        // Initialize SSLContext
         sslContext.init(km, tm, new SecureRandom());
-        // SSLContextのSocketFactoryを取得
+        // Get the SocketFactory of the SSLContext
         SSLSocketFactory sslSF = sslContext.getSocketFactory();
-        // URLConnectionにSocketFactoryをセット
+        // Set SocketFactory in URLConnection
         ((HttpsURLConnection) huc).setSSLSocketFactory(sslSF);
 
-        //----
+        // ----
 
-        // ホスト名を無視させる
+        // Ignore the hostname
         HostnameVerifier hv = (hostname, session) -> {
 Debug.println(hostname + ", "+ session);
             return true;
         };
         ((HttpsURLConnection) huc).setHostnameVerifier(hv);
 
-        // HTMLファイルをStreamで取得
+        // Retrieve HTML files using Stream
         InputStream in = new BufferedInputStream(huc.getInputStream());
         OutputStream os = System.out;
-        // OutputStreamに出力
+        // Output to OutputStream
         byte[] bb = new byte[1024];
         int length = 0;
         while ((length = in.read(bb, 0, bb.length)) != -1) {
