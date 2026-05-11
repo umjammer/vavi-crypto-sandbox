@@ -7,7 +7,7 @@
 
  * windows certifications
  * Camellia
- * Eniguma (wip)
+ * Eniguma
  * [KIRK](https://github.com/jpcsp/jpcsp) (wip spi)
 
 ## Install
@@ -23,7 +23,7 @@
 
 #### How to ignore JCA signed jar checker
 
- * use [instrumentation](src/test/java/instr/PropertiesClassFileTransformer.java)
+ * use [instrumentation](src/test/resources/VaviInstrumentation.properties)
  * just for test, **DON'T** use for production
 
 ### License
@@ -48,3 +48,4 @@ For inquires regarding of Camellia, please access here.
      * https://github.com/conormcd/osx-keychain-java
  * jna platform contains CFxxx
  * ~~libkirk [jpcsp](https://github.com/jpcsp/jpcsp)~~
+ * ~~INSTRUMENTATION BECOMES NOT WORKING AFTER java17~~

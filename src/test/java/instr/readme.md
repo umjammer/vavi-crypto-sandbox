@@ -1,6 +1,6 @@
-# instr package
+# package instr
 
-not used
+not used, use `vavi-instrumentation` instead
 
 ## build script
 
