@@ -8,7 +8,7 @@
  * windows certifications
  * Camellia
  * Eniguma
- * [KIRK](https://github.com/jpcsp/jpcsp) (wip spi)
+ * [KIRK](https://github.com/jpcsp/jpcsp) (the PSP crypto engine, as a jca/jce provider)
 
 ## Install
 
@@ -18,6 +18,7 @@
 
  * [Java Security for the Enterprise (jstk)](http://www.j2ee-security.net/)
  * https://github.com/opengl-8080/enigma
+ * [KIRK](https://www.psdevwiki.com/psp/KIRK), [kirk-engine](https://github.com/ProximaV/kirk-engine-full)
 
 ### Tech-Know
 
