@@ -2,8 +2,8 @@
 
 KIRK is the crypto engine of the PSP, a command processor around AES-128-CBC, AES-CMAC,
 SHA-1 and ECDSA whose keys never leave the chip. `vavi.crypto.kirk` wraps the
-[libkirk](src/main/java/libkirk) emulation into the standard services (see
-[package-info](src/main/java/vavi/crypto/kirk/package-info.java) for the command list).
+[libkirk](../../../libkirk) emulation into the standard services (see
+[package-info](package-info.java) for the command list).
 
 | service                       | KIRK command      |
 |-------------------------------|-------------------|
