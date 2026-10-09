@@ -152,14 +152,14 @@ Debug.println(new String(decrypted, StandardCharsets.UTF_8));
         SecureRandom aliceRandom = SecureRandom.getInstance("SHA1PRNG");
         aliceCipher.init(Cipher.ENCRYPT_MODE, key, aliceRandom);
         byte[] encrypted = aliceCipher.doFinal(input, 0, input.length);
-        Debug.println("encrypted: " + encrypted.length + ", " + ByteUtil.toHexString(encrypted));
+Debug.println("encrypted: " + encrypted.length + ", " + ByteUtil.toHexString(encrypted));
 
         // bob side
         Cipher bobCipher = Cipher.getInstance("Enigma", "Enigma");
         SecureRandom bobRandom = SecureRandom.getInstance("SHA1PRNG");
         bobCipher.init(Cipher.DECRYPT_MODE, key, bobRandom);
         byte[] decrypted = bobCipher.doFinal(encrypted, 0, encrypted.length);
-        Debug.println(new String(decrypted, StandardCharsets.UTF_8));
+Debug.println(new String(decrypted, StandardCharsets.UTF_8));
 
         assertEquals(plain, new String(decrypted, StandardCharsets.UTF_8));
     }
